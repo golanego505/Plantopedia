@@ -8,6 +8,7 @@ For this assignment, you will submit a high-level outline of your project. This 
 
 ### Overview
 Include overview here
+Our project will be called "Plantopedia" and it will be a site in which users will be able to view, learn, and share information about their favorite house plants. Our site will have multiple user types which are users and admins. Plantopedia will be used to unite plant lovers as well as anyone trying to learn more about a specific plant or topic they may be interested in.
 ### Features
 Include Features here
 ### Technologies
