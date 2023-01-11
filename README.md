@@ -12,7 +12,12 @@ Our project will be called "Plantopedia" and it will be a site in which users wi
 ### Features
 Include Features here
 ### Technologies
-Include Technologies here
+* Java
+* Spring Boot
+* MySQL
+* Hibernate
+* Thymeleaf templates
+* Bootstrap
 ### What I'll Have to Learn
 Include what you will need to learn here
 ### Project Tracker
