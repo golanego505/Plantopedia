@@ -10,6 +10,7 @@ Include Features here
 * Thymeleaf templates
 * Bootstrap
 ### What I'll Have to Learn
-Include what you will need to learn here
+* How to integrate an API in a web application: we will need to find a public-facing API giving access to a database of plant data, then query that API according to user actions and display the results attractively in a web page.
+* How to create different levels of user authority: we will need to create filters which distinguish between users not logged in, standard users logged in, and administrative users logged in. These users will have different access and priviliges.
 ### Project Tracker
 https://trello.com/b/BvuQ2K29/plantopedia
