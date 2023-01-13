@@ -10,6 +10,7 @@ Include Features here
 * Thymeleaf templates
 * Bootstrap
 ### What I'll Have to Learn
-Include what you will need to learn here
+* How to integrate an API in a web application
+* How to create different levels of user authority
 ### Project Tracker
 https://trello.com/b/BvuQ2K29/plantopedia
