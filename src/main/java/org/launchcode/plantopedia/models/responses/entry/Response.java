@@ -1,18 +1,9 @@
-package org.launchcode.plantopedia.models;
+package org.launchcode.plantopedia.models.responses.entry;
 
 import org.launchcode.plantopedia.models.metadata.EntryMeta;
 
-public class TrefleKingdom {
-    private Data data;
+public abstract class Response {
     private EntryMeta meta;
-
-    public Data getData() {
-        return data;
-    }
-
-    public void setData(Data data) {
-        this.data = data;
-    }
 
     public EntryMeta getMeta() {
         return meta;
