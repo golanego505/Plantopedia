@@ -1,6 +1,6 @@
-package org.launchcode.plantopedia.models;
+package org.launchcode.plantopedia.models.metadata;
 
-public class Meta {
+public class EntryMeta {
     private String lastModified;
 
     public String getLastModified() {

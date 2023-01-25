@@ -1,4 +1,4 @@
-package org.launchcode.plantopedia.models;
+package org.launchcode.plantopedia.models.taxa;
 
 public abstract class Taxon {
     private Integer id;

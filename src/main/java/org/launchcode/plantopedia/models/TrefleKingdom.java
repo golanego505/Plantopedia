@@ -1,8 +1,10 @@
 package org.launchcode.plantopedia.models;
 
+import org.launchcode.plantopedia.models.metadata.EntryMeta;
+
 public class TrefleKingdom {
     private Data data;
-    private Meta meta;
+    private EntryMeta meta;
 
     public Data getData() {
         return data;
@@ -12,11 +14,11 @@ public class TrefleKingdom {
         this.data = data;
     }
 
-    public Meta getMeta() {
+    public EntryMeta getMeta() {
         return meta;
     }
 
-    public void setMeta(Meta meta) {
+    public void setMeta(EntryMeta meta) {
         this.meta = meta;
     }
 }

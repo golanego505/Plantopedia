@@ -1,8 +1,11 @@
-package org.launchcode.plantopedia.models;
+package org.launchcode.plantopedia.models.taxa;
+
+import org.launchcode.plantopedia.models.links.DivisionClassLinks;
+import org.launchcode.plantopedia.models.links.EntryLinks;
 
 public class DivisionClass extends Taxon {
     private String name;
-    private Links links;
+    private DivisionClassLinks links;
     private Division division;
 
     public String getName() {
@@ -13,11 +16,11 @@ public class DivisionClass extends Taxon {
         this.name = name;
     }
 
-    public Links getLinks() {
+    public EntryLinks getLinks() {
         return links;
     }
 
-    public void setLinks(Links links) {
+    public void setLinks(DivisionClassLinks links) {
         this.links = links;
     }
 

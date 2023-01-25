@@ -1,8 +1,11 @@
-package org.launchcode.plantopedia.models;
+package org.launchcode.plantopedia.models.taxa;
+
+import org.launchcode.plantopedia.models.links.EntryLinks;
+import org.launchcode.plantopedia.models.links.SubkingdomLinks;
 
 public class Subkingdom extends Taxon {
     private String name;
-    private Links links;
+    private SubkingdomLinks links;
     private Kingdom kingdom;
 
     public String getName() {
@@ -13,11 +16,11 @@ public class Subkingdom extends Taxon {
         this.name = name;
     }
 
-    public Links getLinks() {
+    public EntryLinks getLinks() {
         return links;
     }
 
-    public void setLinks(Links links) {
+    public void setLinks(SubkingdomLinks links) {
         this.links = links;
     }
 

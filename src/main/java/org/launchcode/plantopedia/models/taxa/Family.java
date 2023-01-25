@@ -1,9 +1,12 @@
-package org.launchcode.plantopedia.models;
+package org.launchcode.plantopedia.models.taxa;
+
+import org.launchcode.plantopedia.models.links.EntryLinks;
+import org.launchcode.plantopedia.models.links.FamilyLinks;
 
 public class Family extends Taxon {
     private String name;
     private String commonName;
-    private Links links;
+    private FamilyLinks links;
     private DivisionOrder divisionOrder;
 
     public String getName() {
@@ -22,11 +25,11 @@ public class Family extends Taxon {
         this.commonName = commonName;
     }
 
-    public Links getLinks() {
+    public EntryLinks getLinks() {
         return links;
     }
 
-    public void setLinks(Links links) {
+    public void setLinks(FamilyLinks links) {
         this.links = links;
     }
 

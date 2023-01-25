@@ -1,10 +1,12 @@
 package org.launchcode.plantopedia.models;
 
+import org.launchcode.plantopedia.models.links.EntryLinks;
+
 public class Data {
     private Integer id;
     private String name;
     private String slug;
-    private Links links;
+    private EntryLinks entryLinks;
 
     public Integer getId() {
         return id;
@@ -30,11 +32,11 @@ public class Data {
         this.slug = slug;
     }
 
-    public Links getLinks() {
-        return links;
+    public EntryLinks getLinks() {
+        return entryLinks;
     }
 
-    public void setLinks(Links links) {
-        this.links = links;
+    public void setLinks(EntryLinks entryLinks) {
+        this.entryLinks = entryLinks;
     }
 }
