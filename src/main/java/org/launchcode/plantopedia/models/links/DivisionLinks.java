@@ -10,4 +10,10 @@ public class DivisionLinks extends EntryLinks {
     public void setSubkingdom(String subkingdom) {
         this.subkingdom = subkingdom;
     }
+
+    @Override
+    public String toString() {
+        return "self='" + this.getSelf() + "'\n" +
+                "subkingdom='" + subkingdom + "'\n";
+    }
 }

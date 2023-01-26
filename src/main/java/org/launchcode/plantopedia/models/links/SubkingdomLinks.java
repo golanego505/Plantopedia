@@ -10,4 +10,10 @@ public class SubkingdomLinks extends EntryLinks {
     public void setKingdom(String kingdom) {
         this.kingdom = kingdom;
     }
+
+    @Override
+    public String toString() {
+        return "self='" + this.getSelf() + "'\n" +
+                "kingdom='" + kingdom + "'\n";
+    }
 }

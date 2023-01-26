@@ -19,4 +19,12 @@ public class Flower {
     public void setConspicuous(Boolean conspicuous) {
         this.conspicuous = conspicuous;
     }
+
+    @Override
+    public String toString() {
+        return "Flower{" +
+                "color='" + color + '\'' +
+                ", conspicuous=" + conspicuous +
+                '}';
+    }
 }

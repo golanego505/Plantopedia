@@ -19,4 +19,11 @@ public class SpeciesLinks extends EntryLinks {
     public void setGenus(String genus) {
         this.genus = genus;
     }
+
+    @Override
+    public String toString() {
+        return "self='" + this.getSelf() + "'\n" +
+                "plant='" + plant + "'\n" +
+                "genus='" + genus + "'\n";
+    }
 }

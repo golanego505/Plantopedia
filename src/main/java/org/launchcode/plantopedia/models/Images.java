@@ -57,4 +57,16 @@ public class Images {
     public void setOther(ArrayList<Image> other) {
         this.other = other;
     }
+
+    @Override
+    public String toString() {
+        return "Images{" +
+                "flower=" + flower +
+                ", leaf=" + leaf +
+                ", habit=" + habit +
+                ", fruit=" + fruit +
+                ", bark=" + bark +
+                ", other=" + other +
+                '}';
+    }
 }

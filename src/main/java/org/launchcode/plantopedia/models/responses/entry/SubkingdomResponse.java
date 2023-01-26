@@ -12,4 +12,10 @@ public class SubkingdomResponse extends Response {
     public void setData(Subkingdom data) {
         this.data = data;
     }
+    @Override
+    public String toString() {
+        return "SubkingdomResponse{" +
+                "data=" + data + '\'' +
+                ", meta='" + this.getMeta() + '\'';
+    }
 }

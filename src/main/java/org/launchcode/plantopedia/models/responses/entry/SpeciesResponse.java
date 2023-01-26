@@ -22,4 +22,10 @@ public class SpeciesResponse {
     public void setMeta(SpeciesEntryMeta meta) {
         this.meta = meta;
     }
+    @Override
+    public String toString() {
+        return "SpeciesResponse{" +
+                "data=" + data + '\'' +
+                ", meta='" + this.getMeta() + '\'';
+    }
 }

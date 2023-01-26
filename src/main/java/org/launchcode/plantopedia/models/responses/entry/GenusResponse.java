@@ -12,4 +12,10 @@ public class GenusResponse extends Response {
     public void setData(Genus data) {
         this.data = data;
     }
+    @Override
+    public String toString() {
+        return "GenusResponse{" +
+                "data=" + data + '\'' +
+                ", meta='" + this.getMeta() + '\'';
+    }
 }

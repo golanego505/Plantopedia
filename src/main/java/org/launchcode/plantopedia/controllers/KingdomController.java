@@ -21,7 +21,7 @@ public class KingdomController {
         RestTemplate restTemplate = new RestTemplate();
         KingdomResponse response = restTemplate.getForObject(uri, KingdomResponse.class);
         if (response != null){
-            System.out.println(response.getData().getName());
+            System.out.println(response.getData());
         }
         return "KingdomResponse detail page";
     }
@@ -34,7 +34,7 @@ public class KingdomController {
         RestTemplate restTemplate = new RestTemplate();
         SubkingdomResponse response = restTemplate.getForObject(uri, SubkingdomResponse.class);
         if (response != null){
-            System.out.println(response.getData().getName());
+            System.out.println(response.getData());
         }
         return "SubkingdomResponse detail page";
     }
@@ -47,7 +47,7 @@ public class KingdomController {
         RestTemplate restTemplate = new RestTemplate();
         DivisionResponse response = restTemplate.getForObject(uri, DivisionResponse.class);
         if (response != null){
-            System.out.println(response.getData().getName());
+            System.out.println(response.getData());
         }
         return "DivisionResponse detail page";
     }
@@ -60,7 +60,7 @@ public class KingdomController {
         RestTemplate restTemplate = new RestTemplate();
         DivisionClassResponse response = restTemplate.getForObject(uri, DivisionClassResponse.class);
         if (response != null){
-            System.out.println(response.getData().getName());
+            System.out.println(response.getData());
         }
         return "DivisionClassResponse detail page";
     }
@@ -73,7 +73,7 @@ public class KingdomController {
         RestTemplate restTemplate = new RestTemplate();
         DivisionOrderResponse response = restTemplate.getForObject(uri, DivisionOrderResponse.class);
         if (response != null){
-            System.out.println(response.getData().getName());
+            System.out.println(response.getData());
         }
         return "DivisionOrderResponse detail page";
     }
@@ -86,7 +86,7 @@ public class KingdomController {
         RestTemplate restTemplate = new RestTemplate();
         FamilyResponse response = restTemplate.getForObject(uri, FamilyResponse.class);
         if (response != null){
-            System.out.println(response.getData().getName());
+            System.out.println(response.getData());
         }
         return "FamilyResponse detail page";
     }
@@ -99,7 +99,7 @@ public class KingdomController {
         RestTemplate restTemplate = new RestTemplate();
         GenusResponse response = restTemplate.getForObject(uri, GenusResponse.class);
         if (response != null){
-            System.out.println(response.getData().getName());
+            System.out.println(response.getData());
         }
         return "GenusResponse detail page";
     }
@@ -112,7 +112,7 @@ public class KingdomController {
         RestTemplate restTemplate = new RestTemplate();
         PlantResponse response = restTemplate.getForObject(uri, PlantResponse.class);
         if (response != null){
-            System.out.println(response.getData().getScientificName());
+            System.out.println(response.getData());
         }
         return "PlantResponse detail page";
     }
@@ -125,7 +125,7 @@ public class KingdomController {
         RestTemplate restTemplate = new RestTemplate();
         SpeciesResponse response = restTemplate.getForObject(uri, SpeciesResponse.class);
         if (response != null){
-            System.out.println(response.getData().getScientificName());
+            System.out.println(response.getData());
         }
         return "SpciesResponse detail page";
     }
@@ -138,7 +138,7 @@ public class KingdomController {
         RestTemplate restTemplate = new RestTemplate();
         DistributionZoneResponse response = restTemplate.getForObject(uri, DistributionZoneResponse.class);
         if (response != null){
-            System.out.println(response.getData().getName());
+            System.out.println(response.getData());
         }
         return "DistributionZoneResponse detail page";
     }

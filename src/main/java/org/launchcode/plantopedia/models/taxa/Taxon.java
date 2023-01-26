@@ -19,4 +19,12 @@ public abstract class Taxon {
     public void setSlug(String slug) {
         this.slug = slug;
     }
+
+    @Override
+    public String toString() {
+        return "Taxon{" +
+                "id=" + id +
+                ", slug='" + slug + '\'' +
+                '}';
+    }
 }

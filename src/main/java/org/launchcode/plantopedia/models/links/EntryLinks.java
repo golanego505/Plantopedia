@@ -10,4 +10,9 @@ public abstract class EntryLinks {
     public void setSelf(String self) {
         this.self = self;
     }
+
+    @Override
+    public String toString() {
+        return "self='" + self + "'\n";
+    }
 }

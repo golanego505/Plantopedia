@@ -12,4 +12,11 @@ public class DivisionResponse extends Response {
     public void setData(Division data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "DivisionResponse{" +
+                "data=" + data + '\'' +
+                ", meta='" + this.getMeta() + '\'';
+    }
 }

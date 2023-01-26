@@ -12,4 +12,10 @@ public class PlantResponse extends Response {
     public void setData(Plant data) {
         this.data = data;
     }
+    @Override
+    public String toString() {
+        return "PlantResponse{" +
+                "data=" + data + '\'' +
+                ", meta='" + this.getMeta() + '\'';
+    }
 }

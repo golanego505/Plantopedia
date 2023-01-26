@@ -21,4 +21,12 @@ public class DistributionZone extends TdwgUnit {
     public void setChildren(ArrayList<TdwgUnit> children) {
         this.children = children;
     }
+
+    @Override
+    public String toString() {
+        return "DistributionZone{" +
+                "parent=" + parent +
+                ", children=" + children +
+                '}';
+    }
 }

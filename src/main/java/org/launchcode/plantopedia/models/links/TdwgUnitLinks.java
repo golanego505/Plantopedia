@@ -19,4 +19,11 @@ public class TdwgUnitLinks extends EntryLinks {
     public void setSpecies(String species) {
         this.species = species;
     }
+
+    @Override
+    public String toString() {
+        return "self='" + this.getSelf() + "'\n" +
+                "plants='" + plants + "'\n" +
+                "species='" + species + "'\n";
+    }
 }

@@ -1,5 +1,6 @@
 package org.launchcode.plantopedia.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.launchcode.plantopedia.models.measurements.LinearMeasurementCm;
 import org.launchcode.plantopedia.models.measurements.LinearMeasurementMm;
 import org.launchcode.plantopedia.models.measurements.Temperature;
@@ -7,24 +8,41 @@ import org.launchcode.plantopedia.models.measurements.Temperature;
 public class Growth {
     private String description;
     private String sowing;
+    @JsonProperty("days_to_harvest")
     private Integer daysToHarvest;
+    @JsonProperty("row_spacing")
     private LinearMeasurementCm rowSpacing;
     private LinearMeasurementCm spread;
+    @JsonProperty("ph_maximum")
     private Float phMaximum;
+    @JsonProperty("ph_minimum")
     private Float phMinimum;
     private Integer light;
+    @JsonProperty("atmospheric_humidity")
     private Integer atmosphericHumidity;
+    @JsonProperty("growth_months")
     private String growthMonths;
+    @JsonProperty("bloom_months")
     private String bloomMonths;
+    @JsonProperty("fruit_months")
     private String fruitMonths;
+    @JsonProperty("minimum_precipitation")
     private LinearMeasurementMm minimumPrecipitation;
+    @JsonProperty("maximum_precipitation")
     private LinearMeasurementMm maximumPrecipitation;
+    @JsonProperty("minimum_root_depth")
     private LinearMeasurementCm minimumRootDepth;
+    @JsonProperty("minimum_temperature")
     private Temperature minimumTemperature;
+    @JsonProperty("maximum_temperature")
     private Temperature maximumTemperature;
+    @JsonProperty("soil_nutriments")
     private Integer soilNutriments;
+    @JsonProperty("soil_salinity")
     private Integer soilSalinity;
+    @JsonProperty("soil_texture")
     private Integer soilTexture;
+    @JsonProperty("soil_humidity")
     private Integer soilHumidity;
 
     public String getDescription() {
@@ -43,6 +61,7 @@ public class Growth {
         this.sowing = sowing;
     }
 
+    @JsonProperty("days_to_harvest")
     public Integer getDaysToHarvest() {
         return daysToHarvest;
     }
@@ -51,6 +70,7 @@ public class Growth {
         this.daysToHarvest = daysToHarvest;
     }
 
+    @JsonProperty("row_spacing")
     public LinearMeasurementCm getRowSpacing() {
         return rowSpacing;
     }
@@ -67,6 +87,7 @@ public class Growth {
         this.spread = spread;
     }
 
+    @JsonProperty("ph_maximum")
     public Float getPhMaximum() {
         return phMaximum;
     }
@@ -75,6 +96,7 @@ public class Growth {
         this.phMaximum = phMaximum;
     }
 
+    @JsonProperty("ph_minimum")
     public Float getPhMinimum() {
         return phMinimum;
     }
@@ -91,6 +113,7 @@ public class Growth {
         this.light = light;
     }
 
+    @JsonProperty("atmospheric_humidity")
     public Integer getAtmosphericHumidity() {
         return atmosphericHumidity;
     }
@@ -99,6 +122,7 @@ public class Growth {
         this.atmosphericHumidity = atmosphericHumidity;
     }
 
+    @JsonProperty("growth_months")
     public String getGrowthMonths() {
         return growthMonths;
     }
@@ -107,6 +131,7 @@ public class Growth {
         this.growthMonths = growthMonths;
     }
 
+    @JsonProperty("bloom_months")
     public String getBloomMonths() {
         return bloomMonths;
     }
@@ -115,6 +140,7 @@ public class Growth {
         this.bloomMonths = bloomMonths;
     }
 
+    @JsonProperty("fruit_months")
     public String getFruitMonths() {
         return fruitMonths;
     }
@@ -123,6 +149,7 @@ public class Growth {
         this.fruitMonths = fruitMonths;
     }
 
+    @JsonProperty("minimum_precipitation")
     public LinearMeasurementMm getMinimumPrecipitation() {
         return minimumPrecipitation;
     }
@@ -131,6 +158,7 @@ public class Growth {
         this.minimumPrecipitation = minimumPrecipitation;
     }
 
+    @JsonProperty("maximum_precipitation")
     public LinearMeasurementMm getMaximumPrecipitation() {
         return maximumPrecipitation;
     }
@@ -139,6 +167,7 @@ public class Growth {
         this.maximumPrecipitation = maximumPrecipitation;
     }
 
+    @JsonProperty("minimum_root_depth")
     public LinearMeasurementCm getMinimumRootDepth() {
         return minimumRootDepth;
     }
@@ -147,6 +176,7 @@ public class Growth {
         this.minimumRootDepth = minimumRootDepth;
     }
 
+    @JsonProperty("minimum_temperature")
     public Temperature getMinimumTemperature() {
         return minimumTemperature;
     }
@@ -155,6 +185,7 @@ public class Growth {
         this.minimumTemperature = minimumTemperature;
     }
 
+    @JsonProperty("maximum_temperature")
     public Temperature getMaximumTemperature() {
         return maximumTemperature;
     }
@@ -163,6 +194,7 @@ public class Growth {
         this.maximumTemperature = maximumTemperature;
     }
 
+    @JsonProperty("soil_nutriments")
     public Integer getSoilNutriments() {
         return soilNutriments;
     }
@@ -171,6 +203,7 @@ public class Growth {
         this.soilNutriments = soilNutriments;
     }
 
+    @JsonProperty("soil_salinity")
     public Integer getSoilSalinity() {
         return soilSalinity;
     }
@@ -179,6 +212,7 @@ public class Growth {
         this.soilSalinity = soilSalinity;
     }
 
+    @JsonProperty("soil_texture")
     public Integer getSoilTexture() {
         return soilTexture;
     }
@@ -187,11 +221,39 @@ public class Growth {
         this.soilTexture = soilTexture;
     }
 
+    @JsonProperty("soil_humidity")
     public Integer getSoilHumidity() {
         return soilHumidity;
     }
 
     public void setSoilHumidity(Integer soilHumidity) {
         this.soilHumidity = soilHumidity;
+    }
+
+    @Override
+    public String toString() {
+        return "Growth{" +
+                "description='" + description + '\'' +
+                ", sowing='" + sowing + '\'' +
+                ", daysToHarvest=" + daysToHarvest +
+                ", rowSpacing=" + rowSpacing +
+                ", spread=" + spread +
+                ", phMaximum=" + phMaximum +
+                ", phMinimum=" + phMinimum +
+                ", light=" + light +
+                ", atmosphericHumidity=" + atmosphericHumidity +
+                ", growthMonths='" + growthMonths + '\'' +
+                ", bloomMonths='" + bloomMonths + '\'' +
+                ", fruitMonths='" + fruitMonths + '\'' +
+                ", minimumPrecipitation=" + minimumPrecipitation +
+                ", maximumPrecipitation=" + maximumPrecipitation +
+                ", minimumRootDepth=" + minimumRootDepth +
+                ", minimumTemperature=" + minimumTemperature +
+                ", maximumTemperature=" + maximumTemperature +
+                ", soilNutriments=" + soilNutriments +
+                ", soilSalinity=" + soilSalinity +
+                ", soilTexture=" + soilTexture +
+                ", soilHumidity=" + soilHumidity +
+                '}';
     }
 }

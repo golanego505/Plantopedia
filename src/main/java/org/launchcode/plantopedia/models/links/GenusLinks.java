@@ -28,4 +28,12 @@ public class GenusLinks extends EntryLinks {
     public void setFamily(String family) {
         this.family = family;
     }
+
+    @Override
+    public String toString() {
+        return "self='" + this.getSelf() + "'\n" +
+                "plants='" + plants + "'\n" +
+                "species='" + species + "'\n" +
+                "family='" + family + "'\n";
+    }
 }

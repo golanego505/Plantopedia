@@ -1,11 +1,15 @@
 package org.launchcode.plantopedia.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 
 public class Distributions {
+    @JsonProperty("native")
     private ArrayList<TdwgUnit> ntv;
     private ArrayList<TdwgUnit> introduced;
 
+    @JsonProperty("native")
     public ArrayList<TdwgUnit> getNtv() {
         return ntv;
     }
@@ -20,5 +24,13 @@ public class Distributions {
 
     public void setIntroduced(ArrayList<TdwgUnit> introduced) {
         this.introduced = introduced;
+    }
+
+    @Override
+    public String toString() {
+        return "Distributions{" +
+                "ntv=" + ntv +
+                ", introduced=" + introduced +
+                '}';
     }
 }

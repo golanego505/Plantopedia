@@ -12,4 +12,10 @@ public class FamilyResponse extends Response {
     public void setData(Family data) {
         this.data = data;
     }
+    @Override
+    public String toString() {
+        return "FamilyResponse{" +
+                "data=" + data + '\'' +
+                ", meta='" + this.getMeta() + '\'';
+    }
 }

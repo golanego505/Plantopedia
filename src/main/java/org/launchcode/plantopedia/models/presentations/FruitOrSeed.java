@@ -1,9 +1,12 @@
 package org.launchcode.plantopedia.models.presentations;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class FruitOrSeed {
     private Boolean conspicuous;
     private String color;
     private String shape;
+    @JsonProperty("seed_persistence")
     private Boolean seedPersistence;
 
     public Boolean getConspicuous() {
@@ -30,11 +33,22 @@ public class FruitOrSeed {
         this.shape = shape;
     }
 
+    @JsonProperty("seed_persistence")
     public Boolean getSeedPersistence() {
         return seedPersistence;
     }
 
     public void setSeedPersistence(Boolean seedPersistence) {
         this.seedPersistence = seedPersistence;
+    }
+
+    @Override
+    public String toString() {
+        return "FruitOrSeed{" +
+                "conspicuous=" + conspicuous +
+                ", color='" + color + '\'' +
+                ", shape='" + shape + '\'' +
+                ", seedPersistence=" + seedPersistence +
+                '}';
     }
 }

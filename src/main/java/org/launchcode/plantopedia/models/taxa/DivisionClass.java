@@ -31,4 +31,15 @@ public class DivisionClass extends Taxon {
     public void setDivision(Division division) {
         this.division = division;
     }
+
+    @Override
+    public String toString() {
+        return "DivisionClass{" +
+                "id='" + this.getId() +'\'' +
+                ", slug='" + this.getSlug() + '\'' +
+                ", name='" + name + '\'' +
+                ", links=" + links +
+                ", division=" + division +
+                '}';
+    }
 }

@@ -31,4 +31,15 @@ public class Genus extends Taxon {
     public void setFamily(Family family) {
         this.family = family;
     }
+
+    @Override
+    public String toString() {
+        return "Genus{" +
+                "id='" + this.getId() +'\'' +
+                ", slug='" + this.getSlug() + '\'' +
+                ", name='" + name + '\'' +
+                ", links=" + links +
+                ", family=" + family +
+                '}';
+    }
 }

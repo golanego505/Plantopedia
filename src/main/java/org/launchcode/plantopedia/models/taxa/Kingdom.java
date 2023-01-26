@@ -22,4 +22,14 @@ public class Kingdom extends Taxon {
     public void setLinks(KingdomLinks links) {
         this.links = links;
     }
+
+    @Override
+    public String toString() {
+        return "Kingdom{" +
+                "id='" + this.getId() +'\'' +
+                ", slug='" + this.getSlug() + '\'' +
+                ", name='" + name + '\'' +
+                ", links=" + links +
+                '}';
+    }
 }

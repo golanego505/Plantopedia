@@ -10,4 +10,11 @@ public class LinearMeasurementMm {
     public void setMm(Integer mm) {
         this.mm = mm;
     }
+
+    @Override
+    public String toString() {
+        return "LinearMeasurementMm{" +
+                "mm=" + mm +
+                '}';
+    }
 }

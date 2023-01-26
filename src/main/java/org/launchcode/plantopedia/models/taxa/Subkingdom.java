@@ -31,4 +31,15 @@ public class Subkingdom extends Taxon {
     public void setKingdom(Kingdom kingdom) {
         this.kingdom = kingdom;
     }
+
+    @Override
+    public String toString() {
+        return "Subkingdom{" +
+                "id='" + this.getId() +'\'' +
+                ", slug='" + this.getSlug() + '\'' +
+                ", name='" + name + '\'' +
+                ", links=" + links +
+                ", kingdom=" + kingdom +
+                '}';
+    }
 }

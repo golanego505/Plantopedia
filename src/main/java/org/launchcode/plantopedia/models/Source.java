@@ -1,12 +1,16 @@
 package org.launchcode.plantopedia.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Source {
+    @JsonProperty("last_update")
     private String lastUpdate;
     private String id;
     private String name;
     private String url;
     private String citation;
 
+    @JsonProperty("last_update")
     public String getLastUpdate() {
         return lastUpdate;
     }
@@ -45,5 +49,16 @@ public class Source {
 
     public void setCitation(String citation) {
         this.citation = citation;
+    }
+
+    @Override
+    public String toString() {
+        return "Source{" +
+                "lastUpdate='" + lastUpdate + '\'' +
+                ", id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                ", citation='" + citation + '\'' +
+                '}';
     }
 }

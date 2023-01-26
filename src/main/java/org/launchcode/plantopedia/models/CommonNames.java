@@ -525,4 +525,68 @@ public class CommonNames {
     public void setNld(ArrayList<String> nld) {
         this.nld = nld;
     }
+
+    @Override
+    public String toString() {
+        return "CommonNames{" +
+                "en=" + en +
+                ", ar=" + ar +
+                ", an=" + an +
+                ", hy=" + hy +
+                ", az=" + az +
+                ", eu=" + eu +
+                ", be=" + be +
+                ", bg=" + bg +
+                ", ca=" + ca +
+                ", cv=" + cv +
+                ", hr=" + hr +
+                ", cs=" + cs +
+                ", da=" + da +
+                ", nl=" + nl +
+                ", eo=" + eo +
+                ", et=" + et +
+                ", fi=" + fi +
+                ", fr=" + fr +
+                ", gl=" + gl +
+                ", ka=" + ka +
+                ", de=" + de +
+                ", he=" + he +
+                ", hu=" + hu +
+                ", is=" + is +
+                ", it=" + it +
+                ", kk=" + kk +
+                ", lv=" + lv +
+                ", lt=" + lt +
+                ", mk=" + mk +
+                ", gv=" + gv +
+                ", se=" + se +
+                ", no=" + no +
+                ", nb=" + nb +
+                ", nn=" + nn +
+                ", oc=" + oc +
+                ", fa=" + fa +
+                ", pl=" + pl +
+                ", pt=" + pt +
+                ", ru=" + ru +
+                ", sr=" + sr +
+                ", sk=" + sk +
+                ", sl=" + sl +
+                ", es=" + es +
+                ", sv=" + sv +
+                ", tr=" + tr +
+                ", uk=" + uk +
+                ", wa=" + wa +
+                ", cy=" + cy +
+                ", fin=" + fin +
+                ", swe=" + swe +
+                ", dan=" + dan +
+                ", deu=" + deu +
+                ", eng=" + eng +
+                ", nno=" + nno +
+                ", nob=" + nob +
+                ", fra=" + fra +
+                ", por=" + por +
+                ", nld=" + nld +
+                '}';
+    }
 }

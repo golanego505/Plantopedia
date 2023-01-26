@@ -12,4 +12,11 @@ public class DistributionZoneResponse extends Response {
     public void setData(DistributionZone data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "DistributionZoneResponse{" +
+                "data=" + data + '\'' +
+                ", meta='" + this.getMeta() + '\'';
+    }
 }

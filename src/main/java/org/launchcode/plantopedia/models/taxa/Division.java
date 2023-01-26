@@ -31,4 +31,15 @@ public class Division extends Taxon {
     public void setSubkingdom(Subkingdom subkingdom) {
         this.subkingdom = subkingdom;
     }
+
+    @Override
+    public String toString() {
+        return "Division{" +
+                "id='" + this.getId() +'\'' +
+                ", slug='" + this.getSlug() + '\'' +
+                ", name='" + name + '\'' +
+                ", links=" + links +
+                ", subkingdom=" + subkingdom +
+                '}';
+    }
 }

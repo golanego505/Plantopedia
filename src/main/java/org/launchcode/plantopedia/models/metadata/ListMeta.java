@@ -10,4 +10,11 @@ public class ListMeta {
     public void setTotal(Integer total) {
         this.total = total;
     }
+
+    @Override
+    public String toString() {
+        return "ListMeta{" +
+                "total=" + total +
+                '}';
+    }
 }

@@ -10,4 +10,10 @@ public class DivisionClassLinks extends EntryLinks {
     public void setDivision(String division) {
         this.division = division;
     }
+
+    @Override
+    public String toString() {
+        return "self='" + this.getSelf() + "'\n" +
+                "division='" + division + "'\n";
+    }
 }
