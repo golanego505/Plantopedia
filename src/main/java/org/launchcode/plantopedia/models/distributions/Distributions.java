@@ -1,6 +1,7 @@
-package org.launchcode.plantopedia.models;
+package org.launchcode.plantopedia.models.distributions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.launchcode.plantopedia.models.distributions.TdwgUnit;
 
 import java.util.ArrayList;
 

@@ -1,8 +1,8 @@
-package org.launchcode.plantopedia.models.responses.entry;
+package org.launchcode.plantopedia.models.responses.retrievals;
 
 import org.launchcode.plantopedia.models.taxa.Plant;
 
-public class PlantResponse extends Response {
+public class PlantRetrievalResponse extends RetrievalResponse {
     private Plant data;
 
     public Plant getData() {
@@ -14,7 +14,7 @@ public class PlantResponse extends Response {
     }
     @Override
     public String toString() {
-        return "PlantResponse{" +
+        return "PlantRetrievalResponse{" +
                 "data=" + data + '\'' +
                 ", meta='" + this.getMeta() + '\'';
     }

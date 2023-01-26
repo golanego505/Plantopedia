@@ -1,4 +1,6 @@
-package org.launchcode.plantopedia.models;
+package org.launchcode.plantopedia.models.distributions;
+
+import org.launchcode.plantopedia.models.distributions.TdwgUnit;
 
 import java.util.ArrayList;
 

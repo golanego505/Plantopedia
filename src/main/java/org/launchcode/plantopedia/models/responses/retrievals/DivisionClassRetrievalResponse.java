@@ -1,8 +1,8 @@
-package org.launchcode.plantopedia.models.responses.entry;
+package org.launchcode.plantopedia.models.responses.retrievals;
 
 import org.launchcode.plantopedia.models.taxa.DivisionClass;
 
-public class DivisionClassResponse extends Response {
+public class DivisionClassRetrievalResponse extends RetrievalResponse {
     private DivisionClass data;
 
     public DivisionClass getData() {

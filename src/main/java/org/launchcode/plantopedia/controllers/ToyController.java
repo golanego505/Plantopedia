@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 public class KingdomController {
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Value("${TREFLE_API_TOKEN}")
     private String apiKey;
 

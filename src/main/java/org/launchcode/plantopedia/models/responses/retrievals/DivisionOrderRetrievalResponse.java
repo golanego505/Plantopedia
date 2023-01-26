@@ -1,8 +1,8 @@
-package org.launchcode.plantopedia.models.responses.entry;
+package org.launchcode.plantopedia.models.responses.retrievals;
 
 import org.launchcode.plantopedia.models.taxa.DivisionOrder;
 
-public class DivisionOrderResponse extends Response {
+public class DivisionOrderRetrievalResponse extends RetrievalResponse {
     private DivisionOrder data;
 
     public DivisionOrder getData() {
@@ -14,7 +14,7 @@ public class DivisionOrderResponse extends Response {
     }
     @Override
     public String toString() {
-        return "DivisionOrderResponse{" +
+        return "DivisionOrderRetrievalResponse{" +
                 "data=" + data + '\'' +
                 ", meta='" + this.getMeta() + '\'';
     }

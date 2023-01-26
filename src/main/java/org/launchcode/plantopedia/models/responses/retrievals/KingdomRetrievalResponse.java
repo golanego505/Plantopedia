@@ -1,8 +1,8 @@
-package org.launchcode.plantopedia.models.responses.entry;
+package org.launchcode.plantopedia.models.responses.retrievals;
 
 import org.launchcode.plantopedia.models.taxa.Kingdom;
 
-public class KingdomResponse extends Response {
+public class KingdomRetrievalResponse extends RetrievalResponse {
     private Kingdom data;
 
     public Kingdom getData() {
@@ -14,7 +14,7 @@ public class KingdomResponse extends Response {
     }
     @Override
     public String toString() {
-        return "KingdomResponse{" +
+        return "KingdomRetrievalResponse{" +
                 "data=" + data + '\'' +
                 ", meta='" + this.getMeta() + '\'';
     }

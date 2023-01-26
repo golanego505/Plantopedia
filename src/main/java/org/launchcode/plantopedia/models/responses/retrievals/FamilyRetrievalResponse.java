@@ -1,8 +1,8 @@
-package org.launchcode.plantopedia.models.responses.entry;
+package org.launchcode.plantopedia.models.responses.retrievals;
 
 import org.launchcode.plantopedia.models.taxa.Family;
 
-public class FamilyResponse extends Response {
+public class FamilyRetrievalResponse extends RetrievalResponse {
     private Family data;
 
     public Family getData() {
@@ -14,7 +14,7 @@ public class FamilyResponse extends Response {
     }
     @Override
     public String toString() {
-        return "FamilyResponse{" +
+        return "FamilyRetrievalResponse{" +
                 "data=" + data + '\'' +
                 ", meta='" + this.getMeta() + '\'';
     }

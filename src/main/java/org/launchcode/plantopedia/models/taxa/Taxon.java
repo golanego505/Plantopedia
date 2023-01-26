@@ -1,6 +1,11 @@
 package org.launchcode.plantopedia.models.taxa;
 
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public abstract class Taxon {
+    @Id
     private Integer id;
     private String slug;
 

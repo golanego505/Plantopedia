@@ -1,8 +1,8 @@
-package org.launchcode.plantopedia.models.responses.entry;
+package org.launchcode.plantopedia.models.responses.retrievals;
 
-import org.launchcode.plantopedia.models.DistributionZone;
+import org.launchcode.plantopedia.models.distributions.DistributionZone;
 
-public class DistributionZoneResponse extends Response {
+public class DistributionZoneRetrievalResponse extends RetrievalResponse {
     private DistributionZone data;
 
     public DistributionZone getData() {
@@ -15,7 +15,7 @@ public class DistributionZoneResponse extends Response {
 
     @Override
     public String toString() {
-        return "DistributionZoneResponse{" +
+        return "DistributionZoneRetrievalResponse{" +
                 "data=" + data + '\'' +
                 ", meta='" + this.getMeta() + '\'';
     }

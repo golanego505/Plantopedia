@@ -1,11 +1,22 @@
 package org.launchcode.plantopedia.models.taxa;
 
-import org.launchcode.plantopedia.models.links.EntryLinks;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 import org.launchcode.plantopedia.models.links.KingdomLinks;
 
+@Entity
 public class Kingdom extends Taxon {
     private String name;
+    @Transient
     private KingdomLinks links;
+
+    public KingdomLinks getLinks() {
+        return links;
+    }
+
+    public void setLinks(KingdomLinks links) {
+        this.links = links;
+    }
 
     public String getName() {
         return name;
@@ -13,14 +24,6 @@ public class Kingdom extends Taxon {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public EntryLinks getLinks() {
-        return links;
-    }
-
-    public void setLinks(KingdomLinks links) {
-        this.links = links;
     }
 
     @Override

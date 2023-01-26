@@ -1,8 +1,8 @@
-package org.launchcode.plantopedia.models.responses.entry;
+package org.launchcode.plantopedia.models.responses.retrievals;
 
 import org.launchcode.plantopedia.models.taxa.Genus;
 
-public class GenusResponse extends Response {
+public class GenusRetrievalResponse extends RetrievalResponse {
     private Genus data;
 
     public Genus getData() {
@@ -14,7 +14,7 @@ public class GenusResponse extends Response {
     }
     @Override
     public String toString() {
-        return "GenusResponse{" +
+        return "GenusRetrievalResponse{" +
                 "data=" + data + '\'' +
                 ", meta='" + this.getMeta() + '\'';
     }

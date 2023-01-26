@@ -1,12 +1,17 @@
 package org.launchcode.plantopedia.models.taxa;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
 import org.launchcode.plantopedia.models.links.DivisionOrderLinks;
-import org.launchcode.plantopedia.models.links.EntryLinks;
 
+@Entity
 public class DivisionOrder extends Taxon {
     private String name;
+    @Transient
     private DivisionOrderLinks links;
+    @ManyToOne
     @JsonProperty("division_class")
     private DivisionClass divisionClass;
 
@@ -18,7 +23,7 @@ public class DivisionOrder extends Taxon {
         this.name = name;
     }
 
-    public EntryLinks getLinks() {
+    public DivisionOrderLinks getLinks() {
         return links;
     }
 

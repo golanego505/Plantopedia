@@ -1,11 +1,16 @@
 package org.launchcode.plantopedia.models.taxa;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
 import org.launchcode.plantopedia.models.links.DivisionLinks;
-import org.launchcode.plantopedia.models.links.EntryLinks;
 
+@Entity
 public class Division extends Taxon {
     private String name;
+    @Transient
     private DivisionLinks links;
+    @ManyToOne
     private Subkingdom subkingdom;
 
     public String getName() {
@@ -16,7 +21,7 @@ public class Division extends Taxon {
         this.name = name;
     }
 
-    public EntryLinks getLinks() {
+    public DivisionLinks getLinks() {
         return links;
     }
 

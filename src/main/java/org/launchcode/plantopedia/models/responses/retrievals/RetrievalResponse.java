@@ -1,8 +1,8 @@
-package org.launchcode.plantopedia.models.responses.entry;
+package org.launchcode.plantopedia.models.responses.retrievals;
 
 import org.launchcode.plantopedia.models.metadata.EntryMeta;
 
-public abstract class Response {
+public abstract class RetrievalResponse {
     private EntryMeta meta;
 
     public EntryMeta getMeta() {

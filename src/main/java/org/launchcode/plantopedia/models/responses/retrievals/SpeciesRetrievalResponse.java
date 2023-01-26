@@ -1,9 +1,9 @@
-package org.launchcode.plantopedia.models.responses.entry;
+package org.launchcode.plantopedia.models.responses.retrievals;
 
 import org.launchcode.plantopedia.models.metadata.SpeciesEntryMeta;
 import org.launchcode.plantopedia.models.taxa.Species;
 
-public class SpeciesResponse {
+public class SpeciesRetrievalResponse {
     private Species data;
     private SpeciesEntryMeta meta;
 
@@ -24,7 +24,7 @@ public class SpeciesResponse {
     }
     @Override
     public String toString() {
-        return "SpeciesResponse{" +
+        return "SpeciesRetrievalResponse{" +
                 "data=" + data + '\'' +
                 ", meta='" + this.getMeta() + '\'';
     }
