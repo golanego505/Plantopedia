@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Plantopedia</title>
+</head>
+<body>
+
+<h1>Plantopedia</h1>
+
+<h2>Kingdoms</h2>
+<ol>
+    <li th:each="kingdom : ${kingdoms}" th:text="${kingdom.name}"></li>
+</ol>
+
+<h2>Subkingdoms</h2>
+<ol>
+    <li th:each="subkingdom : ${subkingdoms}" th:text="${subkingdom.name}"></li>
+</ol>
+
+<h2>Divisions</h2>
+<ol>
+    <li th:each="division : ${divisions}" th:text="${division.name}"></li>
+</ol>
+
+<h2>Classes</h2>
+<ol>
+    <li th:each="divisionClass : ${divisionClasses}" th:text="${divisionClass.name}"></li>
+</ol>
+
+<h2>Orders</h2>
+<ol>
+    <li th:each="divisionOrder : ${divisionOrders}" th:text="${divisionOrder.name}"></li>
+</ol>
+
+<h2>Families</h2>
+<ol>
+    <li th:each="family : ${families}" th:text="${family.name}"></li>
+</ol>
+
+<h2>Genera</h2>
+<ol>
+    <li th:each="genus : ${genera}" th:text="${genus.name}"></li>
+</ol>
+
+<h2>Plants</h2>
+<ol>
+    <li th:each="plant : ${plants}">
+        <span th:text="${plant.commonName}"></span>
+        <i><span th:text="'(' + ${plant.scientificName} + ')'"></span></i>
+    </li>
+</ol>
+
+<h2>Species</h2>
+<ol>
+    <li th:each="specimen : ${species}">
+        <span th:text="${specimen.commonName}"></span>
+        <i><span th:text="'(' + ${specimen.scientificName} + ')'"></span></i>
+    </li>
+</ol>
+
+</body>
+</html>
