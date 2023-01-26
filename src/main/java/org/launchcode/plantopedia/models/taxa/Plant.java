@@ -36,7 +36,7 @@ public class Plant extends Taxon {
     private List<Source> sources;
 
     @JsonProperty("common_name")
-    public String getCommon_name() {
+    public String getCommonName() {
         return commonName;
     }
     public void setCommonName(String commonName) {
