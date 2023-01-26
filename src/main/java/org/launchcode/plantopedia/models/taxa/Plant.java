@@ -27,6 +27,8 @@ public class Plant extends Taxon {
     private PlantLinks links;
     @JsonProperty("main_species")
     private Species mainSpecies;
+    private PlantGenus genus;
+    private PlantFamily family;
     private List<PlantSpecies> species;
     private List<PlantSpecies> subspecies;
     private List<PlantSpecies> varieties;
@@ -143,6 +145,22 @@ public class Plant extends Taxon {
 
     public void setMainSpecies(Species mainSpecies) {
         this.mainSpecies = mainSpecies;
+    }
+
+    public PlantGenus getGenus() {
+        return genus;
+    }
+
+    public void setGenus(PlantGenus genus) {
+        this.genus = genus;
+    }
+
+    public PlantFamily getFamily() {
+        return family;
+    }
+
+    public void setFamily(PlantFamily family) {
+        this.family = family;
     }
 
     public List<PlantSpecies> getSpecies() {

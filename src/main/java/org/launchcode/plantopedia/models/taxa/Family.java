@@ -3,44 +3,12 @@ package org.launchcode.plantopedia.models.taxa;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
-import org.launchcode.plantopedia.models.links.FamilyLinks;
 
 @Entity
-public class Family extends Taxon {
-    private String name;
-    @JsonProperty("common_name")
-    private String commonName;
-    @Transient
-    private FamilyLinks links;
+public class Family extends PlantFamily {
     @ManyToOne
     @JsonProperty("division_order")
     private DivisionOrder divisionOrder;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @JsonProperty("common_name")
-    public String getCommonName() {
-        return commonName;
-    }
-
-    public void setCommonName(String commonName) {
-        this.commonName = commonName;
-    }
-
-    public FamilyLinks getLinks() {
-        return links;
-    }
-
-    public void setLinks(FamilyLinks links) {
-        this.links = links;
-    }
 
     @JsonProperty("division_order")
     public DivisionOrder getDivisionOrder() {
@@ -56,9 +24,9 @@ public class Family extends Taxon {
         return "Family{" +
                 "id='" + this.getId() +'\'' +
                 ", slug='" + this.getSlug() + '\'' +
-                ", name='" + name + '\'' +
-                ", commonName='" + commonName + '\'' +
-                ", links=" + links +
+                ", name='" + this.getName() + '\'' +
+                ", commonName='" + this.getCommonName() + '\'' +
+                ", links=" + this.getLinks() +
                 ", divisionOrder=" + divisionOrder +
                 '}';
     }
