@@ -1,6 +1,7 @@
 package org.launchcode.plantopedia.controllers;
 
-import org.launchcode.plantopedia.models.responses.entry.*;
+import org.launchcode.plantopedia.models.responses.lists.KingdomListResponse;
+import org.launchcode.plantopedia.models.responses.retrievals.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 @Controller
-public class KingdomController {
+public class ToyController {
 
     @SuppressWarnings("SpellCheckingInspection")
     @Value("${TREFLE_API_TOKEN}")
@@ -20,11 +21,11 @@ public class KingdomController {
 
         String uri = "https://trefle.io/api/v1/kingdoms/1?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
-        KingdomResponse response = restTemplate.getForObject(uri, KingdomResponse.class);
+        KingdomRetrievalResponse response = restTemplate.getForObject(uri, KingdomRetrievalResponse.class);
         if (response != null){
             System.out.println(response.getData());
         }
-        return "KingdomResponse detail page";
+        return "KingdomRetrievalResponse detail page";
     }
 
     @RequestMapping("/subkingdom")
@@ -33,11 +34,11 @@ public class KingdomController {
 
         String uri = "https://trefle.io/api/v1/subkingdoms/1?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
-        SubkingdomResponse response = restTemplate.getForObject(uri, SubkingdomResponse.class);
+        SubkingdomRetrievalResponse response = restTemplate.getForObject(uri, SubkingdomRetrievalResponse.class);
         if (response != null){
             System.out.println(response.getData());
         }
-        return "SubkingdomResponse detail page";
+        return "SubkingdomRetrievalResponse detail page";
     }
 
     @RequestMapping("/division")
@@ -46,11 +47,11 @@ public class KingdomController {
 
         String uri = "https://trefle.io/api/v1/divisions/1?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
-        DivisionResponse response = restTemplate.getForObject(uri, DivisionResponse.class);
+        DivisionRetrievalResponse response = restTemplate.getForObject(uri, DivisionRetrievalResponse.class);
         if (response != null){
             System.out.println(response.getData());
         }
-        return "DivisionResponse detail page";
+        return "DivisionRetrievalResponse detail page";
     }
 
     @RequestMapping("/division_class")
@@ -59,11 +60,11 @@ public class KingdomController {
 
         String uri = "https://trefle.io/api/v1/division_classes/1?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
-        DivisionClassResponse response = restTemplate.getForObject(uri, DivisionClassResponse.class);
+        DivisionClassRetrievalResponse response = restTemplate.getForObject(uri, DivisionClassRetrievalResponse.class);
         if (response != null){
             System.out.println(response.getData());
         }
-        return "DivisionClassResponse detail page";
+        return "DivisionClassRetrievalResponse detail page";
     }
 
     @RequestMapping("/division_order")
@@ -72,11 +73,11 @@ public class KingdomController {
 
         String uri = "https://trefle.io/api/v1/division_orders/1?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
-        DivisionOrderResponse response = restTemplate.getForObject(uri, DivisionOrderResponse.class);
+        DivisionOrderRetrievalResponse response = restTemplate.getForObject(uri, DivisionOrderRetrievalResponse.class);
         if (response != null){
             System.out.println(response.getData());
         }
-        return "DivisionOrderResponse detail page";
+        return "DivisionOrderRetrievalResponse detail page";
     }
 
     @RequestMapping("/family")
@@ -85,11 +86,11 @@ public class KingdomController {
 
         String uri = "https://trefle.io/api/v1/families/1?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
-        FamilyResponse response = restTemplate.getForObject(uri, FamilyResponse.class);
+        FamilyRetrievalResponse response = restTemplate.getForObject(uri, FamilyRetrievalResponse.class);
         if (response != null){
             System.out.println(response.getData());
         }
-        return "FamilyResponse detail page";
+        return "FamilyRetrievalResponse detail page";
     }
 
     @RequestMapping("/genus")
@@ -98,11 +99,11 @@ public class KingdomController {
 
         String uri = "https://trefle.io/api/v1/genus/1?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
-        GenusResponse response = restTemplate.getForObject(uri, GenusResponse.class);
+        GenusRetrievalResponse response = restTemplate.getForObject(uri, GenusRetrievalResponse.class);
         if (response != null){
             System.out.println(response.getData());
         }
-        return "GenusResponse detail page";
+        return "GenusRetrievalResponse detail page";
     }
 
     @RequestMapping("/plant")
@@ -111,11 +112,11 @@ public class KingdomController {
 
         String uri = "https://trefle.io/api/v1/plants/1?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
-        PlantResponse response = restTemplate.getForObject(uri, PlantResponse.class);
+        PlantRetrievalResponse response = restTemplate.getForObject(uri, PlantRetrievalResponse.class);
         if (response != null){
             System.out.println(response.getData());
         }
-        return "PlantResponse detail page";
+        return "PlantRetrievalResponse detail page";
     }
 
     @RequestMapping("/species")
@@ -124,7 +125,7 @@ public class KingdomController {
 
         String uri = "https://trefle.io/api/v1/species/1?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
-        SpeciesResponse response = restTemplate.getForObject(uri, SpeciesResponse.class);
+        SpeciesRetrievalResponse response = restTemplate.getForObject(uri, SpeciesRetrievalResponse.class);
         if (response != null){
             System.out.println(response.getData());
         }
@@ -137,10 +138,23 @@ public class KingdomController {
 
         String uri = "https://trefle.io/api/v1/distributions/1?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
-        DistributionZoneResponse response = restTemplate.getForObject(uri, DistributionZoneResponse.class);
+        DistributionZoneRetrievalResponse response = restTemplate.getForObject(uri, DistributionZoneRetrievalResponse.class);
         if (response != null){
             System.out.println(response.getData());
         }
-        return "DistributionZoneResponse detail page";
+        return "DistributionZoneRetrievalResponse detail page";
+    }
+
+    @RequestMapping("/kingdoms")
+    @ResponseBody
+    private String getAllKingdoms() {
+
+        String uri = "https://trefle.io/api/v1/kingdoms?token=" + apiKey;
+        RestTemplate restTemplate = new RestTemplate();
+        KingdomListResponse response = restTemplate.getForObject(uri, KingdomListResponse.class);
+        if (response != null){
+            System.out.println(response.getData());
+        }
+        return "KingdomListResponse detail page";
     }
 }
