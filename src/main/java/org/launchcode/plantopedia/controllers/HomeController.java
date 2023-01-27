@@ -8,24 +8,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
 @Controller
-@RequestMapping("")
 public class HomeController {
 
     @SuppressWarnings("SpellCheckingInspection")
     @Value("${TREFLE_API_TOKEN}")
     private String apiKey;
+    public static final String API_PATH ="https://trefle.io/api/v1/";
 
-    @RequestMapping("/home")
+    @RequestMapping("/")
     public String index(Model model) {
-        String listKingdomsUri = "https://trefle.io/api/v1/kingdoms?token=" + apiKey;
-        String listSubkingdomsUri = "https://trefle.io/api/v1/subkingdoms?token=" + apiKey;
-        String listDivisionsUri = "https://trefle.io/api/v1/divisions?token=" + apiKey;
-        String listDivisionClassesUri = "https://trefle.io/api/v1/division_classes?token=" + apiKey;
-        String listDivisionOrdersUri = "https://trefle.io/api/v1/division_orders?token=" + apiKey;
-        String listFamiliesUri = "https://trefle.io/api/v1/families?token=" + apiKey;
-        String listGeneraUri = "https://trefle.io/api/v1/genus?token=" + apiKey;
-        String listPlantsUri = "https://trefle.io/api/v1/plants?token=" + apiKey;
-        String listSpeciesUri = "https://trefle.io/api/v1/plants?token=" + apiKey;
+        model.addAttribute("TREFLE_API_TOKEN", apiKey);
+
+        String listKingdomsUri = API_PATH + "kingdoms?token=" + apiKey;
+        String listSubkingdomsUri = API_PATH + "subkingdoms?token=" + apiKey;
+        String listDivisionsUri = API_PATH + "divisions?token=" + apiKey;
+        String listDivisionClassesUri = API_PATH + "division_classes?token=" + apiKey;
+        String listDivisionOrdersUri = API_PATH + "division_orders?token=" + apiKey;
+        String listFamiliesUri = API_PATH + "families?token=" + apiKey;
+        String listGeneraUri = API_PATH + "genus?token=" + apiKey;
+        String listPlantsUri = API_PATH + "plants?token=" + apiKey;
+        String listSpeciesUri = API_PATH + "species?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
 
         KingdomListResponse kingdomListResponse = restTemplate.getForObject(
@@ -56,6 +58,7 @@ public class HomeController {
                 listDivisionOrdersUri, DivisionOrderListResponse.class);
         if (divisionOrderListResponse != null) {
             model.addAttribute("divisionOrders", divisionOrderListResponse.getData());
+            //model.addAttribute("divisionOrderPaginationLinks", divisionOrderListResponse.getLinks());
         }
 
         FamilyListResponse familyListResponse = restTemplate.getForObject(

@@ -10,12 +10,18 @@
 
 <h2>Kingdoms</h2>
 <ol>
-    <li th:each="kingdom : ${kingdoms}" th:text="${kingdom.name}"></li>
+    <li th:each="kingdom : ${kingdoms}">
+        <a th:text="${kingdom.name}" th:href="'https://trefle.io' + ${kingdom.links.self}
+        + '?token=' + ${TREFLE_API_TOKEN}" target="_blank"></a>
+    </li>
 </ol>
 
 <h2>Subkingdoms</h2>
 <ol>
-    <li th:each="subkingdom : ${subkingdoms}" th:text="${subkingdom.name}"></li>
+    <li th:each="subkingdom : ${subkingdoms}">
+        <a th:text="${subkingdom.name}" th:href="'https://trefle.io' + ${subkingdom.links.self}
+        + '?token=' + ${TREFLE_API_TOKEN}" target="_blank"></a>
+    </li>
 </ol>
 
 <h2>Divisions</h2>
@@ -32,6 +38,8 @@
 <ol>
     <li th:each="divisionOrder : ${divisionOrders}" th:text="${divisionOrder.name}"></li>
 </ol>
+<!--<a th:href="'https://trefle.io' + ${divisionOrderPaginationLinks.next} + '&token='-->
+<!--+ ${TREFLE_API_TOKEN}" target="_blank">Next page</a>-->
 
 <h2>Families</h2>
 <ol>
@@ -48,6 +56,10 @@
     <li th:each="plant : ${plants}">
         <span th:text="${plant.commonName}"></span>
         <i><span th:text="'(' + ${plant.scientificName} + ')'"></span></i>
+        <span><img th:src="${plant.imageUrl}"
+                   th:alt="${plant.commonName}"
+                   width="40"
+                   height="40"></span>
     </li>
 </ol>
 
