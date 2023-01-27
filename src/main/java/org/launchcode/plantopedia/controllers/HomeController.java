@@ -24,8 +24,6 @@ public class HomeController {
     @RequestMapping("/")
     public String index(Model model) {
 
-        model.addAttribute("TREFLE_API_TOKEN", apiKey);
-
         String listPlantsUri = API_PATH + "plants?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
 
