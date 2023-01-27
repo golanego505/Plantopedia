@@ -2,72 +2,38 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
+    <link th:href="@{/css/plantopedia.css}" rel="stylesheet"/>
     <title>Plantopedia</title>
+    <style>
+    body {
+    background-color: gray;
+    }
+    a:link {
+    color: CaptionText;
+    background-color: transparent;
+    text-decoration: none;
+    }
+    a:visited {
+    color: CaptionText;
+    }
+    </style>
 </head>
 <body>
 
 <h1>Plantopedia</h1>
 
-<h2>Kingdoms</h2>
-<ol>
-    <li th:each="kingdom : ${kingdoms}">
-        <a th:text="${kingdom.name}" th:href="'https://trefle.io' + ${kingdom.links.self}
-        + '?token=' + ${TREFLE_API_TOKEN}" target="_blank"></a>
-    </li>
-</ol>
-
-<h2>Subkingdoms</h2>
-<ol>
-    <li th:each="subkingdom : ${subkingdoms}">
-        <a th:text="${subkingdom.name}" th:href="'https://trefle.io' + ${subkingdom.links.self}
-        + '?token=' + ${TREFLE_API_TOKEN}" target="_blank"></a>
-    </li>
-</ol>
-
-<h2>Divisions</h2>
-<ol>
-    <li th:each="division : ${divisions}" th:text="${division.name}"></li>
-</ol>
-
-<h2>Classes</h2>
-<ol>
-    <li th:each="divisionClass : ${divisionClasses}" th:text="${divisionClass.name}"></li>
-</ol>
-
-<h2>Orders</h2>
-<ol>
-    <li th:each="divisionOrder : ${divisionOrders}" th:text="${divisionOrder.name}"></li>
-</ol>
-<!--<a th:href="'https://trefle.io' + ${divisionOrderPaginationLinks.next} + '&token='-->
-<!--+ ${TREFLE_API_TOKEN}" target="_blank">Next page</a>-->
-
-<h2>Families</h2>
-<ol>
-    <li th:each="family : ${families}" th:text="${family.name}"></li>
-</ol>
-
-<h2>Genera</h2>
-<ol>
-    <li th:each="genus : ${genera}" th:text="${genus.name}"></li>
-</ol>
-
 <h2>Plants</h2>
 <ol>
-    <li th:each="plant : ${plants}">
-        <span th:text="${plant.commonName}"></span>
-        <i><span th:text="'(' + ${plant.scientificName} + ')'"></span></i>
-        <span><img th:src="${plant.imageUrl}"
-                   th:alt="${plant.commonName}"
-                   width="40"
-                   height="40"></span>
-    </li>
-</ol>
-
-<h2>Species</h2>
-<ol>
-    <li th:each="specimen : ${species}">
-        <span th:text="${specimen.commonName}"></span>
-        <i><span th:text="'(' + ${specimen.scientificName} + ')'"></span></i>
+    <li th:each="plant : ${plants}" style="width: 20%">
+        <a th:href="@{/get-token/{id}(id=${plant.id})}">
+            <div class="card">
+                <img th:src="${plant.imageUrl}" th:alt="${plant.commonName}" width="100%">
+                <div class="container">
+                    <h4 th:text="${plant.commonName}"></h4>
+                    <i><p th:text="${plant.scientificName}"></p></i>
+                </div>
+            </div>
+        </a>
     </li>
 </ol>
 
