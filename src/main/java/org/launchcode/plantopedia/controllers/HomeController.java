@@ -38,8 +38,8 @@ public class HomeController {
         return "index";
     }
 
-    @RequestMapping("get-token/{plantId}")
-    public String useClientToken(@PathVariable int plantId) {
+    @RequestMapping("plants/{plantId}")
+    public String plantDetails(@PathVariable int plantId) {
         String token = getClientToken().getToken();
         return "redirect:https://trefle.io/api/v1/plants/" + plantId + "?token=" + token;
     }
