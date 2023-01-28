@@ -2,7 +2,7 @@ package org.launchcode.plantopedia.models.links;
 
 public class ListLinks extends EntryLinks {
     private String first;
-    private String previous;
+    private String prev;
     private String next;
     private String last;
 
@@ -14,12 +14,12 @@ public class ListLinks extends EntryLinks {
         this.first = first;
     }
 
-    public String getPrevious() {
-        return previous;
+    public String getPrev() {
+        return prev;
     }
 
-    public void setPrevious(String previous) {
-        this.previous = previous;
+    public void setPrev(String prev) {
+        this.prev = prev;
     }
 
     public String getNext() {
