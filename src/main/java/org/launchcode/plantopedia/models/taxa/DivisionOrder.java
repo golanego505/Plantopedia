@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
-import org.launchcode.plantopedia.models.links.DivisionOrderLinks;
+import org.launchcode.plantopedia.responses.links.DivisionOrderLinks;
 
 @Entity
 public class DivisionOrder extends Taxon {
@@ -14,6 +14,9 @@ public class DivisionOrder extends Taxon {
     @ManyToOne
     @JsonProperty("division_class")
     private DivisionClass divisionClass;
+
+    public DivisionOrder() {
+    }
 
     public String getName() {
         return name;

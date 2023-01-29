@@ -1,13 +1,24 @@
 package org.launchcode.plantopedia.models.presentations;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
+@Entity
 public class FruitOrSeed {
+    @Id
+    @GeneratedValue
+    @JsonIgnore
+    private Integer id;
     private Boolean conspicuous;
     private String color;
     private String shape;
     @JsonProperty("seed_persistence")
     private Boolean seedPersistence;
+
+    public FruitOrSeed() {}
 
     public Boolean getConspicuous() {
         return conspicuous;

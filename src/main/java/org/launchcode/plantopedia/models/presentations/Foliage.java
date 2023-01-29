@@ -1,12 +1,23 @@
 package org.launchcode.plantopedia.models.presentations;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
+@Entity
 public class Foliage {
+    @Id
+    @GeneratedValue
+    @JsonIgnore
+    private Integer id;
     private String texture;
     private String color;
     @JsonProperty("leaf_retention")
     private Boolean leafRetention;
+
+    public Foliage() {}
 
     public String getTexture() {
         return texture;

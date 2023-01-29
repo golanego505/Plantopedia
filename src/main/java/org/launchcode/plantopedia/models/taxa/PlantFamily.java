@@ -3,7 +3,7 @@ package org.launchcode.plantopedia.models.taxa;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
-import org.launchcode.plantopedia.models.links.FamilyLinks;
+import org.launchcode.plantopedia.responses.links.FamilyLinks;
 
 @MappedSuperclass
 public class PlantFamily extends Taxon {

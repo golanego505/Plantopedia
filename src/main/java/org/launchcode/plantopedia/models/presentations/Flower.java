@@ -1,8 +1,20 @@
 package org.launchcode.plantopedia.models.presentations;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
 public class Flower {
+    @Id
+    @GeneratedValue
+    @JsonIgnore
+    private Integer id;
     private String color;
     private Boolean conspicuous;
+
+    public Flower() {}
 
     public String getColor() {
         return color;
