@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -64,13 +61,13 @@ public class HomeController {
         return "index";
     }
 
-    @RequestMapping(value = "plants/{plantId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/plants/{plantId}", method = RequestMethod.GET)
     public String plantDetails(@PathVariable int plantId, HttpServletRequest request) {
         String token = getClientToken(request.getRequestURI()).getToken();
         return "redirect:https://trefle.io/api/v1/plants/" + plantId + "?token=" + token;
     }
 
-    @RequestMapping(value = "parse-pagination-link", method = RequestMethod.GET)
+    @RequestMapping(value = "/parse-pagination-link", method = RequestMethod.GET)
     public String parsePaginationLink(@RequestParam String link) {
         String page = getPage(link);
         return "redirect:/plants?page=" + page;
@@ -83,6 +80,28 @@ public class HomeController {
         return restTemplate.postForObject(URI.create(CLIENT_TOKEN_REQUEST_PATH + "?token=" + apiKey),
                 entity, ClientTokenResponse.class);
     }
+
+    @PostMapping(value = "/plants/search")
+    public String searchPlants(Model model, @RequestParam(required = false) String searchTerm, HttpServletRequest request) {
+
+        if (searchTerm.equals("")) {
+            model.addAttribute("error", "Search term cannot be blank");
+        }
+        else {
+            RestTemplate restTemplate = new RestTemplate();
+            String token = getClientToken(request.getRequestURI()).getToken();
+            PlantListResponse response = restTemplate.getForObject(
+                    API_PATH + "plants/search?q=" + searchTerm + "&token=" + token,
+                    PlantListResponse.class);
+            if (response != null) {
+                model.addAttribute("plants", response.getData());
+                model.addAttribute("links", response.getLinks());
+                model.addAttribute("meta", response.getMeta());
+            }
+        }
+        return "index";
+    }
+
 
     public String getPage(String uri) {
         Pattern p = Pattern.compile("page=\\d+");
