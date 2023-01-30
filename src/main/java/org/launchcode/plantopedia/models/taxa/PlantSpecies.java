@@ -1,10 +1,12 @@
 package org.launchcode.plantopedia.models.taxa;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.launchcode.plantopedia.models.links.SpeciesLinks;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
+import org.launchcode.plantopedia.responses.links.SpeciesLinks;
 
-import java.util.List;
-
+@MappedSuperclass
 public class PlantSpecies extends Taxon {
     @JsonProperty("common_name")
     private String commonName;
@@ -14,6 +16,7 @@ public class PlantSpecies extends Taxon {
     private String bibliography;
     private String author;
     private String status;
+    @Column(name = "species_rank")
     private String rank;
     @JsonProperty("family_common_name")
     private String familyCommonName;
@@ -21,10 +24,9 @@ public class PlantSpecies extends Taxon {
     private Integer genusId;
     @JsonProperty("image_url")
     private String imageUrl;
-    @JsonProperty("synonyms")
-    private List<String> truncatedSynonyms;
     private String genus;
     private String family;
+    @Transient
     private SpeciesLinks links;
 
     @JsonProperty("common_name")
@@ -110,15 +112,6 @@ public class PlantSpecies extends Taxon {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    @JsonProperty("synonyms")
-    public List<String> getTruncatedSynonyms() {
-        return truncatedSynonyms;
-    }
-
-    public void setTruncatedSynonyms(List<String> truncatedSynonyms) {
-        this.truncatedSynonyms = truncatedSynonyms;
     }
 
     public String getGenus() {

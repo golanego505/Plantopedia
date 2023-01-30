@@ -2,7 +2,7 @@ package org.launchcode.plantopedia.models.taxa;
 
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
-import org.launchcode.plantopedia.models.links.GenusLinks;
+import org.launchcode.plantopedia.responses.links.GenusLinks;
 
 @MappedSuperclass
 public class PlantGenus extends Taxon {

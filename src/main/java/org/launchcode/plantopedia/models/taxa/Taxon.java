@@ -3,6 +3,8 @@ package org.launchcode.plantopedia.models.taxa;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
+import java.util.Objects;
+
 @MappedSuperclass
 public abstract class Taxon {
     @Id
@@ -31,5 +33,23 @@ public abstract class Taxon {
                 "id=" + id +
                 ", slug='" + slug + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Taxon taxon = (Taxon) o;
+
+        if (!Objects.equals(id, taxon.id)) return false;
+        return Objects.equals(slug, taxon.slug);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (slug != null ? slug.hashCode() : 0);
+        return result;
     }
 }

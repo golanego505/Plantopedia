@@ -1,26 +1,34 @@
 package org.launchcode.plantopedia.models.distributions;
 
-import org.launchcode.plantopedia.models.distributions.TdwgUnit;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 
-import java.util.ArrayList;
+import java.util.List;
 
+@Entity
 public class DistributionZone extends TdwgUnit {
-    private TdwgUnit parent;
-    private ArrayList<TdwgUnit> children;
+    @ManyToOne
+    private DistributionZone parent;
+    @ElementCollection(fetch = FetchType.LAZY, targetClass = DistributionZone.class)
+    private List<DistributionZone> children;
 
-    public TdwgUnit getParent() {
+    public DistributionZone() {}
+
+    public DistributionZone getParent() {
         return parent;
     }
 
-    public void setParent(TdwgUnit parent) {
+    public void setParent(DistributionZone parent) {
         this.parent = parent;
     }
 
-    public ArrayList<TdwgUnit> getChildren() {
+    public List<DistributionZone> getChildren() {
         return children;
     }
 
-    public void setChildren(ArrayList<TdwgUnit> children) {
+    public void setChildren(List<DistributionZone> children) {
         this.children = children;
     }
 

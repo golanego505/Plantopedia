@@ -1,14 +1,21 @@
 package org.launchcode.plantopedia.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+@Entity
 public class Source {
     @JsonProperty("last_update")
     private String lastUpdate;
+    @Id
     private String id;
     private String name;
     private String url;
     private String citation;
+
+    public Source() {
+    }
 
     @JsonProperty("last_update")
     public String getLastUpdate() {

@@ -1,10 +1,9 @@
 package org.launchcode.plantopedia.models.taxa;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import org.launchcode.plantopedia.models.*;
+import jakarta.persistence.*;
+import org.launchcode.plantopedia.models.Source;
 import org.launchcode.plantopedia.models.distributions.Distribution;
 import org.launchcode.plantopedia.models.distributions.Distributions;
 import org.launchcode.plantopedia.models.measurements.LinearMeasurementCm;
@@ -17,6 +16,7 @@ import org.launchcode.plantopedia.models.presentations.FruitOrSeed;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Species extends PlantSpecies {
     private String observations;
     private Boolean vegetable;
@@ -24,19 +24,32 @@ public class Species extends PlantSpecies {
     @JsonProperty("edible_part")
     private String ediblePart;
     private Boolean edible;
+    @OneToOne
     private Images images;
     @JsonProperty("common_names")
+    @OneToOne
     private CommonNames commonNames;
+    @OneToOne
     private Distribution distribution;
+    @OneToOne
     private Distributions distributions;
+    @OneToOne
     private Flower flower;
+    @OneToOne
     private Foliage foliage;
     @JsonProperty("fruit_or_seed")
+    @OneToOne
     private FruitOrSeed fruitOrSeed;
+    @OneToOne
     private Specifications specifications;
+    @OneToOne
     private Growth growth;
+    @ManyToMany
     private List<Synonym> synonyms;
+    @ManyToMany
     private List<Source> sources;
+
+    public Species() {}
 
     public String getObservations() {
         return observations;
@@ -204,13 +217,34 @@ public class Species extends PlantSpecies {
                 '}';
     }
 
+    @Entity
     public static class Images {
+        @Id
+        @GeneratedValue
+        @JsonIgnore
+        private Integer id;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = Image.class)
         private List<Image> flower;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = Image.class)
         private List<Image> leaf;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = Image.class)
         private List<Image> habit;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = Image.class)
         private List<Image> fruit;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = Image.class)
         private List<Image> bark;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = Image.class)
         private List<Image> other;
+
+        public Images() {}
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
 
         public List<Image> getFlower() {
             return flower;
@@ -280,6 +314,8 @@ public class Species extends PlantSpecies {
             private String imageUrl;
             private String copyright;
 
+            public Image() {}
+
             public Integer getId() {
                 return id;
             }
@@ -316,13 +352,21 @@ public class Species extends PlantSpecies {
         }
     }
 
+    @Entity
+    @Access(AccessType.FIELD)
     public static class Growth {
+        @Id
+        @GeneratedValue
+        @JsonIgnore
+        private Integer id;
         private String description;
         private String sowing;
         @JsonProperty("days_to_harvest")
         private Integer daysToHarvest;
         @JsonProperty("row_spacing")
+        @Transient
         private LinearMeasurementCm rowSpacing;
+        @Transient
         private LinearMeasurementCm spread;
         @JsonProperty("ph_maximum")
         private Float phMaximum;
@@ -331,6 +375,12 @@ public class Species extends PlantSpecies {
         private Integer light;
         @JsonProperty("atmospheric_humidity")
         private Integer atmosphericHumidity;
+
+        /*These variables growthMonths, bloomMonths, fruitMonths should
+        be enums taking one of 12 values, which values are the common three-
+        letter abbreviations of the months, all lowercase.
+         */
+
         @JsonProperty("growth_months")
         private String growthMonths;
         @JsonProperty("bloom_months")
@@ -338,14 +388,19 @@ public class Species extends PlantSpecies {
         @JsonProperty("fruit_months")
         private String fruitMonths;
         @JsonProperty("minimum_precipitation")
+        @Transient
         private LinearMeasurementMm minimumPrecipitation;
         @JsonProperty("maximum_precipitation")
+        @Transient
         private LinearMeasurementMm maximumPrecipitation;
         @JsonProperty("minimum_root_depth")
+        @Transient
         private LinearMeasurementCm minimumRootDepth;
         @JsonProperty("minimum_temperature")
+        @Transient
         private Temperature minimumTemperature;
         @JsonProperty("maximum_temperature")
+        @Transient
         private Temperature maximumTemperature;
         @JsonProperty("soil_nutriments")
         private Integer soilNutriments;
@@ -355,6 +410,98 @@ public class Species extends PlantSpecies {
         private Integer soilTexture;
         @JsonProperty("soil_humidity")
         private Integer soilHumidity;
+
+        public Growth() {
+        }
+
+        public void setMinimumTemperatureDegF(Integer minimumTemperatureDegF) {
+        }
+
+        public void setMinimumTemperatureDegC(Integer minimumTemperatureDegC) {
+        }
+
+        public void setMaximumTemperatureDegF(Integer maximumTemperatureDegF) {
+        }
+
+        public void setMaximumTemperatureDegC(Integer maximumTemperatureDegC) {
+        }
+
+        public void setRowSpacingCm(Integer rowSpacingCm) {
+        }
+
+        public void setSpreadCm(Integer spreadCm) {
+        }
+
+        public void setMinimumPrecipitationMm(Integer minimumPrecipitationMm) {
+        }
+
+        public void setMaximumPrecipitationMm(Integer maximumPrecipitationMm) {
+        }
+
+        public void setMinimumRootDepthCm(Integer minimumRootDepthCm) {
+        }
+
+        @Column(name = "row_spacing_cm")
+        @Access(AccessType.PROPERTY)
+        public Integer getRowSpacingCm() {
+            return this.getRowSpacing().getCm();
+        }
+
+        @Column(name = "spread_cm")
+        @Access(AccessType.PROPERTY)
+        public Integer getSpreadCm() {
+            return this.getSpread().getCm();
+        }
+
+        @Column(name = "min_precip_mm")
+        @Access(AccessType.PROPERTY)
+        public Integer getMinimumPrecipitationMm() {
+            return this.getMinimumPrecipitation().getMm();
+        }
+
+        @Column(name = "max_precip_mm")
+        @Access(AccessType.PROPERTY)
+        public Integer getMaximumPrecipitationMm() {
+            return this.getMaximumPrecipitation().getMm();
+        }
+
+        @Column(name = "min_root_depth")
+        @Access(AccessType.PROPERTY)
+        public Integer getMinimumRootDepthCm() {
+            return this.getMinimumRootDepth().getCm();
+        }
+
+        @Column(name = "min_temp_F")
+        @Access(AccessType.PROPERTY)
+        public Integer getMinimumTemperatureDegF() {
+            return this.getMinimumTemperature().getDegF();
+        }
+
+        @Column(name = "min_temp_C")
+        @Access(AccessType.PROPERTY)
+        public Integer getMinimumTemperatureDegC() {
+            return this.getMinimumTemperature().getDegC();
+        }
+
+        @Column(name = "max_temp_F")
+        @Access(AccessType.PROPERTY)
+        public Integer getMaximumTemperatureDegF() {
+            return this.getMaximumTemperature().getDegF();
+        }
+
+        @Column(name = "max_temp_C")
+        @Access(AccessType.PROPERTY)
+        public Integer getMaximumTemperatureDegC() {
+            return this.getMaximumTemperature().getDegC();
+        }
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
 
         public String getDescription() {
             return description;
@@ -569,7 +716,13 @@ public class Species extends PlantSpecies {
         }
     }
 
+    @Entity
+    @Access(AccessType.FIELD)
     public static class Specifications {
+        @Id
+        @GeneratedValue
+        @JsonIgnore
+        private Integer id;
         @JsonProperty("ligneous_type")
         private String ligneousType;
         @JsonProperty("growth_form")
@@ -579,14 +732,40 @@ public class Species extends PlantSpecies {
         @JsonProperty("growth_rate")
         private String growthRate;
         @JsonProperty("average_height")
+        @Transient
         private LinearMeasurementCm averageHeight;
         @JsonProperty("maximum_height")
+        @Transient
         private LinearMeasurementCm maximumHeight;
         @JsonProperty("nitrogen_fixation")
         private String nitrogenFixation;
         @JsonProperty("shape_and_orientation")
         private String shapeAndOrientation;
         private String toxicity;
+
+        public Specifications() {}
+
+        public Integer getId() {
+            return this.id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        @Column(name = "avg_height_cm")
+        @Access(AccessType.PROPERTY)
+        public Integer getAverageHeightCm() {
+            return this.getAverageHeight().getCm();
+        }
+        public void setAverageHeightCm(Integer averageHeightCm) {}
+
+        @Column(name = "max_height_cm")
+        @Access(AccessType.PROPERTY)
+        public Integer getMaximumHeightCm() {
+            return this.getMaximumHeight().getCm();
+        }
+        public void setMaximumHeightCm(Integer maximumHeightCm) {}
 
         @JsonProperty("ligneous_type")
         public String getLigneousType() {
@@ -684,11 +863,17 @@ public class Species extends PlantSpecies {
         }
     }
 
+    @Entity
     public static class Synonym {
+        @Id
         private Integer id;
         private String name;
         private String author;
+        @ManyToMany
         private List<Source> sources;
+
+        public Synonym() {
+        }
 
         public Integer getId() {
             return id;
@@ -723,65 +908,139 @@ public class Species extends PlantSpecies {
         }
     }
 
+    @Entity
     public static class CommonNames {
+        @Id
+        @GeneratedValue
+        @JsonIgnore
+        private Integer id;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> en;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> ar;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> an;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> hy;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> az;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> eu;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> be;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> bg;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> ca;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> cv;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> hr;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> cs;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> da;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> nl;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> eo;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> et;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> fi;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> fr;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> gl;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> ka;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> de;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> he;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> hu;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
+        @Column(name = "lang_is")
         private ArrayList<String> is;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> it;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> kk;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> lv;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> lt;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> mk;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> gv;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> se;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> no;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> nb;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> nn;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> oc;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> fa;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> pl;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> pt;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> ru;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> sr;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> sk;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> sl;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> es;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> sv;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> tr;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> uk;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> wa;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> cy;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> fin;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> swe;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> dan;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> deu;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> eng;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> nno;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> nob;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> fra;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> por;
+        @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         private ArrayList<String> nld;
+
+        public CommonNames() {}
+
+        public Integer getId() {
+            return this.id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
 
         public ArrayList<String> getEn() {
             return en;

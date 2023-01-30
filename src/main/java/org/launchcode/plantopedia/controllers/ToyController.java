@@ -1,19 +1,32 @@
 package org.launchcode.plantopedia.controllers;
 
-import org.launchcode.plantopedia.models.responses.lists.KingdomListResponse;
-import org.launchcode.plantopedia.models.responses.retrievals.*;
+import org.launchcode.plantopedia.data.FamilyRepository;
+import org.launchcode.plantopedia.data.GenusRepository;
+import org.launchcode.plantopedia.models.taxa.Family;
+import org.launchcode.plantopedia.models.taxa.Genus;
+import org.launchcode.plantopedia.responses.lists.KingdomListResponse;
+import org.launchcode.plantopedia.responses.retrievals.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 @Controller
 public class ToyController {
+    public static final String API_PATH ="https://trefle.io/api/v1/";
 
     @SuppressWarnings("SpellCheckingInspection")
     @Value("${TREFLE_API_TOKEN}")
     private String apiKey;
+
+    @Autowired
+    private FamilyRepository familyRepository;
+    @Autowired
+    private GenusRepository genusRepository;
 
     @RequestMapping("/kingdom")
     @ResponseBody
@@ -156,5 +169,33 @@ public class ToyController {
             System.out.println(response.getData());
         }
         return "KingdomListResponse detail page";
+    }
+
+    @RequestMapping(value = "/get-data/families/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    private String getFamilyData(@PathVariable int id) {
+        RestTemplate restTemplate = new RestTemplate();
+        FamilyRetrievalResponse response = restTemplate.getForObject(
+                API_PATH + "families/" + id + "?token=" + apiKey,
+                FamilyRetrievalResponse.class);
+        if (response != null) {
+            Family family = response.getData();
+            familyRepository.save(family);
+        }
+        return "getFamilyData page";
+    }
+
+    @RequestMapping(value = "/get-data/genus/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    private String getGenusData(@PathVariable int id) {
+        RestTemplate restTemplate = new RestTemplate();
+        GenusRetrievalResponse response = restTemplate.getForObject(
+                API_PATH + "genus/" + id + "?token=" + apiKey,
+            GenusRetrievalResponse.class);
+        if (response != null) {
+            Genus genus = response.getData();
+            genusRepository.save(genus);
+        }
+        return "getGenusData page";
     }
 }
