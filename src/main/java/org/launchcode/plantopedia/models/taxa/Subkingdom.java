@@ -3,7 +3,7 @@ package org.launchcode.plantopedia.models.taxa;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
-import org.launchcode.plantopedia.models.links.SubkingdomLinks;
+import org.launchcode.plantopedia.responses.links.SubkingdomLinks;
 
 @Entity
 public class Subkingdom extends Taxon {
@@ -12,6 +12,9 @@ public class Subkingdom extends Taxon {
     private SubkingdomLinks links;
     @ManyToOne
     private Kingdom kingdom;
+
+    public Subkingdom() {
+    }
 
     public String getName() {
         return name;

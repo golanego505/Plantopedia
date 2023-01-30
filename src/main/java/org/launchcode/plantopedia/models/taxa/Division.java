@@ -3,7 +3,7 @@ package org.launchcode.plantopedia.models.taxa;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
-import org.launchcode.plantopedia.models.links.DivisionLinks;
+import org.launchcode.plantopedia.responses.links.DivisionLinks;
 
 @Entity
 public class Division extends Taxon {
@@ -12,6 +12,9 @@ public class Division extends Taxon {
     private DivisionLinks links;
     @ManyToOne
     private Subkingdom subkingdom;
+
+    public Division() {
+    }
 
     public String getName() {
         return name;

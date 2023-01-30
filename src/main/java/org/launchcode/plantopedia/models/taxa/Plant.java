@@ -1,11 +1,13 @@
 package org.launchcode.plantopedia.models.taxa;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 import org.launchcode.plantopedia.models.Source;
-import org.launchcode.plantopedia.models.links.PlantLinks;
+import org.launchcode.plantopedia.responses.links.PlantLinks;
 
 import java.util.List;
 
+@Entity
 public class Plant extends Taxon {
     @JsonProperty("common_name")
     private String commonName;
@@ -21,21 +23,38 @@ public class Plant extends Taxon {
     @JsonProperty("family_common_name")
     private String familyCommonName;
     @JsonProperty("genus_id")
+    @Transient
     private Integer genusId;
     private String observations;
     private Boolean vegetable;
+    @Transient
     private PlantLinks links;
     @JsonProperty("main_species")
+    @Transient
     private Species mainSpecies;
-    private PlantGenus genus;
-    private PlantFamily family;
-    private List<PlantSpecies> species;
-    private List<PlantSpecies> subspecies;
-    private List<PlantSpecies> varieties;
-    private List<PlantSpecies> hybrids;
-    private List<PlantSpecies> forms;
-    private List<PlantSpecies> subvarieties;
+    @ManyToOne
+    @JoinColumn(name = "genus_id")
+    private Genus genus;
+    @ManyToOne
+    @JoinColumn(name = "family_id")
+    private Family family;
+    @Transient
+    private List<PlantOrSpeciesListEntry> species;
+    @Transient
+    private List<PlantOrSpeciesListEntry> subspecies;
+    @Transient
+    private List<PlantOrSpeciesListEntry> varieties;
+    @Transient
+    private List<PlantOrSpeciesListEntry> hybrids;
+    @Transient
+    private List<PlantOrSpeciesListEntry> forms;
+    @Transient
+    private List<PlantOrSpeciesListEntry> subvarieties;
+    @ManyToMany
     private List<Source> sources;
+
+    public Plant() {
+    }
 
     @JsonProperty("common_name")
     public String getCommonName() {
@@ -147,67 +166,67 @@ public class Plant extends Taxon {
         this.mainSpecies = mainSpecies;
     }
 
-    public PlantGenus getGenus() {
+    public Genus getGenus() {
         return genus;
     }
 
-    public void setGenus(PlantGenus genus) {
+    public void setGenus(Genus genus) {
         this.genus = genus;
     }
 
-    public PlantFamily getFamily() {
+    public Family getFamily() {
         return family;
     }
 
-    public void setFamily(PlantFamily family) {
+    public void setFamily(Family family) {
         this.family = family;
     }
 
-    public List<PlantSpecies> getSpecies() {
+    public List<PlantOrSpeciesListEntry> getSpecies() {
         return species;
     }
 
-    public void setSpecies(List<PlantSpecies> species) {
+    public void setSpecies(List<PlantOrSpeciesListEntry> species) {
         this.species = species;
     }
 
-    public List<PlantSpecies> getSubspecies() {
+    public List<PlantOrSpeciesListEntry> getSubspecies() {
         return subspecies;
     }
 
-    public void setSubspecies(List<PlantSpecies> subspecies) {
+    public void setSubspecies(List<PlantOrSpeciesListEntry> subspecies) {
         this.subspecies = subspecies;
     }
 
-    public List<PlantSpecies> getVarieties() {
+    public List<PlantOrSpeciesListEntry> getVarieties() {
         return varieties;
     }
 
-    public void setVarieties(List<PlantSpecies> varieties) {
+    public void setVarieties(List<PlantOrSpeciesListEntry> varieties) {
         this.varieties = varieties;
     }
 
-    public List<PlantSpecies> getHybrids() {
+    public List<PlantOrSpeciesListEntry> getHybrids() {
         return hybrids;
     }
 
-    public void setHybrids(List<PlantSpecies> hybrids) {
+    public void setHybrids(List<PlantOrSpeciesListEntry> hybrids) {
         this.hybrids = hybrids;
     }
 
-    public List<PlantSpecies> getForms() {
+    public List<PlantOrSpeciesListEntry> getForms() {
         return forms;
     }
 
-    public void setForms(List<PlantSpecies> forms) {
+    public void setForms(List<PlantOrSpeciesListEntry> forms) {
         this.forms = forms;
     }
 
-    public List<PlantSpecies> getSubvarieties() {
+    public List<PlantOrSpeciesListEntry> getSubvarieties() {
         return subvarieties;
     }
 
-    public void setSubvarieties(List<PlantSpecies> subvarieties) {
+    public void setSubvarieties(List<PlantOrSpeciesListEntry> subvarieties) {
         this.subvarieties = subvarieties;
     }
 

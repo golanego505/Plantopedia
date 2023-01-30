@@ -2,13 +2,16 @@ package org.launchcode.plantopedia.models.taxa;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Transient;
-import org.launchcode.plantopedia.models.links.KingdomLinks;
+import org.launchcode.plantopedia.responses.links.KingdomLinks;
 
 @Entity
 public class Kingdom extends Taxon {
     private String name;
     @Transient
     private KingdomLinks links;
+
+    public Kingdom() {
+    }
 
     public KingdomLinks getLinks() {
         return links;

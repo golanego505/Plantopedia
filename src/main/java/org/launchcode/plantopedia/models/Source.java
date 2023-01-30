@@ -14,6 +14,9 @@ public class Source {
     private String url;
     private String citation;
 
+    public Source() {
+    }
+
     @JsonProperty("last_update")
     public String getLastUpdate() {
         return lastUpdate;

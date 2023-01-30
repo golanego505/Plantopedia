@@ -10,6 +10,9 @@ public class Family extends PlantFamily {
     @JsonProperty("division_order")
     private DivisionOrder divisionOrder;
 
+    public Family() {
+    }
+
     @JsonProperty("division_order")
     public DivisionOrder getDivisionOrder() {
         return divisionOrder;

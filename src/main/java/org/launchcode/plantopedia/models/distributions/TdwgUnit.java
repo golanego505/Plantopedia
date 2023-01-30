@@ -1,9 +1,13 @@
 package org.launchcode.plantopedia.models.distributions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.launchcode.plantopedia.models.links.TdwgUnitLinks;
+import jakarta.persistence.Entity;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 import org.launchcode.plantopedia.models.taxa.Taxon;
+import org.launchcode.plantopedia.responses.links.TdwgUnitLinks;
 
+@MappedSuperclass
 public class TdwgUnit extends Taxon {
     private String name;
     @JsonProperty("tdwg_code")
@@ -12,7 +16,10 @@ public class TdwgUnit extends Taxon {
     private Integer tdwgLevel;
     @JsonProperty("species_count")
     private Integer speciesCount;
+    @Transient
     private TdwgUnitLinks links;
+
+    public TdwgUnit() {}
 
     public String getName() {
         return name;

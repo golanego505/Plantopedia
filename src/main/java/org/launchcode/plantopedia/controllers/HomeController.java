@@ -1,8 +1,8 @@
 package org.launchcode.plantopedia.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.launchcode.plantopedia.models.responses.ClientTokenResponse;
-import org.launchcode.plantopedia.models.responses.lists.*;
+import org.launchcode.plantopedia.responses.ClientTokenResponse;
+import org.launchcode.plantopedia.responses.lists.PlantListResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
