@@ -63,21 +63,23 @@
 
 <div th:unless="${error}">
     <span>
-        <a th:href="'/parse-pagination-link?scheme=' + ${firstLinkScheme}
-        + '&authority=' + ${firstLinkAuthority} + '&path=' + ${firstLinkPath}
+        <a th:href="'/parse-pagination-link?path=' + ${firstLinkPath}
         + '&query=' + ${firstLinkQuery}">First</a>
     </span>
     <span th:unless="${firstLinkQuery}">
 
     </span>
-    <span th:if="${links.prev != null}">
-        <a th:href="'/parse-pagination-link?link=' + ${links.prev}">Previous</a>
+    <span th:if="${links.prev}">
+        <a th:href="'/parse-pagination-link?path=' + ${prevLinkPath}
+        + '&query=' + ${prevLinkQuery}">Previous</a>
     </span>
-    <span th:if="${links.next != null}">
-        <a th:href="'/parse-pagination-link?link=' + ${links.next}">Next</a>
+    <span th:if="${links.next}">
+        <a th:href="'/parse-pagination-link?path=' + ${nextLinkPath}
+        + '&query=' + ${nextLinkQuery}">Next</a>
     </span>
     <span>
-        <a th:href="'/parse-pagination-link?link=' + ${links.last}">Last</a>
+        <a th:href="'/parse-pagination-link?path=' + ${lastLinkPath}
+        + '&query=' + ${lastLinkQuery}">Last</a>
     </span>
 </div>
 

@@ -27,78 +27,24 @@ public class PlantListController {
     private String apiKey;
     public static final String API_SCHEME = "https";
     public static final String API_HOST = "trefle.io";
-    public static final String API_PATH ="/api/v1/";
+    public static final String API_PATH = "/api/v1/";
     public static final String BASE_API_URI = API_SCHEME + "://" + API_HOST + API_PATH;
-    public static final String CLIENT_TOKEN_REQUEST_PATH = "https://trefle.io/api/auth/claim";
+    public static final String CLIENT_TOKEN_REQUEST_PATH = API_SCHEME + "://" + API_HOST + "/api/auth/claim";
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String listAllPlants(Model model, HttpServletRequest request) {
-
-        String token = getClientToken(request.getRequestURI()).getToken();
-        URI listPlantsUri = URI.create(BASE_API_URI + "plants?token=" + token);
-        RestTemplate restTemplate = new RestTemplate();
-
-        PlantListResponse response = restTemplate.getForObject(
-                listPlantsUri, PlantListResponse.class);
-        if (response != null) {
-            model.addAttribute("plants", response.getData());
-            ListLinks links = response.getLinks();
-            try {
-                URI trefle = new URI(API_SCHEME, API_HOST, null, null);
-
-                URI first = trefle.resolve(links.getFirst());
-                model.addAttribute("firstLinkScheme", first.getScheme());
-                model.addAttribute("firstLinkAuthority", first.getAuthority());
-                model.addAttribute("firstLinkPath", first.getPath());
-                model.addAttribute("firstLinkQuery", first.getQuery());
-
-                URI last = trefle.resolve(links.getLast());
-                model.addAttribute("lastLinkScheme", last.getScheme());
-                model.addAttribute("lastLinkAuthority", last.getAuthority());
-                model.addAttribute("lastLinkPath", last.getPath());
-                model.addAttribute("lastLinkQuery", last.getQuery());
-
-                if (links.getPrev() != null) {
-                    URI prev = trefle.resolve(links.getPrev());
-                    model.addAttribute("prevLinkScheme", prev.getScheme());
-                    model.addAttribute("prevLinkAuthority", prev.getAuthority());
-                    model.addAttribute("prevLinkPath", prev.getPath());
-                    model.addAttribute("prevLinkQuery", prev.getQuery());
-                }
-
-                if (links.getNext() != null) {
-                    URI next = trefle.resolve(links.getNext());
-                    model.addAttribute("nextLinkScheme", next.getScheme());
-                    model.addAttribute("nextLinkAuthority", next.getAuthority());
-                    model.addAttribute("nextLinkPath", next.getPath());
-                    model.addAttribute("nextLinkQuery", next.getQuery());
-                }
-            }
-            catch (URISyntaxException e) {
-                model.addAttribute("error", "Bad URI");
-                return "listPlants";
-            }
-            model.addAttribute("links", links);
-            model.addAttribute("meta", response.getMeta());
-        }
-
-        return "listPlants";
+        return "redirect:/plants";
     }
 
     @RequestMapping(value = "/plants", method = RequestMethod.GET)
     public String plantListByPage(Model model, HttpServletRequest request,
-                                  @RequestParam(value = "page", defaultValue = "0") String page) {
-
-        if (page.equals("0")) {
-            return "redirect:/";
-        }
+                                  @RequestParam(value = "page", defaultValue = "1") String page) {
 
         String token = getClientToken(request.getRequestURI()).getToken();
-        URI listPlantsUri = URI.create(BASE_API_URI + "plants?token=" + token + "&page=" + page);
         RestTemplate restTemplate = new RestTemplate();
-
+        URI listPlants = URI.create(BASE_API_URI + "plants?token=" + token + "&page=" + page);
         PlantListResponse response = restTemplate.getForObject(
-                listPlantsUri, PlantListResponse.class);
+                listPlants, PlantListResponse.class);
 
         if (response != null) {
             model.addAttribute("plants", response.getData());
@@ -107,34 +53,25 @@ public class PlantListController {
                 URI trefle = new URI(API_SCHEME, API_HOST, null, null);
 
                 URI first = trefle.resolve(links.getFirst());
-                model.addAttribute("firstLinkScheme", first.getScheme());
-                model.addAttribute("firstLinkAuthority", first.getAuthority());
                 model.addAttribute("firstLinkPath", first.getPath());
                 model.addAttribute("firstLinkQuery", first.getQuery());
 
                 URI last = trefle.resolve(links.getLast());
-                model.addAttribute("lastLinkScheme", last.getScheme());
-                model.addAttribute("lastLinkAuthority", last.getAuthority());
                 model.addAttribute("lastLinkPath", last.getPath());
                 model.addAttribute("lastLinkQuery", last.getQuery());
 
                 if (links.getPrev() != null) {
                     URI prev = trefle.resolve(links.getPrev());
-                    model.addAttribute("prevLinkScheme", prev.getScheme());
-                    model.addAttribute("prevLinkAuthority", prev.getAuthority());
                     model.addAttribute("prevLinkPath", prev.getPath());
                     model.addAttribute("prevLinkQuery", prev.getQuery());
                 }
 
                 if (links.getNext() != null) {
                     URI next = trefle.resolve(links.getNext());
-                    model.addAttribute("nextLinkScheme", next.getScheme());
-                    model.addAttribute("nextLinkAuthority", next.getAuthority());
                     model.addAttribute("nextLinkPath", next.getPath());
                     model.addAttribute("nextLinkQuery", next.getQuery());
                 }
-            }
-            catch (URISyntaxException e) {
+            } catch (URISyntaxException e) {
                 model.addAttribute("error", "Bad URI");
                 return "listPlants";
             }
@@ -147,34 +84,14 @@ public class PlantListController {
 
     @RequestMapping(value = "/plants/detail/{plantId}", method = RequestMethod.GET)
     public String plantDetails(@PathVariable int plantId, HttpServletRequest request) {
-
         String token = getClientToken(request.getRequestURI()).getToken();
         return "redirect:https://trefle.io/api/v1/plants/" + plantId + "?token=" + token;
     }
 
     @RequestMapping(value = "/parse-pagination-link", method = RequestMethod.GET)
-    public String parsePaginationLink(Model model, @RequestParam String scheme,
-                                      @RequestParam String authority,
-                                      @RequestParam String path,
-                                      @RequestParam String query, HttpServletRequest request) {
-        RestTemplate template = new RestTemplate();
-        String token = getClientToken(request.getRequestURI()).getToken();
-        URI uri = new URI(scheme, authority, path, query, null);
-        if (q.equals("")) {
-            uri = API_SCHEME + "://" + API_HOST + link + "&token=" + token;
-        }
-        else {
-            uri = API_SCHEME + "://" + API_HOST + link + "&q=" + q + "&token=" + token;
-        }
-        PlantListResponse response = template.getForObject(
-                uri,
-                PlantListResponse.class);
-        if (response != null) {
-            model.addAttribute("plants", response.getData());
-            model.addAttribute("links", response.getLinks());
-            model.addAttribute("meta", response.getMeta());
-        }
-        return "listPlants";
+    public String parsePaginationLink(@RequestParam String query) {
+        String page = getPage(query);
+        return "redirect:/plants?page=" + page;
     }
 
     @RequestMapping(value = "/plants/search")
@@ -194,8 +111,7 @@ public class PlantListController {
                 model.addAttribute("links", plantListResponse.getLinks());
                 model.addAttribute("meta", plantListResponse.getMeta());
             }
-        }
-        else {
+        } else {
             PlantListResponse response = restTemplate.getForObject(
                     BASE_API_URI + "plants/search?q=" + q + "&token=" + token,
                     PlantListResponse.class);
@@ -217,14 +133,13 @@ public class PlantListController {
                 entity, ClientTokenResponse.class);
     }
 
-    public String getPage(String uri) {
+    public String getPage(String query) {
         Pattern p = Pattern.compile("page=\\d+");
-        Matcher m = p.matcher(uri);
+        Matcher m = p.matcher(query);
         boolean b = m.find();
         if (!b) {
-            return "0";
-        }
-        else {
+            return "1";
+        } else {
             return m.group().replace("page=", "");
         }
     }
