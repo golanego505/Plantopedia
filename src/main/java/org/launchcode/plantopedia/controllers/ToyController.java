@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+/* As its name suggests, this controller is for playing around,
+   experimenting, troubleshooting, etc. At this point it does
+   nothing important in the application.
+ */
 @Controller
 public class ToyController {
     public static final String API_PATH ="https://trefle.io/api/v1/";
