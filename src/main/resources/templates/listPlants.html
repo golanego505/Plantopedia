@@ -16,7 +16,6 @@
     a:visited {
     color: CaptionText;
     }
-
     </style>
 </head>
 <body>
@@ -28,7 +27,7 @@
 <div th:if="${q}">
     <h3 th:if="${error}" th:text="${error}"></h3>
     <h3 th:unless="${error}"
-        th:text="'Your search for ' + ${q} + ' returned ' + ${meta.total} + ' plants.'"></h3>
+        th:text="'Your search for \'' + ${q} + '\' returned ' + ${meta.total} + ' plants.'"></h3>
 </div>
 <div th:unless="${q}">
     <h3>
@@ -38,9 +37,12 @@
 </div>
 
 <form method="POST" th:action="@{/plants/search}">
+    <label for="q">Keyword:</label>
     <input type="text" id="q" name="q"/>
     <input type="submit" value="Search"/>
 </form>
+
+<h4 th:text="'Page ' + ${page} + ' of ' + ${pageCount}"></h4>
 
 <ol>
     <li th:each="plant : ${plants}" style="width: 20%">
@@ -63,23 +65,19 @@
 
 <div th:unless="${error}">
     <span>
-        <a th:href="'/parse-pagination-link?path=' + ${firstLinkPath}
-        + '&query=' + ${firstLinkQuery}">First</a>
+        <a th:href="'/parse-pagination-link?' + ${firstLinkQuery} + '&path=' + ${firstLinkPath}">First</a>
     </span>
-    <span th:unless="${firstLinkQuery}">
 
-    </span>
+    <span th:unless="${firstLinkQuery}"></span>
+
     <span th:if="${links.prev}">
-        <a th:href="'/parse-pagination-link?path=' + ${prevLinkPath}
-        + '&query=' + ${prevLinkQuery}">Previous</a>
+        <a th:href="'/parse-pagination-link?' + ${prevLinkQuery} + '&path=' + ${prevLinkPath}">Previous</a>
     </span>
     <span th:if="${links.next}">
-        <a th:href="'/parse-pagination-link?path=' + ${nextLinkPath}
-        + '&query=' + ${nextLinkQuery}">Next</a>
+        <a th:href="'/parse-pagination-link?' + ${nextLinkQuery} + '&path=' + ${nextLinkPath}">Next</a>
     </span>
     <span>
-        <a th:href="'/parse-pagination-link?path=' + ${lastLinkPath}
-        + '&query=' + ${lastLinkQuery}">Last</a>
+        <a th:href="'/parse-pagination-link?' + ${lastLinkQuery} + '&path=' + ${lastLinkPath}">Last</a>
     </span>
 </div>
 
