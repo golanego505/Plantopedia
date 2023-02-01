@@ -41,7 +41,7 @@ public class PlantListController {
 
         model.addAttribute("page", page);
         RestTemplate restTemplate = new RestTemplate();
-        URI listPlants = URI.create(BASE_API_URI + "/" + "plants?token=" + apiKey + "&page=" + page);
+        URI listPlants = URI.create(BASE_API_URI + "plants?token=" + apiKey + "&page=" + page);
         PlantListResponse response = restTemplate.getForObject(
                 listPlants, PlantListResponse.class);
         addPlantListToModel(model, response);
