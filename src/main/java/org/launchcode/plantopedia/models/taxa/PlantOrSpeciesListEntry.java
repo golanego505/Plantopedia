@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class PlantOrSpeciesListEntry extends PlantSpecies {
+public class PlantOrSpeciesListEntry extends SpeciesLight {
     @JsonProperty("synonyms")
     private List<String> truncatedSynonyms;
 

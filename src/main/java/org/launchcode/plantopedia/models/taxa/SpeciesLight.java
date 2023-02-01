@@ -7,7 +7,7 @@ import jakarta.persistence.Transient;
 import org.launchcode.plantopedia.responses.links.SpeciesLinks;
 
 @MappedSuperclass
-public class PlantSpecies extends Taxon {
+public class SpeciesLight extends Taxon {
     @JsonProperty("common_name")
     private String commonName;
     @JsonProperty("scientific_name")

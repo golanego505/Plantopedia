@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Species extends PlantSpecies {
+public class Species extends SpeciesLight {
     private String observations;
     private Boolean vegetable;
     private String duration;
