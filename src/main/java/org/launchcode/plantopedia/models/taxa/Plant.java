@@ -2,13 +2,12 @@ package org.launchcode.plantopedia.models.taxa;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import org.launchcode.plantopedia.models.Source;
 import org.launchcode.plantopedia.responses.links.PlantLinks;
 
 import java.util.List;
 
 @Entity
-public class Plant extends Taxon {
+public class Plant extends TaxonWithSources {
     @JsonProperty("common_name")
     private String commonName;
     @JsonProperty("scientific_name")
@@ -39,19 +38,17 @@ public class Plant extends Taxon {
     @JoinColumn(name = "family_id")
     private Family family;
     @Transient
-    private List<PlantOrSpeciesListEntry> species;
+    private List<SpeciesLight> species;
     @Transient
-    private List<PlantOrSpeciesListEntry> subspecies;
+    private List<SpeciesLight> subspecies;
     @Transient
-    private List<PlantOrSpeciesListEntry> varieties;
+    private List<SpeciesLight> varieties;
     @Transient
-    private List<PlantOrSpeciesListEntry> hybrids;
+    private List<SpeciesLight> hybrids;
     @Transient
-    private List<PlantOrSpeciesListEntry> forms;
+    private List<SpeciesLight> forms;
     @Transient
-    private List<PlantOrSpeciesListEntry> subvarieties;
-    @ManyToMany
-    private List<Source> sources;
+    private List<SpeciesLight> subvarieties;
 
     public Plant() {
     }
@@ -182,60 +179,52 @@ public class Plant extends Taxon {
         this.family = family;
     }
 
-    public List<PlantOrSpeciesListEntry> getSpecies() {
+    public List<SpeciesLight> getSpecies() {
         return species;
     }
 
-    public void setSpecies(List<PlantOrSpeciesListEntry> species) {
+    public void setSpecies(List<SpeciesLight> species) {
         this.species = species;
     }
 
-    public List<PlantOrSpeciesListEntry> getSubspecies() {
+    public List<SpeciesLight> getSubspecies() {
         return subspecies;
     }
 
-    public void setSubspecies(List<PlantOrSpeciesListEntry> subspecies) {
+    public void setSubspecies(List<SpeciesLight> subspecies) {
         this.subspecies = subspecies;
     }
 
-    public List<PlantOrSpeciesListEntry> getVarieties() {
+    public List<SpeciesLight> getVarieties() {
         return varieties;
     }
 
-    public void setVarieties(List<PlantOrSpeciesListEntry> varieties) {
+    public void setVarieties(List<SpeciesLight> varieties) {
         this.varieties = varieties;
     }
 
-    public List<PlantOrSpeciesListEntry> getHybrids() {
+    public List<SpeciesLight> getHybrids() {
         return hybrids;
     }
 
-    public void setHybrids(List<PlantOrSpeciesListEntry> hybrids) {
+    public void setHybrids(List<SpeciesLight> hybrids) {
         this.hybrids = hybrids;
     }
 
-    public List<PlantOrSpeciesListEntry> getForms() {
+    public List<SpeciesLight> getForms() {
         return forms;
     }
 
-    public void setForms(List<PlantOrSpeciesListEntry> forms) {
+    public void setForms(List<SpeciesLight> forms) {
         this.forms = forms;
     }
 
-    public List<PlantOrSpeciesListEntry> getSubvarieties() {
+    public List<SpeciesLight> getSubvarieties() {
         return subvarieties;
     }
 
-    public void setSubvarieties(List<PlantOrSpeciesListEntry> subvarieties) {
+    public void setSubvarieties(List<SpeciesLight> subvarieties) {
         this.subvarieties = subvarieties;
-    }
-
-    public List<Source> getSources() {
-        return sources;
-    }
-
-    public void setSources(List<Source> sources) {
-        this.sources = sources;
     }
 
     @Override
@@ -262,7 +251,7 @@ public class Plant extends Taxon {
                 ", hybrids=" + hybrids +
                 ", forms=" + forms +
                 ", subvarieties=" + subvarieties +
-                ", sources=" + sources +
+                ", sources=" + this.getSources() +
                 '}';
     }
 }

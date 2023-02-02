@@ -1,17 +1,17 @@
 package org.launchcode.plantopedia.responses.lists;
 
-import org.launchcode.plantopedia.models.distributions.DistributionZone;
+import org.launchcode.plantopedia.models.distributions.Zone;
 
 import java.util.List;
 
 public class DistributionZoneListResponse extends ListResponse {
-    private List<DistributionZone> data;
+    private List<Zone> data;
 
-    public List<DistributionZone> getData() {
+    public List<Zone> getData() {
         return data;
     }
 
-    public void setData(List<DistributionZone> data) {
+    public void setData(List<Zone> data) {
         this.data = data;
     }
 }

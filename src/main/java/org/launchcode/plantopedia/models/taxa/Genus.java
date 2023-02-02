@@ -1,13 +1,33 @@
 package org.launchcode.plantopedia.models.taxa;
 
 import jakarta.persistence.*;
+import org.launchcode.plantopedia.responses.links.GenusLinks;
 
 @Entity
 @Access(AccessType.FIELD)
-public class Genus extends PlantGenus {
+public class Genus extends Taxon {
+    private String name;
+    @Transient
+    private GenusLinks links;
     @ManyToOne
     private Family family;
     public Genus() {}
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public GenusLinks getLinks() {
+        return links;
+    }
+
+    public void setLinks(GenusLinks links) {
+        this.links = links;
+    }
+
 
     public Family getFamily() {
         return family;

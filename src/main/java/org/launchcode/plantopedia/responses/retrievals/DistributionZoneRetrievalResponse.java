@@ -1,15 +1,15 @@
 package org.launchcode.plantopedia.responses.retrievals;
 
-import org.launchcode.plantopedia.models.distributions.DistributionZone;
+import org.launchcode.plantopedia.models.distributions.Zone;
 
 public class DistributionZoneRetrievalResponse extends RetrievalResponse {
-    private DistributionZone data;
+    private Zone data;
 
-    public DistributionZone getData() {
+    public Zone getData() {
         return data;
     }
 
-    public void setData(DistributionZone data) {
+    public void setData(Zone data) {
         this.data = data;
     }
 
