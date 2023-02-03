@@ -13,6 +13,7 @@ public class Plant extends TaxonWithSources {
     @JsonProperty("scientific_name")
     private String scientificName;
     @JsonProperty("main_species_id")
+    @Transient
     private Integer mainSpeciesId;
     @JsonProperty("image_url")
     private String imageUrl;
@@ -22,6 +23,7 @@ public class Plant extends TaxonWithSources {
     @JsonProperty("family_common_name")
     private String familyCommonName;
     @JsonProperty("genus_id")
+    @Transient
     private Integer genusId;
     private String observations;
     private Boolean vegetable;
@@ -36,6 +38,7 @@ public class Plant extends TaxonWithSources {
     @ManyToOne
     @JoinColumn(name = "family_id")
     private Family family;
+    @Transient
     private List<SpeciesLight> species;
     @Transient
     private List<SpeciesLight> subspecies;

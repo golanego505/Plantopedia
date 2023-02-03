@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
+import static org.launchcode.plantopedia.controllers.ClientToken.getClientToken;
 import static org.launchcode.plantopedia.controllers.PlantListController.BASE_API_URI;
 
 @Controller
@@ -20,7 +21,7 @@ public class PlantSearchController {
                                @Value("${TREFLE_API_TOKEN}") String apiKey) {
 
         RestTemplate restTemplate = new RestTemplate();
-        String token = PlantListController.getClientToken(request.getRequestURI(), apiKey).getToken();
+        String token = getClientToken(request.getRequestURI(), apiKey).getToken();
         PlantListResponse response = restTemplate.getForObject(
                 BASE_API_URI + "plants/search?q=" + q + "&page=" + page + "&token=" + token,
                 PlantListResponse.class);
