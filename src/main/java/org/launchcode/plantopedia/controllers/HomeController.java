@@ -14,19 +14,18 @@ import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.launchcode.plantopedia.controllers.ClientToken.API_PATH;
+import static org.launchcode.plantopedia.controllers.ClientToken.getClientToken;
+
 @Controller
 public class HomeController {
 
-    @SuppressWarnings("SpellCheckingInspection")
-    @Value("${TREFLE_API_TOKEN}")
-    private String apiKey;
-    public static final String API_PATH ="https://trefle.io/api/v1/";
-    public static final String CLIENT_TOKEN_REQUEST_PATH = "https://trefle.io/api/auth/claim";
+
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String index(Model model) {
+    public String index(Model model, HttpServletRequest request) {
 
-        String listPlantsUri = API_PATH + "plants?token=" + apiKey;
+        String listPlantsUri = API_PATH + "plants?token=" + getClientToken(request.getRequestURI()).getToken();
         RestTemplate restTemplate = new RestTemplate();
 
         PlantListResponse plantListResponse = restTemplate.getForObject(
@@ -41,13 +40,13 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/plants", method = RequestMethod.GET)
-    public String plantListResult(Model model, @RequestParam(value = "page", defaultValue = "0") String page) {
+    public String plantListResult(Model model, @RequestParam(value = "page", defaultValue = "0") String page, HttpServletRequest request) {
 
         if (page.equals("0")) {
             return "redirect:/";
         }
 
-        String listPlantsUri = API_PATH + "plants?token=" + apiKey + "&page=" + page;
+        String listPlantsUri = API_PATH + "plants?token=" + getClientToken(request.getRequestURI()).getToken() + "&page=" + page;
         RestTemplate restTemplate = new RestTemplate();
 
         PlantListResponse plantListResponse = restTemplate.getForObject(
@@ -61,11 +60,7 @@ public class HomeController {
         return "index";
     }
 
-    @RequestMapping(value = "/plants/{plantId}", method = RequestMethod.GET)
-    public String plantDetails(@PathVariable int plantId, HttpServletRequest request) {
-        String token = getClientToken(request.getRequestURI()).getToken();
-        return "redirect:https://trefle.io/api/v1/plants/" + plantId + "?token=" + token;
-    }
+
 
     @RequestMapping(value = "/parse-pagination-link", method = RequestMethod.GET)
     public String parsePaginationLink(@RequestParam String link) {
@@ -73,13 +68,7 @@ public class HomeController {
         return "redirect:/plants?page=" + page;
     }
 
-    public ClientTokenResponse getClientToken(String origin) {
-        ClientTokenRequest request = new ClientTokenRequest(origin);
-        HttpEntity<ClientTokenRequest> entity = new HttpEntity<>(request);
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.postForObject(URI.create(CLIENT_TOKEN_REQUEST_PATH + "?token=" + apiKey),
-                entity, ClientTokenResponse.class);
-    }
+
 
     @PostMapping(value = "/plants/search")
     public String searchPlants(Model model, @RequestParam(required = false) String searchTerm, HttpServletRequest request) {
@@ -115,34 +104,5 @@ public class HomeController {
         }
     }
 
-    public static class ClientTokenRequest {
-        private String origin;
-        private String ip;
 
-        public ClientTokenRequest(String origin) {
-            this.origin = origin;
-            this.ip = null;
-        }
-
-        public ClientTokenRequest(String origin, String ip) {
-            this.origin = origin;
-            this.ip = ip;
-        }
-
-        public String getOrigin() {
-            return origin;
-        }
-
-        public void setOrigin(String origin) {
-            this.origin = origin;
-        }
-
-        public String getIp() {
-            return ip;
-        }
-
-        public void setIp(String ip) {
-            this.ip = ip;
-        }
-    }
 }
