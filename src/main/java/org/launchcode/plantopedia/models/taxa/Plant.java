@@ -13,6 +13,7 @@ public class Plant extends TaxonWithSources {
     @JsonProperty("scientific_name")
     private String scientificName;
     @JsonProperty("main_species_id")
+    @Transient
     private Integer mainSpeciesId;
     @JsonProperty("image_url")
     private String imageUrl;
@@ -29,7 +30,7 @@ public class Plant extends TaxonWithSources {
     @Transient
     private PlantLinks links;
     @JsonProperty("main_species")
-    @Transient
+    @OneToOne
     private Species mainSpecies;
     @ManyToOne
     @JoinColumn(name = "genus_id")
@@ -38,17 +39,18 @@ public class Plant extends TaxonWithSources {
     @JoinColumn(name = "family_id")
     private Family family;
     @Transient
+    @OneToMany
     private List<SpeciesLight> species;
-    @Transient
-    private List<SpeciesLight> subspecies;
-    @Transient
-    private List<SpeciesLight> varieties;
-    @Transient
-    private List<SpeciesLight> hybrids;
-    @Transient
-    private List<SpeciesLight> forms;
-    @Transient
-    private List<SpeciesLight> subvarieties;
+//    @Transient
+//    private List<SpeciesLight> subspecies;
+//    @Transient
+//    private List<SpeciesLight> varieties;
+//    @Transient
+//    private List<SpeciesLight> hybrids;
+//    @Transient
+//    private List<SpeciesLight> forms;
+//    @Transient
+//    private List<SpeciesLight> subvarieties;
 
     public Plant() {
     }
@@ -187,45 +189,45 @@ public class Plant extends TaxonWithSources {
         this.species = species;
     }
 
-    public List<SpeciesLight> getSubspecies() {
-        return subspecies;
-    }
-
-    public void setSubspecies(List<SpeciesLight> subspecies) {
-        this.subspecies = subspecies;
-    }
-
-    public List<SpeciesLight> getVarieties() {
-        return varieties;
-    }
-
-    public void setVarieties(List<SpeciesLight> varieties) {
-        this.varieties = varieties;
-    }
-
-    public List<SpeciesLight> getHybrids() {
-        return hybrids;
-    }
-
-    public void setHybrids(List<SpeciesLight> hybrids) {
-        this.hybrids = hybrids;
-    }
-
-    public List<SpeciesLight> getForms() {
-        return forms;
-    }
-
-    public void setForms(List<SpeciesLight> forms) {
-        this.forms = forms;
-    }
-
-    public List<SpeciesLight> getSubvarieties() {
-        return subvarieties;
-    }
-
-    public void setSubvarieties(List<SpeciesLight> subvarieties) {
-        this.subvarieties = subvarieties;
-    }
+//    public List<SpeciesLight> getSubspecies() {
+//        return subspecies;
+//    }
+//
+//    public void setSubspecies(List<SpeciesLight> subspecies) {
+//        this.subspecies = subspecies;
+//    }
+//
+//    public List<SpeciesLight> getVarieties() {
+//        return varieties;
+//    }
+//
+//    public void setVarieties(List<SpeciesLight> varieties) {
+//        this.varieties = varieties;
+//    }
+//
+//    public List<SpeciesLight> getHybrids() {
+//        return hybrids;
+//    }
+//
+//    public void setHybrids(List<SpeciesLight> hybrids) {
+//        this.hybrids = hybrids;
+//    }
+//
+//    public List<SpeciesLight> getForms() {
+//        return forms;
+//    }
+//
+//    public void setForms(List<SpeciesLight> forms) {
+//        this.forms = forms;
+//    }
+//
+//    public List<SpeciesLight> getSubvarieties() {
+//        return subvarieties;
+//    }
+//
+//    public void setSubvarieties(List<SpeciesLight> subvarieties) {
+//        this.subvarieties = subvarieties;
+//    }
 
     @Override
     public String toString() {
@@ -246,11 +248,11 @@ public class Plant extends TaxonWithSources {
                 ", links=" + links +
                 ", mainSpecies=" + mainSpecies +
                 ", species=" + species +
-                ", subspecies=" + subspecies +
-                ", varieties=" + varieties +
-                ", hybrids=" + hybrids +
-                ", forms=" + forms +
-                ", subvarieties=" + subvarieties +
+//                ", subspecies=" + subspecies +
+//                ", varieties=" + varieties +
+//                ", hybrids=" + hybrids +
+//                ", forms=" + forms +
+//                ", subvarieties=" + subvarieties +
                 ", sources=" + this.getSources() +
                 '}';
     }
