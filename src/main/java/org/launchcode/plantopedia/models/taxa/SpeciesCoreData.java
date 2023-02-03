@@ -14,6 +14,7 @@ public abstract class SpeciesCoreData extends Taxon {
     @JsonProperty("scientific_name")
     private String scientificName;
     private Integer year;
+    @Column(length = 511)
     private String bibliography;
     private String author;
     private Status status;
@@ -22,6 +23,7 @@ public abstract class SpeciesCoreData extends Taxon {
     @JsonProperty("family_common_name")
     private String familyCommonName;
     @JsonProperty("genus_id")
+    @Transient
     private Integer genusId;
     @JsonProperty("image_url")
     private String imageUrl;
@@ -137,6 +139,27 @@ public abstract class SpeciesCoreData extends Taxon {
 
     public void setLinks(SpeciesLinks links) {
         this.links = links;
+    }
+
+    @Override
+    public String toString() {
+        return "SpeciesCoreData{" +
+                " id=" + this.getId() +
+                ", slug=" + this.getSlug() +
+                ", commonName='" + commonName + '\'' +
+                ", scientificName='" + scientificName + '\'' +
+                ", year=" + year +
+                ", bibliography='" + bibliography + '\'' +
+                ", author='" + author + '\'' +
+                ", status=" + status +
+                ", rank=" + rank +
+                ", familyCommonName='" + familyCommonName + '\'' +
+                ", genusId=" + genusId +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", genus='" + genus + '\'' +
+                ", family='" + family + '\'' +
+                ", links=" + links +
+                '}';
     }
 
     public enum Rank {
