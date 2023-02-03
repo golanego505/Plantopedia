@@ -7,7 +7,6 @@ import org.launchcode.plantopedia.models.taxa.Genus;
 import org.launchcode.plantopedia.responses.lists.KingdomListResponse;
 import org.launchcode.plantopedia.responses.retrievals.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+/* As its name suggests, this controller is for playing around,
+   experimenting, troubleshooting, etc. At this point it does
+   nothing important in the application.
+ */
 @Controller
 public class ToyController {
     public static final String API_PATH ="https://trefle.io/api/v1/";
-
-    @SuppressWarnings("SpellCheckingInspection")
-    @Value("${TREFLE_API_TOKEN}")
-    private String apiKey;
+    private String apiKey = "MY_FAKE_KEY";
 
     @Autowired
     private FamilyRepository familyRepository;

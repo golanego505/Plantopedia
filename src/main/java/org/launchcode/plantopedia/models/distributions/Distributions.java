@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Distributions {
@@ -13,10 +13,16 @@ public class Distributions {
     @JsonIgnore
     private Integer id;
     @JsonProperty("native")
-    @ElementCollection(fetch = FetchType.LAZY, targetClass = DistributionZone.class)
-    private ArrayList<DistributionZone> ntv;
-    @ElementCollection(fetch = FetchType.LAZY, targetClass = DistributionZone.class)
-    private ArrayList<DistributionZone> introduced;
+    @ElementCollection(fetch = FetchType.LAZY, targetClass = TdwgUnit.class)
+    private List<TdwgUnit> ntv;
+    @ElementCollection(fetch = FetchType.LAZY, targetClass = TdwgUnit.class)
+    private List<TdwgUnit> introduced;
+    @ElementCollection(fetch = FetchType.LAZY, targetClass = TdwgUnit.class)
+    private List<TdwgUnit> doubtful;
+    @ElementCollection(fetch = FetchType.LAZY, targetClass = TdwgUnit.class)
+    private List<TdwgUnit> absent;
+    @ElementCollection(fetch = FetchType.LAZY, targetClass = TdwgUnit.class)
+    private List<TdwgUnit> extinct;
 
     public Distributions() {}
 
@@ -29,27 +35,55 @@ public class Distributions {
     }
 
     @JsonProperty("native")
-    public ArrayList<DistributionZone> getNtv() {
+    public List<TdwgUnit> getNtv() {
         return ntv;
     }
 
-    public void setNtv(ArrayList<DistributionZone> ntv) {
+    public void setNtv(List<TdwgUnit> ntv) {
         this.ntv = ntv;
     }
 
-    public ArrayList<DistributionZone> getIntroduced() {
+    public List<TdwgUnit> getIntroduced() {
         return introduced;
     }
 
-    public void setIntroduced(ArrayList<DistributionZone> introduced) {
+    public void setIntroduced(List<TdwgUnit> introduced) {
         this.introduced = introduced;
+    }
+
+    public List<TdwgUnit> getDoubtful() {
+        return doubtful;
+    }
+
+    public void setDoubtful(List<TdwgUnit> doubtful) {
+        this.doubtful = doubtful;
+    }
+
+    public List<TdwgUnit> getAbsent() {
+        return absent;
+    }
+
+    public void setAbsent(List<TdwgUnit> absent) {
+        this.absent = absent;
+    }
+
+    public List<TdwgUnit> getExtinct() {
+        return extinct;
+    }
+
+    public void setExtinct(List<TdwgUnit> extinct) {
+        this.extinct = extinct;
     }
 
     @Override
     public String toString() {
         return "Distributions{" +
-                "ntv=" + ntv +
+                "id=" + id +
+                ", ntv=" + ntv +
                 ", introduced=" + introduced +
+                ", doubtful=" + doubtful +
+                ", absent=" + absent +
+                ", extinct=" + extinct +
                 '}';
     }
 }

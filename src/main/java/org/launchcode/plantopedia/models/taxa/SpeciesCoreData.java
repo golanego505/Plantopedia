@@ -1,13 +1,14 @@
 package org.launchcode.plantopedia.models.taxa;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
 import org.launchcode.plantopedia.responses.links.SpeciesLinks;
 
 @MappedSuperclass
-public class PlantSpecies extends Taxon {
+public abstract class SpeciesCoreData extends Taxon {
     @JsonProperty("common_name")
     private String commonName;
     @JsonProperty("scientific_name")
@@ -15,9 +16,9 @@ public class PlantSpecies extends Taxon {
     private Integer year;
     private String bibliography;
     private String author;
-    private String status;
+    private Status status;
     @Column(name = "species_rank")
-    private String rank;
+    private Rank rank;
     @JsonProperty("family_common_name")
     private String familyCommonName;
     @JsonProperty("genus_id")
@@ -71,19 +72,19 @@ public class PlantSpecies extends Taxon {
         this.author = author;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public String getRank() {
+    public Rank getRank() {
         return rank;
     }
 
-    public void setRank(String rank) {
+    public void setRank(Rank rank) {
         this.rank = rank;
     }
 
@@ -136,5 +137,41 @@ public class PlantSpecies extends Taxon {
 
     public void setLinks(SpeciesLinks links) {
         this.links = links;
+    }
+
+    public enum Rank {
+        SPECIES ("species"),
+        SUBSPECIES ("ssp"),
+        VARIETY ("var"),
+        FORM ("form"),
+        HYBRID ("hybrid"),
+        SUBVARIETY ("subvar");
+
+        private final String rank;
+
+        Rank(String rank) {
+            this.rank = rank;
+        }
+
+        @JsonValue
+        private String getRank() {
+            return this.rank;
+        }
+    }
+
+    public enum Status {
+        ACCEPTED ("accepted"),
+        UNKNOWN ("unknown");
+
+        private final String status;
+
+        Status(String status) {
+            this.status = status;
+        }
+
+        @JsonValue
+        public String getStatus() {
+            return this.status;
+        }
     }
 }

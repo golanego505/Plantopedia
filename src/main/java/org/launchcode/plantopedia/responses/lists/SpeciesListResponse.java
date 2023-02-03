@@ -1,17 +1,17 @@
 package org.launchcode.plantopedia.responses.lists;
 
-import org.launchcode.plantopedia.models.taxa.PlantOrSpeciesListEntry;
+import org.launchcode.plantopedia.models.taxa.SpeciesLight;
 
 import java.util.List;
 
 public class SpeciesListResponse extends ListResponse {
-    private List<PlantOrSpeciesListEntry> data;
+    private List<SpeciesLight> data;
 
-    public List<PlantOrSpeciesListEntry> getData() {
+    public List<SpeciesLight> getData() {
         return data;
     }
 
-    public void setData(List<PlantOrSpeciesListEntry> data) {
+    public void setData(List<SpeciesLight> data) {
         this.data = data;
     }
 }
