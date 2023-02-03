@@ -182,20 +182,6 @@ public class ToyController {
         return "KingdomListResponse detail page";
     }
 
-//    @RequestMapping(value = "/get-data/families/{id}", method = RequestMethod.GET)
-//    @ResponseBody
-//    private String getFamilyData(@PathVariable(required = false) int id) {
-//        RestTemplate restTemplate = new RestTemplate();
-//        FamilyRetrievalResponse response = restTemplate.getForObject(
-//                API_PATH + "families/" + id + "?token=" + apiKey,
-//                FamilyRetrievalResponse.class);
-//        if (response != null) {
-//            Family family = response.getData();
-//            familyRepository.save(family);
-//        }
-//        return "getFamilyData page";
-//    }
-
     @RequestMapping("/get-data/families")
     @ResponseBody
     private String getFamilies(@Value("${TREFLE_API_TOKEN}") String apiKey) {

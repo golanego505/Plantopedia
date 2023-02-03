@@ -22,14 +22,13 @@ public class Plant extends TaxonWithSources {
     @JsonProperty("family_common_name")
     private String familyCommonName;
     @JsonProperty("genus_id")
-    @Transient
     private Integer genusId;
     private String observations;
     private Boolean vegetable;
     @Transient
     private PlantLinks links;
     @JsonProperty("main_species")
-    @Transient
+    @OneToOne
     private Species mainSpecies;
     @ManyToOne
     @JoinColumn(name = "genus_id")
@@ -37,7 +36,6 @@ public class Plant extends TaxonWithSources {
     @ManyToOne
     @JoinColumn(name = "family_id")
     private Family family;
-    @Transient
     private List<SpeciesLight> species;
     @Transient
     private List<SpeciesLight> subspecies;

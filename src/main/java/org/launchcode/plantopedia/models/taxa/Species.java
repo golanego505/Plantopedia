@@ -1669,16 +1669,16 @@ public class Species extends SpeciesCoreDataWithSources {
         @GeneratedValue
         @JsonIgnore
         private Integer id;
-        private Color color;
+        private List<Color> color;
         private Boolean conspicuous;
 
         public Flower() {}
 
-        public Color getColor() {
+        public List<Color> getColor() {
             return color;
         }
 
-        public void setColor(Color color) {
+        public void setColor(List<Color> color) {
             this.color = color;
         }
 
@@ -1706,7 +1706,7 @@ public class Species extends SpeciesCoreDataWithSources {
         @JsonIgnore
         private Integer id;
         private Texture texture;
-        private Color color;
+        private List<Color> color;
         @JsonProperty("leaf_retention")
         private Boolean leafRetention;
 
@@ -1720,11 +1720,11 @@ public class Species extends SpeciesCoreDataWithSources {
             this.texture = texture;
         }
 
-        public Color getColor() {
+        public List<Color> getColor() {
             return color;
         }
 
-        public void setColor(Color color) {
+        public void setColor(List<Color> color) {
             this.color = color;
         }
 
@@ -1771,7 +1771,7 @@ public class Species extends SpeciesCoreDataWithSources {
         @JsonIgnore
         private Integer id;
         private Boolean conspicuous;
-        private Color color;
+        private List<Color> color;
         private String shape;
         @JsonProperty("seed_persistence")
         private Boolean seedPersistence;
@@ -1786,11 +1786,11 @@ public class Species extends SpeciesCoreDataWithSources {
             this.conspicuous = conspicuous;
         }
 
-        public Color getColor() {
+        public List<Color> getColor() {
             return color;
         }
 
-        public void setColor(Color color) {
+        public void setColor(List<Color> color) {
             this.color = color;
         }
 
