@@ -2,35 +2,26 @@ package org.launchcode.plantopedia.models.taxa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
-import org.launchcode.plantopedia.models.Source;
-import org.launchcode.plantopedia.models.distributions.Distribution;
 import org.launchcode.plantopedia.models.distributions.Distributions;
-import org.launchcode.plantopedia.models.measurements.LinearMeasurementCm;
-import org.launchcode.plantopedia.models.measurements.LinearMeasurementMm;
-import org.launchcode.plantopedia.models.measurements.Temperature;
-import org.launchcode.plantopedia.models.presentations.Flower;
-import org.launchcode.plantopedia.models.presentations.Foliage;
-import org.launchcode.plantopedia.models.presentations.FruitOrSeed;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Species extends PlantSpecies {
+public class Species extends SpeciesCoreDataWithSources {
     private String observations;
     private Boolean vegetable;
-    private String duration;
+    private Duration duration;
     @JsonProperty("edible_part")
-    private String ediblePart;
+    private EdiblePart ediblePart;
     private Boolean edible;
     @OneToOne
     private Images images;
     @JsonProperty("common_names")
     @OneToOne
     private CommonNames commonNames;
-    @OneToOne
-    private Distribution distribution;
     @OneToOne
     private Distributions distributions;
     @OneToOne
@@ -46,8 +37,6 @@ public class Species extends PlantSpecies {
     private Growth growth;
     @ManyToMany
     private List<Synonym> synonyms;
-    @ManyToMany
-    private List<Source> sources;
 
     public Species() {}
 
@@ -66,20 +55,20 @@ public class Species extends PlantSpecies {
     public void setVegetable(Boolean vegetable) {
         this.vegetable = vegetable;
     }
-    public String getDuration() {
+    public Duration getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(Duration duration) {
         this.duration = duration;
     }
 
     @JsonProperty("edible_part")
-    public String getEdiblePart() {
+    public EdiblePart getEdiblePart() {
         return ediblePart;
     }
 
-    public void setEdiblePart(String ediblePart) {
+    public void setEdiblePart(EdiblePart ediblePart) {
         this.ediblePart = ediblePart;
     }
 
@@ -106,14 +95,6 @@ public class Species extends PlantSpecies {
 
     public void setCommonNames(CommonNames commonNames) {
         this.commonNames = commonNames;
-    }
-
-    public Distribution getDistribution() {
-        return distribution;
-    }
-
-    public void setDistribution(Distribution distribution) {
-        this.distribution = distribution;
     }
 
     public Distributions getDistributions() {
@@ -173,13 +154,6 @@ public class Species extends PlantSpecies {
         this.synonyms = synonyms;
     }
 
-    public List<Source> getSources() {
-        return sources;
-    }
-    public void setSources(List<Source> sources) {
-        this.sources = sources;
-    }
-
     @Override
     public String toString() {
         return "Species{" +
@@ -204,7 +178,6 @@ public class Species extends PlantSpecies {
                 ", edible=" + edible +
                 ", images=" + images +
                 ", commonNames=" + commonNames +
-                ", distribution=" + distribution +
                 ", distributions=" + distributions +
                 ", flower=" + flower +
                 ", foliage=" + foliage +
@@ -213,7 +186,7 @@ public class Species extends PlantSpecies {
                 ", growth=" + growth +
                 ", links=" + this.getLinks() +
                 ", synonyms=" + synonyms +
-                ", sources=" + sources +
+                ", sources=" + this.getSources() +
                 '}';
     }
 
@@ -362,7 +335,7 @@ public class Species extends PlantSpecies {
         private String description;
         private String sowing;
         @JsonProperty("days_to_harvest")
-        private Integer daysToHarvest;
+        private Float daysToHarvest;
         @JsonProperty("row_spacing")
         @Transient
         private LinearMeasurementCm rowSpacing;
@@ -375,18 +348,12 @@ public class Species extends PlantSpecies {
         private Integer light;
         @JsonProperty("atmospheric_humidity")
         private Integer atmosphericHumidity;
-
-        /*These variables growthMonths, bloomMonths, fruitMonths should
-        be enums taking one of 12 values, which values are the common three-
-        letter abbreviations of the months, all lowercase.
-         */
-
         @JsonProperty("growth_months")
-        private String growthMonths;
+        private List<Month> growthMonths;
         @JsonProperty("bloom_months")
-        private String bloomMonths;
+        private List<Month> bloomMonths;
         @JsonProperty("fruit_months")
-        private String fruitMonths;
+        private List<Month> fruitMonths;
         @JsonProperty("minimum_precipitation")
         @Transient
         private LinearMeasurementMm minimumPrecipitation;
@@ -443,55 +410,55 @@ public class Species extends PlantSpecies {
 
         @Column(name = "row_spacing_cm")
         @Access(AccessType.PROPERTY)
-        public Integer getRowSpacingCm() {
+        public Float getRowSpacingCm() {
             return this.getRowSpacing().getCm();
         }
 
         @Column(name = "spread_cm")
         @Access(AccessType.PROPERTY)
-        public Integer getSpreadCm() {
+        public Float getSpreadCm() {
             return this.getSpread().getCm();
         }
 
         @Column(name = "min_precip_mm")
         @Access(AccessType.PROPERTY)
-        public Integer getMinimumPrecipitationMm() {
+        public Float getMinimumPrecipitationMm() {
             return this.getMinimumPrecipitation().getMm();
         }
 
         @Column(name = "max_precip_mm")
         @Access(AccessType.PROPERTY)
-        public Integer getMaximumPrecipitationMm() {
+        public Float getMaximumPrecipitationMm() {
             return this.getMaximumPrecipitation().getMm();
         }
 
         @Column(name = "min_root_depth")
         @Access(AccessType.PROPERTY)
-        public Integer getMinimumRootDepthCm() {
+        public Float getMinimumRootDepthCm() {
             return this.getMinimumRootDepth().getCm();
         }
 
         @Column(name = "min_temp_F")
         @Access(AccessType.PROPERTY)
-        public Integer getMinimumTemperatureDegF() {
+        public Float getMinimumTemperatureDegF() {
             return this.getMinimumTemperature().getDegF();
         }
 
         @Column(name = "min_temp_C")
         @Access(AccessType.PROPERTY)
-        public Integer getMinimumTemperatureDegC() {
+        public Float getMinimumTemperatureDegC() {
             return this.getMinimumTemperature().getDegC();
         }
 
         @Column(name = "max_temp_F")
         @Access(AccessType.PROPERTY)
-        public Integer getMaximumTemperatureDegF() {
+        public Float getMaximumTemperatureDegF() {
             return this.getMaximumTemperature().getDegF();
         }
 
         @Column(name = "max_temp_C")
         @Access(AccessType.PROPERTY)
-        public Integer getMaximumTemperatureDegC() {
+        public Float getMaximumTemperatureDegC() {
             return this.getMaximumTemperature().getDegC();
         }
 
@@ -520,11 +487,11 @@ public class Species extends PlantSpecies {
         }
 
         @JsonProperty("days_to_harvest")
-        public Integer getDaysToHarvest() {
+        public Float getDaysToHarvest() {
             return daysToHarvest;
         }
 
-        public void setDaysToHarvest(Integer daysToHarvest) {
+        public void setDaysToHarvest(Float daysToHarvest) {
             this.daysToHarvest = daysToHarvest;
         }
 
@@ -581,29 +548,29 @@ public class Species extends PlantSpecies {
         }
 
         @JsonProperty("growth_months")
-        public String getGrowthMonths() {
+        public List<Month> getGrowthMonths() {
             return growthMonths;
         }
 
-        public void setGrowthMonths(String growthMonths) {
+        public void setGrowthMonths(List<Month> growthMonths) {
             this.growthMonths = growthMonths;
         }
 
         @JsonProperty("bloom_months")
-        public String getBloomMonths() {
+        public List<Month> getBloomMonths() {
             return bloomMonths;
         }
 
-        public void setBloomMonths(String bloomMonths) {
+        public void setBloomMonths(List<Month> bloomMonths) {
             this.bloomMonths = bloomMonths;
         }
 
         @JsonProperty("fruit_months")
-        public String getFruitMonths() {
+        public List<Month> getFruitMonths() {
             return fruitMonths;
         }
 
-        public void setFruitMonths(String fruitMonths) {
+        public void setFruitMonths(List<Month> fruitMonths) {
             this.fruitMonths = fruitMonths;
         }
 
@@ -714,6 +681,65 @@ public class Species extends PlantSpecies {
                     ", soilHumidity=" + soilHumidity +
                     '}';
         }
+
+        public enum Month {
+            JANUARY ("jan"),
+            FEBRUARY ("feb"),
+            MARCH ("mar"),
+            APRIL ("apr"),
+            MAY ("may"),
+            JUNE ("jun"),
+            JULY ("jul"),
+            AUGUST ("aug"),
+            SEPTEMBER ("sep"),
+            OCTOBER ("oct"),
+            NOVEMBER ("nov"),
+            DECEMBER ("dec");
+
+            private final String month;
+
+            Month(String month) {
+                this.month = month;
+            }
+
+            @JsonValue
+            public String getMonth() {
+                return this.month;
+            }
+        }
+
+        public static class Temperature {
+            @JsonProperty("deg_f")
+            private Float degF;
+            @JsonProperty("deg_c")
+            private Float degC;
+
+            @JsonProperty("deg_f")
+            public Float getDegF() {
+                return degF;
+            }
+
+            public void setDegF(Float degF) {
+                this.degF = degF;
+            }
+
+            @JsonProperty("deg_c")
+            public Float getDegC() {
+                return degC;
+            }
+
+            public void setDegC(Float degC) {
+                this.degC = degC;
+            }
+
+            @Override
+            public String toString() {
+                return "Temperature{" +
+                        "degF=" + degF +
+                        ", degC=" + degC +
+                        '}';
+            }
+        }
     }
 
     @Entity
@@ -724,7 +750,7 @@ public class Species extends PlantSpecies {
         @JsonIgnore
         private Integer id;
         @JsonProperty("ligneous_type")
-        private String ligneousType;
+        private LigneousType ligneousType;
         @JsonProperty("growth_form")
         private String growthForm;
         @JsonProperty("growth_habit")
@@ -741,7 +767,7 @@ public class Species extends PlantSpecies {
         private String nitrogenFixation;
         @JsonProperty("shape_and_orientation")
         private String shapeAndOrientation;
-        private String toxicity;
+        private Toxicity toxicity;
 
         public Specifications() {}
 
@@ -755,24 +781,24 @@ public class Species extends PlantSpecies {
 
         @Column(name = "avg_height_cm")
         @Access(AccessType.PROPERTY)
-        public Integer getAverageHeightCm() {
+        public Float getAverageHeightCm() {
             return this.getAverageHeight().getCm();
         }
         public void setAverageHeightCm(Integer averageHeightCm) {}
 
         @Column(name = "max_height_cm")
         @Access(AccessType.PROPERTY)
-        public Integer getMaximumHeightCm() {
+        public Float getMaximumHeightCm() {
             return this.getMaximumHeight().getCm();
         }
         public void setMaximumHeightCm(Integer maximumHeightCm) {}
 
         @JsonProperty("ligneous_type")
-        public String getLigneousType() {
+        public LigneousType getLigneousType() {
             return ligneousType;
         }
 
-        public void setLigneousType(String ligneousType) {
+        public void setLigneousType(LigneousType ligneousType) {
             this.ligneousType = ligneousType;
         }
 
@@ -839,11 +865,11 @@ public class Species extends PlantSpecies {
             this.shapeAndOrientation = shapeAndOrientation;
         }
 
-        public String getToxicity() {
+        public Toxicity getToxicity() {
             return toxicity;
         }
 
-        public void setToxicity(String toxicity) {
+        public void setToxicity(Toxicity toxicity) {
             this.toxicity = toxicity;
         }
 
@@ -861,6 +887,43 @@ public class Species extends PlantSpecies {
                     ", toxicity='" + toxicity + '\'' +
                     '}';
         }
+
+        public enum LigneousType {
+            LIANA ("liana"),
+            SUBSHRUB ("subshrub"),
+            SHRUB ("shrub"),
+            TREE ("tree"),
+            PARASITE ("parasite");
+
+            private final String type;
+
+            LigneousType(String type) {
+                this.type = type;
+            }
+
+            @JsonValue
+            public String getType() {
+                return this.type;
+            }
+        }
+
+        public enum Toxicity {
+            NONE ("none"),
+            LOW ("low"),
+            MEDIUM ("medium"),
+            HIGH ("high");
+
+            private final String level;
+
+            Toxicity(String level) {
+                this.level = level;
+            }
+
+            @JsonValue
+            public String getLevel() {
+                return this.level;
+            }
+        }
     }
 
     @Entity
@@ -869,8 +932,6 @@ public class Species extends PlantSpecies {
         private Integer id;
         private String name;
         private String author;
-        @ManyToMany
-        private List<Source> sources;
 
         public Synonym() {
         }
@@ -899,13 +960,6 @@ public class Species extends PlantSpecies {
             this.author = author;
         }
 
-        public List<Source> getSources() {
-            return sources;
-        }
-
-        public void setSources(List<Source> sources) {
-            this.sources = sources;
-        }
     }
 
     @Entity
@@ -1567,6 +1621,268 @@ public class Species extends PlantSpecies {
                     ", fra=" + fra +
                     ", por=" + por +
                     ", nld=" + nld +
+                    '}';
+        }
+    }
+
+    public enum Duration {
+        ANNUAL ("annual"),
+        PERENNIAL ("perennial"),
+        BIENNIAL ("biennial");
+
+        private final String duration;
+
+        Duration(String duration) {
+            this.duration = duration;
+        }
+
+        @JsonValue
+        private String getDuration() {
+            return this.duration;
+        }
+    }
+
+    public enum EdiblePart {
+        ROOTS ("roots"),
+        STEM ("stem"),
+        LEAVES ("leaves"),
+        FLOWERS ("flowers"),
+        FRUITS ("fruits"),
+        SEEDS ("seeds"),
+        TUBERS ("tubers");
+
+        private final String part;
+
+        EdiblePart(String part) {
+            this.part = part;
+        }
+
+        @JsonValue
+        private String getPart() {
+            return this.part;
+        }
+    }
+
+    @Entity
+    public static class Flower {
+        @Id
+        @GeneratedValue
+        @JsonIgnore
+        private Integer id;
+        private Color color;
+        private Boolean conspicuous;
+
+        public Flower() {}
+
+        public Color getColor() {
+            return color;
+        }
+
+        public void setColor(Color color) {
+            this.color = color;
+        }
+
+        public Boolean getConspicuous() {
+            return conspicuous;
+        }
+
+        public void setConspicuous(Boolean conspicuous) {
+            this.conspicuous = conspicuous;
+        }
+
+        @Override
+        public String toString() {
+            return "Flower{" +
+                    "color='" + color + '\'' +
+                    ", conspicuous=" + conspicuous +
+                    '}';
+        }
+    }
+
+    @Entity
+    public static class Foliage {
+        @Id
+        @GeneratedValue
+        @JsonIgnore
+        private Integer id;
+        private Texture texture;
+        private Color color;
+        @JsonProperty("leaf_retention")
+        private Boolean leafRetention;
+
+        public Foliage() {}
+
+        public Texture getTexture() {
+            return texture;
+        }
+
+        public void setTexture(Texture texture) {
+            this.texture = texture;
+        }
+
+        public Color getColor() {
+            return color;
+        }
+
+        public void setColor(Color color) {
+            this.color = color;
+        }
+
+        @JsonProperty("leaf_retention")
+        public Boolean getLeafRetention() {
+            return leafRetention;
+        }
+
+        public void setLeafRetention(Boolean leafRetention) {
+            this.leafRetention = leafRetention;
+        }
+
+        @Override
+        public String toString() {
+            return "Foliage{" +
+                    "texture='" + texture + '\'' +
+                    ", color='" + color + '\'' +
+                    ", leafRetention=" + leafRetention +
+                    '}';
+        }
+
+        public enum Texture {
+            FINE ("fine"),
+            MEDIUM ("medium"),
+            COARSE ("coarse");
+
+            private final String texture;
+
+            Texture(String texture) {
+                this.texture = texture;
+            }
+
+            @JsonValue
+            public String getTexture() {
+                return texture;
+            }
+        }
+    }
+
+    @Entity
+    public static class FruitOrSeed {
+        @Id
+        @GeneratedValue
+        @JsonIgnore
+        private Integer id;
+        private Boolean conspicuous;
+        private Color color;
+        private String shape;
+        @JsonProperty("seed_persistence")
+        private Boolean seedPersistence;
+
+        public FruitOrSeed() {}
+
+        public Boolean getConspicuous() {
+            return conspicuous;
+        }
+
+        public void setConspicuous(Boolean conspicuous) {
+            this.conspicuous = conspicuous;
+        }
+
+        public Color getColor() {
+            return color;
+        }
+
+        public void setColor(Color color) {
+            this.color = color;
+        }
+
+        public String getShape() {
+            return shape;
+        }
+
+        public void setShape(String shape) {
+            this.shape = shape;
+        }
+
+        @JsonProperty("seed_persistence")
+        public Boolean getSeedPersistence() {
+            return seedPersistence;
+        }
+
+        public void setSeedPersistence(Boolean seedPersistence) {
+            this.seedPersistence = seedPersistence;
+        }
+
+        @Override
+        public String toString() {
+            return "FruitOrSeed{" +
+                    "conspicuous=" + conspicuous +
+                    ", color='" + color + '\'' +
+                    ", shape='" + shape + '\'' +
+                    ", seedPersistence=" + seedPersistence +
+                    '}';
+        }
+    }
+
+    public enum Color {
+        WHITE ("white"),
+        RED ("red"),
+        BROWN ("brown"),
+        ORANGE ("orange"),
+        YELLOW ("yellow"),
+        LIME ("lime"),
+        GREEN ("green"),
+        CYAN ("cyan"),
+        BLUE ("blue"),
+        PURPLE ("purple"),
+        MAGENTA ("magenta"),
+        GREY ("grey"),
+        BLACK ("black");
+
+        private final String color;
+
+        Color(String color) {
+            this.color = color;
+        }
+
+        @JsonValue
+        public String getColor() {
+            return color;
+        }
+    }
+
+    public static class LinearMeasurementMm {
+        private Float mm;
+
+        public Float getMm() {
+            return mm;
+        }
+
+        public void setMm(Float mm) {
+            this.mm = mm;
+        }
+
+        @Override
+        public String toString() {
+            return "LinearMeasurementMm{" +
+                    "mm=" + mm +
+                    '}';
+        }
+    }
+
+    public static class LinearMeasurementCm {
+        private Float cm;
+
+        public Float getCm() {
+            return cm;
+        }
+
+        public void setCm(Float cm) {
+            this.cm = cm;
+        }
+
+        @Override
+        public String toString() {
+            return "LinearMeasurementCm{" +
+                    "cm=" + cm +
                     '}';
         }
     }

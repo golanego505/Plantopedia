@@ -1,14 +1,14 @@
 package org.launchcode.plantopedia.models.distributions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import org.launchcode.plantopedia.models.taxa.Taxon;
 import org.launchcode.plantopedia.responses.links.TdwgUnitLinks;
 
+import java.util.List;
+
 @Entity
-public class TdwgUnit extends Taxon {
+public class Zone extends Taxon {
     private String name;
     @JsonProperty("tdwg_code")
     private String tdwgCode;
@@ -18,8 +18,12 @@ public class TdwgUnit extends Taxon {
     private Integer speciesCount;
     @Transient
     private TdwgUnitLinks links;
+    @ManyToOne
+    private TdwgUnit parent;
+    @ElementCollection(fetch = FetchType.LAZY, targetClass = TdwgUnit.class)
+    private List<TdwgUnit> children;
 
-    public TdwgUnit() {}
+    public Zone() {}
 
     public String getName() {
         return name;
@@ -29,7 +33,6 @@ public class TdwgUnit extends Taxon {
         this.name = name;
     }
 
-    @JsonProperty("tdwg_code")
     public String getTdwgCode() {
         return tdwgCode;
     }
@@ -38,7 +41,6 @@ public class TdwgUnit extends Taxon {
         this.tdwgCode = tdwgCode;
     }
 
-    @JsonProperty("tdwg_level")
     public Integer getTdwgLevel() {
         return tdwgLevel;
     }
@@ -47,7 +49,6 @@ public class TdwgUnit extends Taxon {
         this.tdwgLevel = tdwgLevel;
     }
 
-    @JsonProperty("species_count")
     public Integer getSpeciesCount() {
         return speciesCount;
     }
@@ -64,14 +65,32 @@ public class TdwgUnit extends Taxon {
         this.links = links;
     }
 
+    public TdwgUnit getParent() {
+        return parent;
+    }
+
+    public void setParent(TdwgUnit parent) {
+        this.parent = parent;
+    }
+
+    public List<TdwgUnit> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<TdwgUnit> children) {
+        this.children = children;
+    }
+
     @Override
     public String toString() {
-        return "TdwgUnit{" +
+        return "Zone{" +
                 "name='" + name + '\'' +
                 ", tdwgCode='" + tdwgCode + '\'' +
                 ", tdwgLevel=" + tdwgLevel +
                 ", speciesCount=" + speciesCount +
                 ", links=" + links +
+                ", parent=" + parent +
+                ", children=" + children +
                 '}';
     }
 }
