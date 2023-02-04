@@ -127,6 +127,9 @@ public class PlantListController {
         private String origin;
         private String ip;
 
+        public ClientTokenRequest() {
+        }
+
         public ClientTokenRequest(String origin) {
             this.origin = origin;
             this.ip = null;

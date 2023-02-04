@@ -1,38 +1,44 @@
 package org.launchcode.plantopedia.models.distributions;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.List;
 
-@Entity
+@Embeddable
 public class Distributions {
-    @Id
-    @GeneratedValue
-    @JsonIgnore
-    private Integer id;
-    @JsonProperty("native")
-    @ElementCollection(fetch = FetchType.LAZY, targetClass = TdwgUnit.class)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "native_distributions",
+            joinColumns = @JoinColumn(name = "species_id"),
+            inverseJoinColumns = @JoinColumn(name = "tdwg_unit_id")
+    )
     private List<TdwgUnit> ntv;
-    @ElementCollection(fetch = FetchType.LAZY, targetClass = TdwgUnit.class)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "introduced_distributions",
+            joinColumns = @JoinColumn(name = "species_id"),
+            inverseJoinColumns = @JoinColumn(name = "tdwg_unit_id")
+    )
     private List<TdwgUnit> introduced;
-    @ElementCollection(fetch = FetchType.LAZY, targetClass = TdwgUnit.class)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "doubtful_distributions",
+            joinColumns = @JoinColumn(name = "species_id"),
+            inverseJoinColumns = @JoinColumn(name = "tdwg_unit_id")
+    )
     private List<TdwgUnit> doubtful;
-    @ElementCollection(fetch = FetchType.LAZY, targetClass = TdwgUnit.class)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "absent_distributions",
+            joinColumns = @JoinColumn(name = "species_id"),
+            inverseJoinColumns = @JoinColumn(name = "tdwg_unit_id")
+    )
     private List<TdwgUnit> absent;
-    @ElementCollection(fetch = FetchType.LAZY, targetClass = TdwgUnit.class)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "extinct_distributions",
+            joinColumns = @JoinColumn(name = "species_id"),
+            inverseJoinColumns = @JoinColumn(name = "tdwg_unit_id")
+    )
     private List<TdwgUnit> extinct;
 
     public Distributions() {}
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     @JsonProperty("native")
     public List<TdwgUnit> getNtv() {
@@ -78,7 +84,7 @@ public class Distributions {
     @Override
     public String toString() {
         return "Distributions{" +
-                "id=" + id +
+//                "id=" + id +
                 ", ntv=" + ntv +
                 ", introduced=" + introduced +
                 ", doubtful=" + doubtful +

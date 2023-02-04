@@ -4,7 +4,7 @@ import org.launchcode.plantopedia.models.distributions.Zone;
 
 import java.util.List;
 
-public class DistributionZoneListResponse extends ListResponse {
+public class ZoneListResponse extends ListResponse {
     private List<Zone> data;
 
     public List<Zone> getData() {
