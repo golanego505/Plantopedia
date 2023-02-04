@@ -2,9 +2,7 @@ package org.launchcode.plantopedia.models.taxa;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import org.launchcode.plantopedia.responses.links.SpeciesLinks;
 
 @MappedSuperclass
@@ -17,8 +15,10 @@ public abstract class SpeciesCoreData extends Taxon {
     @Column(length = 511)
     private String bibliography;
     private String author;
+    @Enumerated(EnumType.STRING)
     private Status status;
     @Column(name = "species_rank")
+    @Enumerated(EnumType.STRING)
     private Rank rank;
     @JsonProperty("family_common_name")
     private String familyCommonName;

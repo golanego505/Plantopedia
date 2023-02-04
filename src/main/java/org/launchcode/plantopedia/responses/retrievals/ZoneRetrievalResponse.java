@@ -2,7 +2,7 @@ package org.launchcode.plantopedia.responses.retrievals;
 
 import org.launchcode.plantopedia.models.distributions.Zone;
 
-public class DistributionZoneRetrievalResponse extends RetrievalResponse {
+public class ZoneRetrievalResponse extends RetrievalResponse {
     private Zone data;
 
     public Zone getData() {
@@ -15,7 +15,7 @@ public class DistributionZoneRetrievalResponse extends RetrievalResponse {
 
     @Override
     public String toString() {
-        return "DistributionZoneRetrievalResponse{" +
+        return "ZoneRetrievalResponse{" +
                 "data=" + data + '\'' +
                 ", meta='" + this.getMeta() + '\'';
     }

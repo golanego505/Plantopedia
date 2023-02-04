@@ -1,16 +1,16 @@
 package org.launchcode.plantopedia.models.taxa;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 
 import java.util.List;
 
 @MappedSuperclass
 public abstract class TaxonWithSources extends Taxon {
     @ManyToMany
+    @JoinTable(name = "plant_source", inverseJoinColumns = {
+            @JoinColumn(name = "source_id")
+    })
     private List<Source> sources;
 
     public List<Source> getSources() {

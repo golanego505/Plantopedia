@@ -2,7 +2,6 @@ package org.launchcode.plantopedia.models.distributions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
-import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
 import org.launchcode.plantopedia.models.taxa.Taxon;
 import org.launchcode.plantopedia.responses.links.TdwgUnitLinks;

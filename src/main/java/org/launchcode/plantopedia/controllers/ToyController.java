@@ -145,17 +145,17 @@ public class ToyController {
         return "SpciesResponse detail page";
     }
 
-    @RequestMapping("/distribution")
+    @RequestMapping("/zone")
     @ResponseBody
-    private String getDistributionZone() {
+    private String getZone() {
 
         String uri = "https://trefle.io/api/v1/distributions/1?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
-        DistributionZoneRetrievalResponse response = restTemplate.getForObject(uri, DistributionZoneRetrievalResponse.class);
+        ZoneRetrievalResponse response = restTemplate.getForObject(uri, ZoneRetrievalResponse.class);
         if (response != null){
             System.out.println(response.getData());
         }
-        return "DistributionZoneRetrievalResponse detail page";
+        return "ZoneRetrievalResponse detail page";
     }
 
     @RequestMapping("/kingdoms")
