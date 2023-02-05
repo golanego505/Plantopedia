@@ -35,8 +35,8 @@ public class PlantListController {
     }
 
     @RequestMapping(value = "/plants", method = RequestMethod.GET)
-    public String plantListByPage(Model model, HttpServletRequest request,
-                                  @RequestParam(value = "page", defaultValue = "1") String page,
+    public String plantListByPage(Model model, @RequestParam(value = "page", defaultValue = "1") String page,
+                                  @RequestParam(defaultValue = "1") Boolean showImages,
                                   @Value("${TREFLE_API_TOKEN}") String apiKey) {
 
         model.addAttribute("page", page);
@@ -44,6 +44,7 @@ public class PlantListController {
         URI listPlants = URI.create(BASE_API_URI + "plants?token=" + apiKey + "&page=" + page);
         PlantListResponse response = restTemplate.getForObject(
                 listPlants, PlantListResponse.class);
+        model.addAttribute("showImages", showImages);
         addPlantListToModel(model, response);
         return "listPlants";
     }
@@ -59,11 +60,12 @@ public class PlantListController {
     public String parsePaginationLink(@RequestParam Map<String, String> query) {
         String searchTerm = query.get("q");
         String page = query.get("page");
+        String showImages = query.get("showImages");
         if (searchTerm == null || searchTerm.equals("")) {
-            return "redirect:/plants?page=" + page;
+            return "redirect:/plants?page=" + page + "&showImages=" + showImages;
         }
         else {
-            return "redirect:/plants/search?page=" + page + "&q=" + searchTerm;
+            return "redirect:/plants/search?page=" + page + "&q=" + searchTerm + "&showImages=" + showImages;
         }
     }
 

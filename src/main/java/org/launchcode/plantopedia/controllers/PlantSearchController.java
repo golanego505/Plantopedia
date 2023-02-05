@@ -17,6 +17,7 @@ public class PlantSearchController {
     @RequestMapping(value = "/plants/search")
     public String searchPlants(Model model, @RequestParam String q, HttpServletRequest request,
                                @RequestParam(defaultValue = "1") String page,
+                               @RequestParam(defaultValue = "1") Boolean showImages,
                                @Value("${TREFLE_API_TOKEN}") String apiKey) {
 
         RestTemplate restTemplate = new RestTemplate();
@@ -26,6 +27,7 @@ public class PlantSearchController {
                 PlantListResponse.class);
         model.addAttribute("q", q);
         model.addAttribute("page", page);
+        model.addAttribute("showImages", showImages);
         PlantListController.addPlantListToModel(model, response);
         return "listPlants";
     }

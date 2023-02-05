@@ -16,6 +16,15 @@
     a:visited {
     color: CaptionText;
     }
+
+
+
+
+
+
+
+
+
     </style>
 </head>
 <body>
@@ -39,12 +48,49 @@
 <form method="POST" th:action="@{/plants/search}">
     <label for="q">Keyword:</label>
     <input type="text" id="q" name="q"/>
+    <input type="hidden" name="showImages" th:value="${showImages}"/>
     <input type="submit" value="Search"/>
 </form>
 
-<h4 th:text="'Page ' + ${page} + ' of ' + ${pageCount}"></h4>
+<table>
+    <tr>
+        <td>
+            <h4 th:text="'Page ' + ${page} + ' of ' + ${pageCount}"></h4>
+        </td>
+        <td th:if="${showImages}">
+            <form th:if="${q}" id="hide_images_search_results">
+                <input type="hidden" name="q" th:value="${q}"/>
+                <input type="hidden" name="page" th:value="${page}"/>
+                <button name="showImages" type="submit" formmethod="POST" form="hide_images_search_results" value="0"
+                        th:formaction="@{/plants/search}">Hide Images
+                </button>
+            </form>
+            <form th:unless="${q}" id="hide_images_list_all">
+                <input type="hidden" name="page" th:value="${page}"/>
+                <button name="showImages" type="submit" formmethod="GET" form="hide_images_list_all" value="0"
+                        th:formaction="@{/plants}">Hide Images
+                </button>
+            </form>
+        </td>
+        <td th:unless="${showImages}">
+            <form th:if="${q}" id="show_images_search_results">
+                <input type="hidden" name="q" th:value="${q}"/>
+                <input type="hidden" name="page" th:value="${page}"/>
+                <button name="showImages" type="submit" formmethod="POST" form="show_images_search_results" value="1"
+                        th:formaction="@{/plants/search}">Show Images
+                </button>
+            </form>
+            <form th:unless="${q}" id="show_images_list_all">
+                <input type="hidden" name="page" th:value="${page}"/>
+                <button name="showImages" type="submit" formmethod="GET" form="show_images_list_all" value="1"
+                        th:formaction="@{/plants}">Show Images
+                </button>
+            </form>
+        </td>
+    </tr>
+</table>
 
-<ol>
+<ol th:if="${showImages}">
     <li th:each="plant : ${plants}" style="width: 20%">
         <a th:href="@{/plants/detail/{id}(id=${plant.id})}">
             <div class="card">
@@ -63,21 +109,38 @@
     </li>
 </ol>
 
+<ol th:unless="${showImages}">
+    <li th:each="plant : ${plants}" style="width: 20%">
+        <a th:href="@{/plants/detail/{id}(id=${plant.id})}">
+            <div class="card">
+                <div class="container">
+                    <h4 th:text="${plant.commonName}"></h4>
+                    <i><p th:text="${plant.scientificName}"></p></i>
+                </div>
+            </div>
+        </a>
+    </li>
+</ol>
+
 <div th:unless="${error}">
     <span>
-        <a th:href="'/parse-pagination-link?' + ${firstLinkQuery} + '&path=' + ${firstLinkPath}">First</a>
+        <a th:href="'/parse-pagination-link?' + ${firstLinkQuery} + '&path=' + ${firstLinkPath}
+        + '&showImages=' + ${showImages}">First</a>
     </span>
 
     <span th:unless="${firstLinkQuery}"></span>
 
     <span th:if="${links.prev}">
-        <a th:href="'/parse-pagination-link?' + ${prevLinkQuery} + '&path=' + ${prevLinkPath}">Previous</a>
+        <a th:href="'/parse-pagination-link?' + ${prevLinkQuery} + '&path=' + ${prevLinkPath}
+        + '&showImages=' + ${showImages}">Previous</a>
     </span>
     <span th:if="${links.next}">
-        <a th:href="'/parse-pagination-link?' + ${nextLinkQuery} + '&path=' + ${nextLinkPath}">Next</a>
+        <a th:href="'/parse-pagination-link?' + ${nextLinkQuery} + '&path=' + ${nextLinkPath}
+        + '&showImages=' + ${showImages}">Next</a>
     </span>
     <span>
-        <a th:href="'/parse-pagination-link?' + ${lastLinkQuery} + '&path=' + ${lastLinkPath}">Last</a>
+        <a th:href="'/parse-pagination-link?' + ${lastLinkQuery} + '&path=' + ${lastLinkPath}
+        + '&showImages=' + ${showImages}">Last</a>
     </span>
 </div>
 
