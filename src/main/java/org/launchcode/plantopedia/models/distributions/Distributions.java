@@ -7,31 +7,31 @@ import java.util.List;
 
 @Embeddable
 public class Distributions {
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)//, cascade = CascadeType.ALL)
     @JoinTable(name = "native_distributions",
             joinColumns = @JoinColumn(name = "species_id"),
             inverseJoinColumns = @JoinColumn(name = "tdwg_unit_id")
     )
     private List<TdwgUnit> ntv;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)//, cascade = CascadeType.ALL)
     @JoinTable(name = "introduced_distributions",
             joinColumns = @JoinColumn(name = "species_id"),
             inverseJoinColumns = @JoinColumn(name = "tdwg_unit_id")
     )
     private List<TdwgUnit> introduced;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)//, cascade = CascadeType.ALL)
     @JoinTable(name = "doubtful_distributions",
             joinColumns = @JoinColumn(name = "species_id"),
             inverseJoinColumns = @JoinColumn(name = "tdwg_unit_id")
     )
     private List<TdwgUnit> doubtful;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)//, cascade = CascadeType.ALL)
     @JoinTable(name = "absent_distributions",
             joinColumns = @JoinColumn(name = "species_id"),
             inverseJoinColumns = @JoinColumn(name = "tdwg_unit_id")
     )
     private List<TdwgUnit> absent;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)//, cascade = CascadeType.ALL)
     @JoinTable(name = "extinct_distributions",
             joinColumns = @JoinColumn(name = "species_id"),
             inverseJoinColumns = @JoinColumn(name = "tdwg_unit_id")

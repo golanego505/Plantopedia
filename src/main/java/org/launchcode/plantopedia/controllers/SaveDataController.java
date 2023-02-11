@@ -100,6 +100,13 @@ public class SaveDataController {
         return "Saved all species with ids <=" + maxId;
     }
 
+    @RequestMapping(value = "/get-data/species-with-common-names")
+    @ResponseBody
+    public String getSpeciesWithCommonNames(@Value("${TREFLE_API_TOKEN}") String apiKey) {
+        saveSpeciesWithCommonNames(apiKey);
+        return "Saved all species with common names.";
+    }
+
     private void saveSpeciesLight(String apiKey) {
 
         String uri = "https://trefle.io/api/v1/species?token=" + apiKey;
@@ -125,10 +132,91 @@ public class SaveDataController {
         }
     }
 
+    private void saveSpeciesWithCommonNames(String apiKey) {
+        String uri = "https://trefle.io/api/v1/species?filter_not[common_name]=null&token=" + apiKey;
+        RestTemplate restTemplate = new RestTemplate();
+        SpeciesListResponse speciesPageResponse = restTemplate.
+                getForObject(uri, SpeciesListResponse.class);
+        if (speciesPageResponse != null) {
+            int pageCount = (int) Math.ceil(speciesPageResponse.getMeta().getTotal() / 20.0);
+            int currentSpeciesId;
+            for (int i = 30; i <= pageCount; i++) {
+                uri = "https://trefle.io/api/v1/species?filter_not[common_name]=null" +
+                        "&page=" + i +
+                        "&token=" + apiKey;
+                speciesPageResponse = restTemplate.getForObject(uri, SpeciesListResponse.class);
+                assert speciesPageResponse != null;
+                List<SpeciesLight> speciesOnCurrentPage = speciesPageResponse.getData();
+                for (SpeciesLight sl : speciesOnCurrentPage) {
+                    currentSpeciesId = sl.getId();
+                    saveSpeciesById(apiKey, currentSpeciesId, restTemplate);
+                }
+            }
+        }
+    }
+
     private void saveSpeciesById(String apiKey, Integer id) {
         String uri = "https://trefle.io/api/v1/species/" + id + "?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
         SpeciesRetrievalResponse response = restTemplate.getForObject(
+                uri, SpeciesRetrievalResponse.class);
+        if (response != null) {
+            Species species = response.getData();
+            List<TaxonWithSources.Source> sources = species.getSources();
+            for (TaxonWithSources.Source source : sources) {
+                sourceRepository.save(source);
+            }
+            Species.Images images = species.getImages();
+            if (images.getBark() != null) {
+                for (Species.Images.Image image : images.getBark()) {
+                    imageRepository.save(image);
+                }
+            }
+            if (images.getFruit() != null) {
+                for (Species.Images.Image image : images.getFruit()) {
+                    imageRepository.save(image);
+                }
+            }
+            if (images.getFlower() != null) {
+                for (Species.Images.Image image : images.getFlower()) {
+                    imageRepository.save(image);
+                }
+            }
+            if (images.getLeaf() != null) {
+                for (Species.Images.Image image : images.getLeaf()) {
+                    imageRepository.save(image);
+                }
+            }
+            if (images.getHabit() != null) {
+                for (Species.Images.Image image : images.getHabit()) {
+                    imageRepository.save(image);
+                }
+            }
+            if (images.getOther() != null) {
+                for (Species.Images.Image image : images.getOther()) {
+                    imageRepository.save(image);
+                }
+            }
+            if (images.getUnspecified() != null) {
+                for (Species.Images.Image image : images.getUnspecified()) {
+                    imageRepository.save(image);
+                }
+            }
+            growthRepository.save(species.getGrowth());
+            specificationsRepository.save(species.getSpecifications());
+            flowerRepository.save(species.getFlower());
+            foliageRepository.save(species.getFoliage());
+            fruitOrSeedRepository.save(species.getFruitOrSeed());
+            for (Species.Synonym synonym : species.getSynonyms()) {
+                synonymRepository.save(synonym);
+            }
+            speciesRepository.save(species);
+        }
+    }
+
+    private void saveSpeciesById(String apiKey, Integer id, RestTemplate rt) {
+        String uri = "https://trefle.io/api/v1/species/" + id + "?token=" + apiKey;
+        SpeciesRetrievalResponse response = rt.getForObject(
                 uri, SpeciesRetrievalResponse.class);
         if (response != null) {
             Species species = response.getData();

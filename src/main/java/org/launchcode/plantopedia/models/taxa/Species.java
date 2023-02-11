@@ -447,31 +447,31 @@ public class Species extends SpeciesCoreDataWithSources {
             this.species = species;
         }
 
-        public void setMinimumTemperatureDegF(Integer minimumTemperatureDegF) {
+        public void setMinimumTemperatureDegF(Float minimumTemperatureDegF) {
         }
 
-        public void setMinimumTemperatureDegC(Integer minimumTemperatureDegC) {
+        public void setMinimumTemperatureDegC(Float minimumTemperatureDegC) {
         }
 
-        public void setMaximumTemperatureDegF(Integer maximumTemperatureDegF) {
+        public void setMaximumTemperatureDegF(Float maximumTemperatureDegF) {
         }
 
-        public void setMaximumTemperatureDegC(Integer maximumTemperatureDegC) {
+        public void setMaximumTemperatureDegC(Float maximumTemperatureDegC) {
         }
 
-        public void setRowSpacingCm(Integer rowSpacingCm) {
+        public void setRowSpacingCm(Float rowSpacingCm) {
         }
 
-        public void setSpreadCm(Integer spreadCm) {
+        public void setSpreadCm(Float spreadCm) {
         }
 
-        public void setMinimumPrecipitationMm(Integer minimumPrecipitationMm) {
+        public void setMinimumPrecipitationMm(Float minimumPrecipitationMm) {
         }
 
-        public void setMaximumPrecipitationMm(Integer maximumPrecipitationMm) {
+        public void setMaximumPrecipitationMm(Float maximumPrecipitationMm) {
         }
 
-        public void setMinimumRootDepthCm(Integer minimumRootDepthCm) {
+        public void setMinimumRootDepthCm(Float minimumRootDepthCm) {
         }
 
         @Column(name = "row_spacing_cm")
