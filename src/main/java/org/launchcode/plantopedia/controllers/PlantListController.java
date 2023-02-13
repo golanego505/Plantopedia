@@ -45,24 +45,28 @@ public class PlantListController {
     public String plantListByPage(Model model, @RequestParam(value = "page", defaultValue = "1") String page,
                                   @RequestParam(name = "showImages", defaultValue = "1") String showImages,
                                   @RequestParam(name = "orderFieldOne", defaultValue = "") String orderFieldOne,
+                                  @RequestParam(name = "plants", required = false) List<Plant> plants,
                                   @Value("${TREFLE_API_TOKEN}") String apiKey) {
 
         model.addAttribute("page", page);
         model.addAttribute("showImages", !(showImages.equals("0") || showImages.equals("false")));
         model.addAttribute("orderFieldOne", orderFieldOne);
-        RestTemplate restTemplate = new RestTemplate();
-        PlantListResponse response;
-        URI listPlants;
-        if (orderFieldOne.equals("")) {
-            listPlants = URI.create(BASE_API_URI + "plants?token=" + apiKey + "&page=" + page);
-        } else {
-            listPlants = URI.create(BASE_API_URI + "plants?token=" + apiKey + "&page=" + page
-                    + "&order[" + orderFieldOne + "]=asc");
+        if (plants == null) {
+            RestTemplate restTemplate = new RestTemplate();
+            PlantListResponse response;
+            URI listPlants;
+            if (orderFieldOne.equals("")) {
+                listPlants = URI.create(BASE_API_URI + "plants?token=" + apiKey + "&page=" + page);
+            } else {
+                listPlants = URI.create(BASE_API_URI + "plants?token=" + apiKey + "&page=" + page
+                        + "&order[" + orderFieldOne + "]=asc");
+            }
+            response = restTemplate.getForObject(
+                    listPlants, PlantListResponse.class);
+            addPlantListToModel(model, response);
+            return "listPlants";
         }
-        response = restTemplate.getForObject(
-                listPlants, PlantListResponse.class);
-        addPlantListToModel(model, response);
-        return "listPlants";
+        else return displayGivenListOfPlants(model, plants);
     }
 
     @RequestMapping(value = "/plants/detail/{plantId}", method = RequestMethod.GET)

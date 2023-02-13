@@ -67,12 +67,6 @@
                         th:formaction="@{/plants}">Hide Images
                 </button>
             </form>
-            <!--            <form th:unless="${q}" id="hide_images_list_all">-->
-            <!--                <input type="hidden" name="page" th:value="${page}"/>-->
-            <!--                <button name="showImages" type="submit" formmethod="GET" form="hide_images_list_all" value="0"-->
-            <!--                        th:formaction="@{/plants}">Hide Images-->
-            <!--                </button>-->
-            <!--            </form>-->
         </td>
         <td th:unless="${showImages}">
             <form id="show_images">
@@ -86,12 +80,6 @@
                         th:formaction="@{/plants}">Show Images
                 </button>
             </form>
-            <!--            <form th:unless="${q}" id="show_images_list_all">-->
-            <!--                <input type="hidden" name="page" th:value="${page}"/>-->
-            <!--                <button name="showImages" type="submit" formmethod="GET" form="show_images_list_all" value="1"-->
-            <!--                        th:formaction="@{/plants}">Show Images-->
-            <!--                </button>-->
-            <!--            </form>-->
         </td>
     </tr>
 </table>
@@ -108,21 +96,26 @@
                 </select>
                 <input th:if="${q}" type="hidden" name="q" th:value="${q}"/>
                 <input type="hidden" name="showImages" th:value="${showImages}"/>
-                <input type="hidden" name="page" th:value="1"/>
+                <input type="hidden" name="page" value="1"/>
             </td>
-            <!--            <td>-->
-            <!--                <label for="order-field-2">Secondary order field:</label>-->
-            <!--                <select name="order_field_2" id="order-field-2">-->
-            <!--                    <option value="common_name">Common Name</option>-->
-            <!--                    <option value="scientific_name">Scientific Name</option>-->
-            <!--                </select>-->
-            <!--            </td>-->
             <td>
                 <input type="submit" value="Apply"/>
             </td>
         </tr>
     </table>
 </form>
+
+<div th:if="${q}">
+    <form method="POST" th:action="@{/filter-search-results}">
+        <input type="hidden" name="q" th:value="${q}"/>
+        <input type="hidden" name="showImages" th:value="${showImages}"/>
+        <input type="hidden" name="page" value="1"/>
+        <input th:if="${orderFieldOne}" type="hidden" name="orderFieldOne" th:value="${orderFieldOne}"/>
+        <input id="hideIfNull1" type="checkbox" name="hideNullCommonNames" value="1"/>
+        <label for="hideIfNull1">Hide plants without common names</label>
+        <input type="submit" value="Filter"/>
+    </form>
+</div>
 
 <ol th:if="${showImages}">
     <li th:each="plant : ${plants}" style="width: 20%">
