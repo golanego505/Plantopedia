@@ -29,18 +29,18 @@ public class Species extends SpeciesCoreDataWithSources {
     private CommonNames commonNames;
     @Embedded
     private Distributions distributions;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Flower flower;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Foliage foliage;
     @JsonProperty("fruit_or_seed")
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private FruitOrSeed fruitOrSeed;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Specifications specifications;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Growth growth;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "species_synonym", inverseJoinColumns = {
             @JoinColumn(name = "synonym_id")
     })
@@ -200,44 +200,44 @@ public class Species extends SpeciesCoreDataWithSources {
 
     @Embeddable
     public static class Images {
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "flower_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
         )
         private List<Image> flower;
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "leaf_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
         )
         private List<Image> leaf;
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "habit_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
         )
         private List<Image> habit;
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "fruit_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
         )
         private List<Image> fruit;
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "bark_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
         )
         private List<Image> bark;
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "other_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
         )
         private List<Image> other;
         @JsonProperty("")
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "unspecified_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
@@ -320,6 +320,7 @@ public class Species extends SpeciesCoreDataWithSources {
             @Id
             private Integer id;
             @JsonProperty("image_url")
+            @Column(length = 511)
             private String imageUrl;
             private String copyright;
 
@@ -433,7 +434,7 @@ public class Species extends SpeciesCoreDataWithSources {
         @JsonProperty("soil_humidity")
         private Integer soilHumidity;
         @JsonIgnore
-        @OneToOne(mappedBy = "growth")
+        @OneToOne(mappedBy = "growth", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
         private Species species;
 
         public Growth() {
@@ -865,7 +866,7 @@ public class Species extends SpeciesCoreDataWithSources {
         @Enumerated(EnumType.STRING)
         private Toxicity toxicity;
         @JsonIgnore
-        @OneToOne(mappedBy = "specifications")
+        @OneToOne(mappedBy = "specifications", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
         private Species species;
 
         public Specifications() {}
@@ -1779,7 +1780,8 @@ public class Species extends SpeciesCoreDataWithSources {
         private List<Color> color;
         private Boolean conspicuous;
         @JsonIgnore
-        @OneToOne(mappedBy = "flower")
+        @OneToOne(mappedBy = "flower",
+                cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
         private Species species;
 
         public Flower() {}
@@ -1834,7 +1836,7 @@ public class Species extends SpeciesCoreDataWithSources {
         @JsonProperty("leaf_retention")
         private Boolean leafRetention;
         @JsonIgnore
-        @OneToOne(mappedBy = "foliage")
+        @OneToOne(mappedBy = "foliage", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
         private Species species;
 
         public Foliage() {}
@@ -1917,7 +1919,7 @@ public class Species extends SpeciesCoreDataWithSources {
         @JsonProperty("seed_persistence")
         private Boolean seedPersistence;
         @JsonIgnore
-        @OneToOne(mappedBy = "fruitOrSeed")
+        @OneToOne(mappedBy = "fruitOrSeed", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
         private Species species;
 
         public FruitOrSeed() {}

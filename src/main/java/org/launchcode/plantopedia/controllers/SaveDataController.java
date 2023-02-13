@@ -81,7 +81,7 @@ public class SaveDataController {
     @ResponseBody
     public String handleSaveSpeciesById(@PathVariable Integer id,
                                         @Value("${TREFLE_API_TOKEN}") String apiKey) {
-        saveSpeciesById(apiKey, id);
+        saveSpeciesByIdWithCascading(apiKey, id);
         return "Saved species with id=" + id;
     }
 
@@ -211,6 +211,16 @@ public class SaveDataController {
                 synonymRepository.save(synonym);
             }
             speciesRepository.save(species);
+        }
+    }
+
+    private void saveSpeciesByIdWithCascading(String apiKey, Integer id) {
+        String uri = "https://trefle.io/api/v1/species/" + id + "?token=" + apiKey;
+        RestTemplate restTemplate = new RestTemplate();
+        SpeciesRetrievalResponse response = restTemplate.getForObject(
+                uri, SpeciesRetrievalResponse.class);
+        if (response != null) {
+            speciesRepository.save(response.getData());
         }
     }
 

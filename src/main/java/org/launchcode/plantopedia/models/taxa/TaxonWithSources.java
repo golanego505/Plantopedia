@@ -1,5 +1,6 @@
 package org.launchcode.plantopedia.models.taxa;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 @MappedSuperclass
 public abstract class TaxonWithSources extends Taxon {
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "plant_source", inverseJoinColumns = {
             @JoinColumn(name = "source_id")
     })
@@ -30,6 +31,12 @@ public abstract class TaxonWithSources extends Taxon {
         private String name;
         private String url;
         private String citation;
+        @JsonIgnore
+        @ManyToMany(mappedBy = "sources", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+        private List<Species> species;
+        @JsonIgnore
+        @ManyToMany(mappedBy = "sources", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+        private List<Plant> plant;
 
         public Source() {
         }
@@ -73,6 +80,22 @@ public abstract class TaxonWithSources extends Taxon {
 
         public void setCitation(String citation) {
             this.citation = citation;
+        }
+
+        public List<Species> getSpecies() {
+            return species;
+        }
+
+        public void setSpecies(List<Species> species) {
+            this.species = species;
+        }
+
+        public List<Plant> getPlant() {
+            return plant;
+        }
+
+        public void setPlant(List<Plant> plant) {
+            this.plant = plant;
         }
 
         @Override

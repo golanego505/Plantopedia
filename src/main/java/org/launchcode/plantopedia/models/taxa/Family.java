@@ -1,9 +1,7 @@
 package org.launchcode.plantopedia.models.taxa;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import org.launchcode.plantopedia.responses.links.FamilyLinks;
 
 @Entity
@@ -13,7 +11,7 @@ public class Family extends Taxon {
     private String commonName;
     @Transient
     private FamilyLinks links;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonProperty("division_order")
     private DivisionOrder divisionOrder;
 

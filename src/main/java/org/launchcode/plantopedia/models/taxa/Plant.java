@@ -28,12 +28,12 @@ public class Plant extends TaxonWithSources {
     @Transient
     private PlantLinks links;
     @JsonProperty("main_species")
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private Species mainSpecies;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "genus_id")
     private Genus genus;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "family_id")
     private Family family;
 

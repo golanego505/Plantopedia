@@ -1,15 +1,12 @@
 package org.launchcode.plantopedia.models.taxa;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 
 import java.util.List;
 
 @MappedSuperclass
 public abstract class SpeciesCoreDataWithSources extends SpeciesCoreData {
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "species_source", inverseJoinColumns = {
             @JoinColumn(name = "source_id")
     })
