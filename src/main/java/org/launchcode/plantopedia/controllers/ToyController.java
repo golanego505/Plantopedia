@@ -3,7 +3,6 @@ package org.launchcode.plantopedia.controllers;
 import org.launchcode.plantopedia.data.FamilyRepository;
 import org.launchcode.plantopedia.data.GenusRepository;
 import org.launchcode.plantopedia.models.taxa.Family;
-import org.launchcode.plantopedia.models.taxa.Genus;
 import org.launchcode.plantopedia.responses.lists.KingdomListResponse;
 import org.launchcode.plantopedia.responses.retrievals.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,19 +182,5 @@ public class ToyController {
             familyRepository.save(family);
         }
         return "getFamilyData page";
-    }
-
-    @RequestMapping(value = "/get-data/genus/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    private String getGenusData(@PathVariable int id) {
-        RestTemplate restTemplate = new RestTemplate();
-        GenusRetrievalResponse response = restTemplate.getForObject(
-                API_PATH + "genus/" + id + "?token=" + apiKey,
-            GenusRetrievalResponse.class);
-        if (response != null) {
-            Genus genus = response.getData();
-            genusRepository.save(genus);
-        }
-        return "getGenusData page";
     }
 }

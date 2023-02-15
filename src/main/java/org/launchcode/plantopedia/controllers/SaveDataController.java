@@ -8,6 +8,7 @@ import org.launchcode.plantopedia.models.distributions.Zone;
 import org.launchcode.plantopedia.models.taxa.*;
 import org.launchcode.plantopedia.responses.lists.SpeciesListResponse;
 import org.launchcode.plantopedia.responses.lists.ZoneListResponse;
+import org.launchcode.plantopedia.responses.retrievals.GenusRetrievalResponse;
 import org.launchcode.plantopedia.responses.retrievals.PlantRetrievalResponse;
 import org.launchcode.plantopedia.responses.retrievals.SpeciesRetrievalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,20 @@ public class SaveDataController {
     private ZoneRepository zoneRepository;
     @Autowired
     private PlantRepository plantRepository;
+    @Autowired
+    private GenusRepository genusRepository;
+
+    @RequestMapping(value = "/get-data/genus/{id}")
+    @ResponseBody
+    public String getGenusById(@PathVariable int id, @Value("${TREFLE_API_TOKEN}") String apiKey) {
+        RestTemplate restTemplate = new RestTemplate();
+        String uri = "https://trefle.io/api/v1/genus/" + id + "?token=" + apiKey;
+        GenusRetrievalResponse response = restTemplate.getForObject(uri, GenusRetrievalResponse.class);
+        if (response != null) {
+            genusRepository.save(response.getData());
+        }
+        return "Genus with id=" + id + " saved.";
+    }
 
     @RequestMapping(value = "/get-data/species-in-range")
     @ResponseBody
