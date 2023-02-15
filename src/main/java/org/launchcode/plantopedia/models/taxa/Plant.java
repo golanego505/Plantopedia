@@ -13,6 +13,7 @@ public class Plant extends TaxonWithSources {
     @JsonProperty("scientific_name")
     private String scientificName;
     @JsonProperty("main_species_id")
+    @Transient
     private Integer mainSpeciesId;
     @JsonProperty("image_url")
     private String imageUrl;
@@ -29,7 +30,7 @@ public class Plant extends TaxonWithSources {
     @Transient
     private PlantLinks links;
     @JsonProperty("main_species")
-    @Transient
+    @OneToOne
     private Species mainSpecies;
     @ManyToOne
     @JoinColumn(name = "genus_id")

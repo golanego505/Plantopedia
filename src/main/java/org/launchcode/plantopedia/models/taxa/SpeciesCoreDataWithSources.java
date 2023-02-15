@@ -6,7 +6,7 @@ import jakarta.persistence.MappedSuperclass;
 import java.util.List;
 
 @MappedSuperclass
-public abstract class SpeciesCoreDataWithSources extends SpeciesCoreData{
+public abstract class SpeciesCoreDataWithSources extends SpeciesCoreData {
     @ManyToMany
     private List<TaxonWithSources.Source> sources;
 
