@@ -119,7 +119,7 @@
 
 <ol th:if="${showImages}">
     <li th:each="plant : ${plants}" style="width: 20%">
-        <a th:href="@{/plants/detail/{id}(id=${plant.id})}">
+        <a th:href="@{/species/{id}(id=${plant.id})}">
             <div class="card">
                 <img th:if="${plant.commonName != null}"
                      th:src="${plant.imageUrl}"
