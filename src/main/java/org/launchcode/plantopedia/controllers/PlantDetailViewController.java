@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
+import org.thymeleaf.util.StringUtils;
+
+import java.util.ArrayList;
 
 import static org.launchcode.plantopedia.controllers.ClientToken.API_PATH;
 import static org.launchcode.plantopedia.controllers.ClientToken.getClientToken;
@@ -28,6 +31,16 @@ public class PlantDetailViewController {
         if (speciesData != null) {
             Species species = speciesData.getData();
             model.addAttribute("species", species);
+            if (species.getEdiblePart() != null) {
+                if (species.getEdiblePart().size() > 0) {
+                    ArrayList<String> parts = new ArrayList<>();
+                    for (Species.EdiblePart part : species.getEdiblePart()) {
+                        parts.add(part.getPart());
+                    }
+                    String partsList = StringUtils.join(parts, ", ");
+                    model.addAttribute("edibleParts", partsList);
+                }
+            }
         }
         return "plantDetailView";
     }

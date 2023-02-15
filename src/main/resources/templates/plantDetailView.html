@@ -48,7 +48,8 @@
     </tr>
     <tr>
         <td>Edible Parts:</td>
-        <td th:text="${species.ediblePart}"></td>
+        <td th:if="${edibleParts}" th:text="${edibleParts}"></td>
+        <td th:unless="${edibleParts}">None</td>
     </tr>
 </table>
 </div>

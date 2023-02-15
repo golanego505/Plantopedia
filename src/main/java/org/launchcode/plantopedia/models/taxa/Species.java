@@ -1760,7 +1760,7 @@ public class Species extends SpeciesCoreDataWithSources {
         }
 
         @JsonValue
-        private String getPart() {
+        public String getPart() {
             return this.part;
         }
     }
