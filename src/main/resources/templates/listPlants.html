@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/plantopedia.css}" rel="stylesheet"/>
+    <title>Plantopedia</title>
+    <style>
+    body {
+    background-color: gray;
+    }
+    a:link {
+    color: CaptionText;
+    background-color: transparent;
+    text-decoration: none;
+    }
+    a:visited {
+    color: CaptionText;
+    }
+    </style>
+</head>
+<body>
+
+<h1>Plantopedia</h1>
+
+<h2>Plants</h2>
+
+<div th:if="${q}">
+    <h3 th:if="${error}" th:text="${error}"></h3>
+    <h3 th:unless="${error}"
+        th:text="'Your search for \'' + ${q} + '\' returned ' + ${meta.total} + ' plants.'"></h3>
+</div>
+<div th:unless="${q}">
+    <h3>
+        <h3 th:if="${error}" th:text="${error}"></h3>
+        <h3 th:unless="${error}" th:text="'The database contains ' +${meta.total} + ' plants.'"></h3>
+    </h3>
+</div>
+
+<form method="POST" th:action="@{/plants/search}">
+    <label for="q">Keyword:</label>
+    <input type="text" id="q" name="q"/>
+    <input type="submit" value="Search"/>
+</form>
+
+<h4 th:text="'Page ' + ${page} + ' of ' + ${pageCount}"></h4>
+
+<ol>
+    <li th:each="plant : ${plants}" style="width: 20%">
+        <a th:href="@{/plants/detail/{id}(id=${plant.id})}">
+            <div class="card">
+                <img th:if="${plant.commonName != null}"
+                     th:src="${plant.imageUrl}"
+                     th:alt="${plant.commonName}" width="100%">
+                <img th:unless="${plant.commonName != null}"
+                     th:src="${plant.imageUrl}"
+                     th:alt="${plant.scientificName}" width="100%">
+                <div class="container">
+                    <h4 th:text="${plant.commonName}"></h4>
+                    <i><p th:text="${plant.scientificName}"></p></i>
+                </div>
+            </div>
+        </a>
+    </li>
+</ol>
+
+<div th:unless="${error}">
+    <span>
+        <a th:href="'/parse-pagination-link?' + ${firstLinkQuery} + '&path=' + ${firstLinkPath}">First</a>
+    </span>
+
+    <span th:unless="${firstLinkQuery}"></span>
+
+    <span th:if="${links.prev}">
+        <a th:href="'/parse-pagination-link?' + ${prevLinkQuery} + '&path=' + ${prevLinkPath}">Previous</a>
+    </span>
+    <span th:if="${links.next}">
+        <a th:href="'/parse-pagination-link?' + ${nextLinkQuery} + '&path=' + ${nextLinkPath}">Next</a>
+    </span>
+    <span>
+        <a th:href="'/parse-pagination-link?' + ${lastLinkQuery} + '&path=' + ${lastLinkPath}">Last</a>
+    </span>
+</div>
+
+</body>
+</html>
