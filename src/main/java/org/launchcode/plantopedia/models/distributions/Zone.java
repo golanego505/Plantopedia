@@ -20,7 +20,11 @@ public class Zone extends Taxon {
     private TdwgUnitLinks links;
     @ManyToOne
     private TdwgUnit parent;
-    @ElementCollection(fetch = FetchType.LAZY, targetClass = TdwgUnit.class)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "zone_children",
+            joinColumns = @JoinColumn(name = "zone_id"),
+            inverseJoinColumns = @JoinColumn(name = "child_id")
+    )
     private List<TdwgUnit> children;
 
     public Zone() {}

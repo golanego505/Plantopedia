@@ -3,6 +3,12 @@ package org.launchcode.plantopedia.responses;
 public class ClientTokenResponse {
     private String token;
     private String expiration;
+    public ClientTokenResponse() {}
+
+    public ClientTokenResponse(String token, String expiration) {
+        this.token = token;
+        this.expiration = expiration;
+    }
 
     public String getToken() {
         return token;

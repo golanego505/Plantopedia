@@ -6,23 +6,28 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import org.launchcode.plantopedia.models.distributions.Distributions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Species extends SpeciesCoreDataWithSources {
     private String observations;
     private Boolean vegetable;
-    private Duration duration;
+    @ElementCollection
+    @CollectionTable(name = "durations")
+    @Enumerated(EnumType.STRING)
+    private List<Duration> duration;
     @JsonProperty("edible_part")
-    private EdiblePart ediblePart;
+    @ElementCollection
+    @CollectionTable(name = "edible_parts")
+    @Enumerated(EnumType.STRING)
+    private List<EdiblePart> ediblePart;
     private Boolean edible;
-    @OneToOne
+    @Embedded
     private Images images;
     @JsonProperty("common_names")
-    @OneToOne
+    @Embedded
     private CommonNames commonNames;
-    @OneToOne
+    @Embedded
     private Distributions distributions;
     @OneToOne
     private Flower flower;
@@ -36,6 +41,9 @@ public class Species extends SpeciesCoreDataWithSources {
     @OneToOne
     private Growth growth;
     @ManyToMany
+    @JoinTable(name = "species_synonym", inverseJoinColumns = {
+            @JoinColumn(name = "synonym_id")
+    })
     private List<Synonym> synonyms;
 
     public Species() {}
@@ -55,20 +63,20 @@ public class Species extends SpeciesCoreDataWithSources {
     public void setVegetable(Boolean vegetable) {
         this.vegetable = vegetable;
     }
-    public Duration getDuration() {
+    public List<Duration> getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(List<Duration> duration) {
         this.duration = duration;
     }
 
     @JsonProperty("edible_part")
-    public EdiblePart getEdiblePart() {
+    public List<EdiblePart> getEdiblePart() {
         return ediblePart;
     }
 
-    public void setEdiblePart(EdiblePart ediblePart) {
+    public void setEdiblePart(List<EdiblePart> ediblePart) {
         this.ediblePart = ediblePart;
     }
 
@@ -190,34 +198,53 @@ public class Species extends SpeciesCoreDataWithSources {
                 '}';
     }
 
-    @Entity
+    @Embeddable
     public static class Images {
-        @Id
-        @GeneratedValue
-        @JsonIgnore
-        private Integer id;
-        @ElementCollection(fetch = FetchType.LAZY, targetClass = Image.class)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @JoinTable(name = "flower_images",
+                joinColumns = @JoinColumn(name = "species_id"),
+                inverseJoinColumns = @JoinColumn(name = "image_id")
+        )
         private List<Image> flower;
-        @ElementCollection(fetch = FetchType.LAZY, targetClass = Image.class)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @JoinTable(name = "leaf_images",
+                joinColumns = @JoinColumn(name = "species_id"),
+                inverseJoinColumns = @JoinColumn(name = "image_id")
+        )
         private List<Image> leaf;
-        @ElementCollection(fetch = FetchType.LAZY, targetClass = Image.class)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @JoinTable(name = "habit_images",
+                joinColumns = @JoinColumn(name = "species_id"),
+                inverseJoinColumns = @JoinColumn(name = "image_id")
+        )
         private List<Image> habit;
-        @ElementCollection(fetch = FetchType.LAZY, targetClass = Image.class)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @JoinTable(name = "fruit_images",
+                joinColumns = @JoinColumn(name = "species_id"),
+                inverseJoinColumns = @JoinColumn(name = "image_id")
+        )
         private List<Image> fruit;
-        @ElementCollection(fetch = FetchType.LAZY, targetClass = Image.class)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @JoinTable(name = "bark_images",
+                joinColumns = @JoinColumn(name = "species_id"),
+                inverseJoinColumns = @JoinColumn(name = "image_id")
+        )
         private List<Image> bark;
-        @ElementCollection(fetch = FetchType.LAZY, targetClass = Image.class)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @JoinTable(name = "other_images",
+                joinColumns = @JoinColumn(name = "species_id"),
+                inverseJoinColumns = @JoinColumn(name = "image_id")
+        )
         private List<Image> other;
+        @JsonProperty("")
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @JoinTable(name = "unspecified_images",
+                joinColumns = @JoinColumn(name = "species_id"),
+                inverseJoinColumns = @JoinColumn(name = "image_id")
+        )
+        private List<Image> unspecified;
 
         public Images() {}
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
 
         public List<Image> getFlower() {
             return flower;
@@ -267,6 +294,14 @@ public class Species extends SpeciesCoreDataWithSources {
             this.other = other;
         }
 
+        public List<Image> getUnspecified() {
+            return unspecified;
+        }
+
+        public void setUnspecified(List<Image> unspecified) {
+            this.unspecified = unspecified;
+        }
+
         @Override
         public String toString() {
             return "Images{" +
@@ -280,6 +315,7 @@ public class Species extends SpeciesCoreDataWithSources {
         }
 
         @Entity
+        @Table(name = "image")
         public static class Image {
             @Id
             private Integer id;
@@ -326,6 +362,7 @@ public class Species extends SpeciesCoreDataWithSources {
     }
 
     @Entity
+    @Table(name = "growth")
     @Access(AccessType.FIELD)
     public static class Growth {
         @Id
@@ -349,10 +386,28 @@ public class Species extends SpeciesCoreDataWithSources {
         @JsonProperty("atmospheric_humidity")
         private Integer atmosphericHumidity;
         @JsonProperty("growth_months")
+        @ElementCollection
+        @CollectionTable(name = "growth_months",
+                joinColumns = {
+                @JoinColumn(name = "growth_id", referencedColumnName = "id")
+                })
+        @Enumerated(EnumType.STRING)
         private List<Month> growthMonths;
         @JsonProperty("bloom_months")
+        @ElementCollection
+        @CollectionTable(name = "bloom_months",
+                joinColumns = {
+                        @JoinColumn(name = "growth_id", referencedColumnName = "id")
+                })
+        @Enumerated(EnumType.STRING)
         private List<Month> bloomMonths;
         @JsonProperty("fruit_months")
+        @ElementCollection
+        @CollectionTable(name = "fruit_months",
+                joinColumns = {
+                        @JoinColumn(name = "growth_id", referencedColumnName = "id")
+                })
+        @Enumerated(EnumType.STRING)
         private List<Month> fruitMonths;
         @JsonProperty("minimum_precipitation")
         @Transient
@@ -377,8 +432,19 @@ public class Species extends SpeciesCoreDataWithSources {
         private Integer soilTexture;
         @JsonProperty("soil_humidity")
         private Integer soilHumidity;
+        @JsonIgnore
+        @OneToOne(mappedBy = "growth")
+        private Species species;
 
         public Growth() {
+        }
+
+        public Species getSpecies() {
+            return species;
+        }
+
+        public void setSpecies(Species species) {
+            this.species = species;
         }
 
         public void setMinimumTemperatureDegF(Integer minimumTemperatureDegF) {
@@ -411,54 +477,81 @@ public class Species extends SpeciesCoreDataWithSources {
         @Column(name = "row_spacing_cm")
         @Access(AccessType.PROPERTY)
         public Float getRowSpacingCm() {
+            if (this.getRowSpacing() == null) {
+                return null;
+            }
             return this.getRowSpacing().getCm();
         }
 
         @Column(name = "spread_cm")
         @Access(AccessType.PROPERTY)
         public Float getSpreadCm() {
+            if (this.getSpread() == null) {
+                return null;
+            }
             return this.getSpread().getCm();
         }
 
         @Column(name = "min_precip_mm")
         @Access(AccessType.PROPERTY)
         public Float getMinimumPrecipitationMm() {
+            if (this.getMinimumPrecipitation() == null) {
+                return null;
+            }
             return this.getMinimumPrecipitation().getMm();
         }
 
         @Column(name = "max_precip_mm")
         @Access(AccessType.PROPERTY)
         public Float getMaximumPrecipitationMm() {
+            if (this.getMaximumPrecipitation() == null) {
+                return null;
+            }
             return this.getMaximumPrecipitation().getMm();
         }
 
         @Column(name = "min_root_depth")
         @Access(AccessType.PROPERTY)
         public Float getMinimumRootDepthCm() {
+            if (this.getMinimumRootDepth() == null) {
+                return null;
+            }
             return this.getMinimumRootDepth().getCm();
         }
 
         @Column(name = "min_temp_F")
         @Access(AccessType.PROPERTY)
         public Float getMinimumTemperatureDegF() {
+            if (this.getMinimumTemperature() == null) {
+                return null;
+            }
             return this.getMinimumTemperature().getDegF();
         }
 
         @Column(name = "min_temp_C")
         @Access(AccessType.PROPERTY)
         public Float getMinimumTemperatureDegC() {
+            if (this.getMinimumTemperature() == null) {
+                return null;
+            }
             return this.getMinimumTemperature().getDegC();
         }
 
         @Column(name = "max_temp_F")
         @Access(AccessType.PROPERTY)
         public Float getMaximumTemperatureDegF() {
+            if (this.getMaximumTemperature() == null) {
+                return null;
+            }
             return this.getMaximumTemperature().getDegF();
         }
 
         @Column(name = "max_temp_C")
         @Access(AccessType.PROPERTY)
         public Float getMaximumTemperatureDegC() {
+            if (this.getMaximumTemperature() == null) {
+                return null;
+            }
             return this.getMaximumTemperature().getDegC();
         }
 
@@ -743,6 +836,7 @@ public class Species extends SpeciesCoreDataWithSources {
     }
 
     @Entity
+    @Table(name = "specifications")
     @Access(AccessType.FIELD)
     public static class Specifications {
         @Id
@@ -750,6 +844,7 @@ public class Species extends SpeciesCoreDataWithSources {
         @JsonIgnore
         private Integer id;
         @JsonProperty("ligneous_type")
+        @Enumerated(EnumType.STRING)
         private LigneousType ligneousType;
         @JsonProperty("growth_form")
         private String growthForm;
@@ -767,7 +862,11 @@ public class Species extends SpeciesCoreDataWithSources {
         private String nitrogenFixation;
         @JsonProperty("shape_and_orientation")
         private String shapeAndOrientation;
+        @Enumerated(EnumType.STRING)
         private Toxicity toxicity;
+        @JsonIgnore
+        @OneToOne(mappedBy = "specifications")
+        private Species species;
 
         public Specifications() {}
 
@@ -782,6 +881,9 @@ public class Species extends SpeciesCoreDataWithSources {
         @Column(name = "avg_height_cm")
         @Access(AccessType.PROPERTY)
         public Float getAverageHeightCm() {
+            if (this.getAverageHeight() == null) {
+                return null;
+            }
             return this.getAverageHeight().getCm();
         }
         public void setAverageHeightCm(Integer averageHeightCm) {}
@@ -789,6 +891,9 @@ public class Species extends SpeciesCoreDataWithSources {
         @Column(name = "max_height_cm")
         @Access(AccessType.PROPERTY)
         public Float getMaximumHeightCm() {
+            if (this.getMaximumHeight() == null) {
+                return null;
+            }
             return this.getMaximumHeight().getCm();
         }
         public void setMaximumHeightCm(Integer maximumHeightCm) {}
@@ -871,6 +976,14 @@ public class Species extends SpeciesCoreDataWithSources {
 
         public void setToxicity(Toxicity toxicity) {
             this.toxicity = toxicity;
+        }
+
+        public Species getSpecies() {
+            return species;
+        }
+
+        public void setSpecies(Species species) {
+            this.species = species;
         }
 
         @Override
@@ -962,601 +1075,589 @@ public class Species extends SpeciesCoreDataWithSources {
 
     }
 
-    @Entity
+    @Embeddable
     public static class CommonNames {
-        @Id
-        @GeneratedValue
-        @JsonIgnore
-        private Integer id;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> en;
+        private List<String> en;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> ar;
+        private List<String> ar;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> an;
+        private List<String> an;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> hy;
+        private List<String> hy;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> az;
+        private List<String> az;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> eu;
+        private List<String> eu;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> be;
+        private List<String> be;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> bg;
+        private List<String> bg;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> ca;
+        private List<String> ca;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> cv;
+        private List<String> cv;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> hr;
+        private List<String> hr;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> cs;
+        private List<String> cs;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> da;
+        private List<String> da;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> nl;
+        private List<String> nl;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> eo;
+        private List<String> eo;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> et;
+        private List<String> et;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> fi;
+        private List<String> fi;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> fr;
+        private List<String> fr;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> gl;
+        private List<String> gl;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> ka;
+        private List<String> ka;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> de;
+        private List<String> de;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> he;
+        private List<String> he;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> hu;
+        private List<String> hu;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
         @Column(name = "lang_is")
-        private ArrayList<String> is;
+        private List<String> is;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> it;
+        private List<String> it;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> kk;
+        private List<String> kk;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> lv;
+        private List<String> lv;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> lt;
+        private List<String> lt;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> mk;
+        private List<String> mk;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> gv;
+        private List<String> gv;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> se;
+        private List<String> se;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> no;
+        private List<String> no;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> nb;
+        private List<String> nb;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> nn;
+        private List<String> nn;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> oc;
+        private List<String> oc;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> fa;
+        private List<String> fa;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> pl;
+        private List<String> pl;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> pt;
+        private List<String> pt;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> ru;
+        private List<String> ru;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> sr;
+        private List<String> sr;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> sk;
+        private List<String> sk;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> sl;
+        private List<String> sl;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> es;
+        private List<String> es;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> sv;
+        private List<String> sv;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> tr;
+        private List<String> tr;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> uk;
+        private List<String> uk;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> wa;
+        private List<String> wa;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> cy;
+        private List<String> cy;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> fin;
+        private List<String> fin;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> swe;
+        private List<String> swe;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> dan;
+        private List<String> dan;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> deu;
+        private List<String> deu;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> eng;
+        private List<String> eng;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> nno;
+        private List<String> nno;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> nob;
+        private List<String> nob;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> fra;
+        private List<String> fra;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> por;
+        private List<String> por;
         @ElementCollection(fetch = FetchType.LAZY, targetClass = String.class)
-        private ArrayList<String> nld;
+        private List<String> nld;
 
         public CommonNames() {}
 
-        public Integer getId() {
-            return this.id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        public ArrayList<String> getEn() {
+        public List<String> getEn() {
             return en;
         }
 
-        public void setEn(ArrayList<String> en) {
+        public void setEn(List<String> en) {
             this.en = en;
         }
 
-        public ArrayList<String> getAr() {
+        public List<String> getAr() {
             return ar;
         }
 
-        public void setAr(ArrayList<String> ar) {
+        public void setAr(List<String> ar) {
             this.ar = ar;
         }
 
-        public ArrayList<String> getAn() {
+        public List<String> getAn() {
             return an;
         }
 
-        public void setAn(ArrayList<String> an) {
+        public void setAn(List<String> an) {
             this.an = an;
         }
 
-        public ArrayList<String> getHy() {
+        public List<String> getHy() {
             return hy;
         }
 
-        public void setHy(ArrayList<String> hy) {
+        public void setHy(List<String> hy) {
             this.hy = hy;
         }
 
-        public ArrayList<String> getAz() {
+        public List<String> getAz() {
             return az;
         }
 
-        public void setAz(ArrayList<String> az) {
+        public void setAz(List<String> az) {
             this.az = az;
         }
 
-        public ArrayList<String> getEu() {
+        public List<String> getEu() {
             return eu;
         }
 
-        public void setEu(ArrayList<String> eu) {
+        public void setEu(List<String> eu) {
             this.eu = eu;
         }
 
-        public ArrayList<String> getBe() {
+        public List<String> getBe() {
             return be;
         }
 
-        public void setBe(ArrayList<String> be) {
+        public void setBe(List<String> be) {
             this.be = be;
         }
 
-        public ArrayList<String> getBg() {
+        public List<String> getBg() {
             return bg;
         }
 
-        public void setBg(ArrayList<String> bg) {
+        public void setBg(List<String> bg) {
             this.bg = bg;
         }
 
-        public ArrayList<String> getCa() {
+        public List<String> getCa() {
             return ca;
         }
 
-        public void setCa(ArrayList<String> ca) {
+        public void setCa(List<String> ca) {
             this.ca = ca;
         }
 
-        public ArrayList<String> getCv() {
+        public List<String> getCv() {
             return cv;
         }
 
-        public void setCv(ArrayList<String> cv) {
+        public void setCv(List<String> cv) {
             this.cv = cv;
         }
 
-        public ArrayList<String> getHr() {
+        public List<String> getHr() {
             return hr;
         }
 
-        public void setHr(ArrayList<String> hr) {
+        public void setHr(List<String> hr) {
             this.hr = hr;
         }
 
-        public ArrayList<String> getCs() {
+        public List<String> getCs() {
             return cs;
         }
 
-        public void setCs(ArrayList<String> cs) {
+        public void setCs(List<String> cs) {
             this.cs = cs;
         }
 
-        public ArrayList<String> getDa() {
+        public List<String> getDa() {
             return da;
         }
 
-        public void setDa(ArrayList<String> da) {
+        public void setDa(List<String> da) {
             this.da = da;
         }
 
-        public ArrayList<String> getNl() {
+        public List<String> getNl() {
             return nl;
         }
 
-        public void setNl(ArrayList<String> nl) {
+        public void setNl(List<String> nl) {
             this.nl = nl;
         }
 
-        public ArrayList<String> getEo() {
+        public List<String> getEo() {
             return eo;
         }
 
-        public void setEo(ArrayList<String> eo) {
+        public void setEo(List<String> eo) {
             this.eo = eo;
         }
 
-        public ArrayList<String> getEt() {
+        public List<String> getEt() {
             return et;
         }
 
-        public void setEt(ArrayList<String> et) {
+        public void setEt(List<String> et) {
             this.et = et;
         }
 
-        public ArrayList<String> getFi() {
+        public List<String> getFi() {
             return fi;
         }
 
-        public void setFi(ArrayList<String> fi) {
+        public void setFi(List<String> fi) {
             this.fi = fi;
         }
 
-        public ArrayList<String> getFr() {
+        public List<String> getFr() {
             return fr;
         }
 
-        public void setFr(ArrayList<String> fr) {
+        public void setFr(List<String> fr) {
             this.fr = fr;
         }
 
-        public ArrayList<String> getGl() {
+        public List<String> getGl() {
             return gl;
         }
 
-        public void setGl(ArrayList<String> gl) {
+        public void setGl(List<String> gl) {
             this.gl = gl;
         }
 
-        public ArrayList<String> getKa() {
+        public List<String> getKa() {
             return ka;
         }
 
-        public void setKa(ArrayList<String> ka) {
+        public void setKa(List<String> ka) {
             this.ka = ka;
         }
 
-        public ArrayList<String> getDe() {
+        public List<String> getDe() {
             return de;
         }
 
-        public void setDe(ArrayList<String> de) {
+        public void setDe(List<String> de) {
             this.de = de;
         }
 
-        public ArrayList<String> getHe() {
+        public List<String> getHe() {
             return he;
         }
 
-        public void setHe(ArrayList<String> he) {
+        public void setHe(List<String> he) {
             this.he = he;
         }
 
-        public ArrayList<String> getHu() {
+        public List<String> getHu() {
             return hu;
         }
 
-        public void setHu(ArrayList<String> hu) {
+        public void setHu(List<String> hu) {
             this.hu = hu;
         }
 
-        public ArrayList<String> getIs() {
+        public List<String> getIs() {
             return is;
         }
 
-        public void setIs(ArrayList<String> is) {
+        public void setIs(List<String> is) {
             this.is = is;
         }
 
-        public ArrayList<String> getIt() {
+        public List<String> getIt() {
             return it;
         }
 
-        public void setIt(ArrayList<String> it) {
+        public void setIt(List<String> it) {
             this.it = it;
         }
 
-        public ArrayList<String> getKk() {
+        public List<String> getKk() {
             return kk;
         }
 
-        public void setKk(ArrayList<String> kk) {
+        public void setKk(List<String> kk) {
             this.kk = kk;
         }
 
-        public ArrayList<String> getLv() {
+        public List<String> getLv() {
             return lv;
         }
 
-        public void setLv(ArrayList<String> lv) {
+        public void setLv(List<String> lv) {
             this.lv = lv;
         }
 
-        public ArrayList<String> getLt() {
+        public List<String> getLt() {
             return lt;
         }
 
-        public void setLt(ArrayList<String> lt) {
+        public void setLt(List<String> lt) {
             this.lt = lt;
         }
 
-        public ArrayList<String> getMk() {
+        public List<String> getMk() {
             return mk;
         }
 
-        public void setMk(ArrayList<String> mk) {
+        public void setMk(List<String> mk) {
             this.mk = mk;
         }
 
-        public ArrayList<String> getGv() {
+        public List<String> getGv() {
             return gv;
         }
 
-        public void setGv(ArrayList<String> gv) {
+        public void setGv(List<String> gv) {
             this.gv = gv;
         }
 
-        public ArrayList<String> getSe() {
+        public List<String> getSe() {
             return se;
         }
 
-        public void setSe(ArrayList<String> se) {
+        public void setSe(List<String> se) {
             this.se = se;
         }
 
-        public ArrayList<String> getNo() {
+        public List<String> getNo() {
             return no;
         }
 
-        public void setNo(ArrayList<String> no) {
+        public void setNo(List<String> no) {
             this.no = no;
         }
 
-        public ArrayList<String> getNb() {
+        public List<String> getNb() {
             return nb;
         }
 
-        public void setNb(ArrayList<String> nb) {
+        public void setNb(List<String> nb) {
             this.nb = nb;
         }
 
-        public ArrayList<String> getNn() {
+        public List<String> getNn() {
             return nn;
         }
 
-        public void setNn(ArrayList<String> nn) {
+        public void setNn(List<String> nn) {
             this.nn = nn;
         }
 
-        public ArrayList<String> getOc() {
+        public List<String> getOc() {
             return oc;
         }
 
-        public void setOc(ArrayList<String> oc) {
+        public void setOc(List<String> oc) {
             this.oc = oc;
         }
 
-        public ArrayList<String> getFa() {
+        public List<String> getFa() {
             return fa;
         }
 
-        public void setFa(ArrayList<String> fa) {
+        public void setFa(List<String> fa) {
             this.fa = fa;
         }
 
-        public ArrayList<String> getPl() {
+        public List<String> getPl() {
             return pl;
         }
 
-        public void setPl(ArrayList<String> pl) {
+        public void setPl(List<String> pl) {
             this.pl = pl;
         }
 
-        public ArrayList<String> getPt() {
+        public List<String> getPt() {
             return pt;
         }
 
-        public void setPt(ArrayList<String> pt) {
+        public void setPt(List<String> pt) {
             this.pt = pt;
         }
 
-        public ArrayList<String> getRu() {
+        public List<String> getRu() {
             return ru;
         }
 
-        public void setRu(ArrayList<String> ru) {
+        public void setRu(List<String> ru) {
             this.ru = ru;
         }
 
-        public ArrayList<String> getSr() {
+        public List<String> getSr() {
             return sr;
         }
 
-        public void setSr(ArrayList<String> sr) {
+        public void setSr(List<String> sr) {
             this.sr = sr;
         }
 
-        public ArrayList<String> getSk() {
+        public List<String> getSk() {
             return sk;
         }
 
-        public void setSk(ArrayList<String> sk) {
+        public void setSk(List<String> sk) {
             this.sk = sk;
         }
 
-        public ArrayList<String> getSl() {
+        public List<String> getSl() {
             return sl;
         }
 
-        public void setSl(ArrayList<String> sl) {
+        public void setSl(List<String> sl) {
             this.sl = sl;
         }
 
-        public ArrayList<String> getEs() {
+        public List<String> getEs() {
             return es;
         }
 
-        public void setEs(ArrayList<String> es) {
+        public void setEs(List<String> es) {
             this.es = es;
         }
 
-        public ArrayList<String> getSv() {
+        public List<String> getSv() {
             return sv;
         }
 
-        public void setSv(ArrayList<String> sv) {
+        public void setSv(List<String> sv) {
             this.sv = sv;
         }
 
-        public ArrayList<String> getTr() {
+        public List<String> getTr() {
             return tr;
         }
 
-        public void setTr(ArrayList<String> tr) {
+        public void setTr(List<String> tr) {
             this.tr = tr;
         }
 
-        public ArrayList<String> getUk() {
+        public List<String> getUk() {
             return uk;
         }
 
-        public void setUk(ArrayList<String> uk) {
+        public void setUk(List<String> uk) {
             this.uk = uk;
         }
 
-        public ArrayList<String> getWa() {
+        public List<String> getWa() {
             return wa;
         }
 
-        public void setWa(ArrayList<String> wa) {
+        public void setWa(List<String> wa) {
             this.wa = wa;
         }
 
-        public ArrayList<String> getCy() {
+        public List<String> getCy() {
             return cy;
         }
 
-        public void setCy(ArrayList<String> cy) {
+        public void setCy(List<String> cy) {
             this.cy = cy;
         }
 
-        public ArrayList<String> getFin() {
+        public List<String> getFin() {
             return fin;
         }
 
-        public void setFin(ArrayList<String> fin) {
+        public void setFin(List<String> fin) {
             this.fin = fin;
         }
 
-        public ArrayList<String> getSwe() {
+        public List<String> getSwe() {
             return swe;
         }
 
-        public void setSwe(ArrayList<String> swe) {
+        public void setSwe(List<String> swe) {
             this.swe = swe;
         }
 
-        public ArrayList<String> getDan() {
+        public List<String> getDan() {
             return dan;
         }
 
-        public void setDan(ArrayList<String> dan) {
+        public void setDan(List<String> dan) {
             this.dan = dan;
         }
 
-        public ArrayList<String> getDeu() {
+        public List<String> getDeu() {
             return deu;
         }
 
-        public void setDeu(ArrayList<String> deu) {
+        public void setDeu(List<String> deu) {
             this.deu = deu;
         }
 
-        public ArrayList<String> getEng() {
+        public List<String> getEng() {
             return eng;
         }
 
-        public void setEng(ArrayList<String> eng) {
+        public void setEng(List<String> eng) {
             this.eng = eng;
         }
 
-        public ArrayList<String> getNno() {
+        public List<String> getNno() {
             return nno;
         }
 
-        public void setNno(ArrayList<String> nno) {
+        public void setNno(List<String> nno) {
             this.nno = nno;
         }
 
-        public ArrayList<String> getNob() {
+        public List<String> getNob() {
             return nob;
         }
 
-        public void setNob(ArrayList<String> nob) {
+        public void setNob(List<String> nob) {
             this.nob = nob;
         }
 
-        public ArrayList<String> getFra() {
+        public List<String> getFra() {
             return fra;
         }
 
-        public void setFra(ArrayList<String> fra) {
+        public void setFra(List<String> fra) {
             this.fra = fra;
         }
 
-        public ArrayList<String> getPor() {
+        public List<String> getPor() {
             return por;
         }
 
-        public void setPor(ArrayList<String> por) {
+        public void setPor(List<String> por) {
             this.por = por;
         }
 
-        public ArrayList<String> getNld() {
+        public List<String> getNld() {
             return nld;
         }
 
-        public void setNld(ArrayList<String> nld) {
+        public void setNld(List<String> nld) {
             this.nld = nld;
         }
 
@@ -1664,13 +1765,22 @@ public class Species extends SpeciesCoreDataWithSources {
     }
 
     @Entity
+    @Table(name = "flower")
     public static class Flower {
         @Id
         @GeneratedValue
         @JsonIgnore
         private Integer id;
+        @ElementCollection
+        @CollectionTable(name = "flower_colors", joinColumns = {
+                @JoinColumn(name = "flower_id")
+        })
+        @Enumerated(EnumType.STRING)
         private List<Color> color;
         private Boolean conspicuous;
+        @JsonIgnore
+        @OneToOne(mappedBy = "flower")
+        private Species species;
 
         public Flower() {}
 
@@ -1690,6 +1800,14 @@ public class Species extends SpeciesCoreDataWithSources {
             this.conspicuous = conspicuous;
         }
 
+        public Species getSpecies() {
+            return species;
+        }
+
+        public void setSpecies(Species species) {
+            this.species = species;
+        }
+
         @Override
         public String toString() {
             return "Flower{" +
@@ -1700,15 +1818,24 @@ public class Species extends SpeciesCoreDataWithSources {
     }
 
     @Entity
+    @Table(name = "foliage")
     public static class Foliage {
         @Id
         @GeneratedValue
         @JsonIgnore
         private Integer id;
         private Texture texture;
+        @ElementCollection
+        @CollectionTable(name = "foliage_colors", joinColumns = {
+                @JoinColumn(name = "foliage_id")
+        })
+        @Enumerated(EnumType.STRING)
         private List<Color> color;
         @JsonProperty("leaf_retention")
         private Boolean leafRetention;
+        @JsonIgnore
+        @OneToOne(mappedBy = "foliage")
+        private Species species;
 
         public Foliage() {}
 
@@ -1735,6 +1862,14 @@ public class Species extends SpeciesCoreDataWithSources {
 
         public void setLeafRetention(Boolean leafRetention) {
             this.leafRetention = leafRetention;
+        }
+
+        public Species getSpecies() {
+            return species;
+        }
+
+        public void setSpecies(Species species) {
+            this.species = species;
         }
 
         @Override
@@ -1765,16 +1900,25 @@ public class Species extends SpeciesCoreDataWithSources {
     }
 
     @Entity
+    @Table(name = "fruit_or_seed")
     public static class FruitOrSeed {
         @Id
         @GeneratedValue
         @JsonIgnore
         private Integer id;
         private Boolean conspicuous;
+        @ElementCollection
+        @CollectionTable(name = "fruit_or_seed_colors", joinColumns = {
+                @JoinColumn(name = "fruit_or_seed_id")
+        })
+        @Enumerated(EnumType.STRING)
         private List<Color> color;
         private String shape;
         @JsonProperty("seed_persistence")
         private Boolean seedPersistence;
+        @JsonIgnore
+        @OneToOne(mappedBy = "fruitOrSeed")
+        private Species species;
 
         public FruitOrSeed() {}
 
@@ -1809,6 +1953,14 @@ public class Species extends SpeciesCoreDataWithSources {
 
         public void setSeedPersistence(Boolean seedPersistence) {
             this.seedPersistence = seedPersistence;
+        }
+
+        public Species getSpecies() {
+            return species;
+        }
+
+        public void setSpecies(Species species) {
+            this.species = species;
         }
 
         @Override
