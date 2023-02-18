@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Plantopedia - New Search</title>
+</head>
+<body>
+
+<h1>Plantopedia</h1>
+<h2>New Search</h2>
+
+<h4>Run a new search:</h4>
+<form method="POST" th:action="@{/plants/search}">
+    <label for="q">Keyword:</label>
+    <input type="text" id="q" required name="q"/><br>
+    <input type="radio" id="showImages" name="showImages" value="1"/>
+    <label for="showImages">Show Images</label><br>
+    <input type="radio" id="hideImages" name="showImages" value="0"/>
+    <label for="hideImages">Hide Images</label><br>
+    <label for="plantsPerPage">Results per page:</label>
+    <select name="plantsPerPage" id="plantsPerPage">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <option value="40">40</option>
+    </select>
+    <label for="order-field-1">Order by:</label>
+    <select name="orderFieldOne" id="order-field-1">
+        <option value="common_name">Common Name</option>
+        <option value="scientific_name">Scientific Name</option>
+    </select>
+    <input type="hidden" name="page" value="0"/>
+    <input type="submit" value="Search"/><br>
+</form>
+
+</body>
+</html>
