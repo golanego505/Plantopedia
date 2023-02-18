@@ -32,23 +32,25 @@ import static org.launchcode.plantopedia.controllers.PlantListController.BASE_AP
 @Controller
 public class PlantSearchController {
 
+    static List<SpeciesLight> results = new ArrayList<>();
+    static PagedListHolder<SpeciesLight> pagedResults = new PagedListHolder<>();
+    static String searchTerm;
     @Autowired
     private SpeciesLightRepository speciesLightRepository;
 
     @PostMapping(value = "/plants/search")
-    public String searchPlants(Model model, HttpServletRequest request,
+    public String processSearchForm(Model model, HttpServletRequest request,
                                @RequestParam String q,
                                @RequestParam int page,
                                @RequestParam(defaultValue = "1") String showImages,
                                @RequestParam(name = "orderFieldOne", defaultValue = "") String orderFieldOne,
-                               @RequestParam int plantsPerPage,
+                               @RequestParam int pageSize,
                                @RequestParam(name = "filters", defaultValue = "") String filters,
                                @Value("${TREFLE_API_TOKEN}") String apiKey) {
-        List<SpeciesLight> hits = speciesLightRepository.findByCommonNameContainingIgnoreCase(q);
-        hits.addAll(speciesLightRepository.findByScientificNameContainingIgnoreCase(q));
-        PagedListHolder<SpeciesLight> hitsPage = new PagedListHolder<>(hits);
-        hitsPage.setPage(page);
-        hitsPage.setPageSize(plantsPerPage);
+        PagedListHolder<SpeciesLight> hitsPage = getPagedSearchResults(q, 0, pageSize);
+        pagedResults = hitsPage;
+        results = hitsPage.getSource();
+        searchTerm = q;
 //        RestTemplate restTemplate = new RestTemplate();
 //        String token = PlantListController.getClientToken(request.getRequestURI(), apiKey).getToken();
 //        PlantListResponse response;
@@ -63,14 +65,27 @@ public class PlantSearchController {
 //                            "&token=" + token + "&" + filters,
 //                    PlantListResponse.class);
 //        }
-        model.addAttribute("q", q);
-        model.addAttribute("page", page + 1);
-        model.addAttribute("showImages", !(showImages.equals("0") || showImages.equals("false")));
+        return "redirect:/plants/search/results?"
+                + "showImages=" + showImages
+                + "&page=" + page
+                + "&orderFieldOne=" + orderFieldOne;
+    }
+
+    @GetMapping(value = "/plants/search/results")
+    public String displaySearchResults(Model model,
+                                       @RequestParam boolean showImages,
+                                       @RequestParam int page,
+                                       @RequestParam String orderFieldOne) {
+        model.addAttribute("q", searchTerm);
+        model.addAttribute("showImages", showImages);
         model.addAttribute("orderFieldOne", orderFieldOne);
-//        PlantListController.addPlantListToModel(model, response);
-        model.addAttribute("plants", hitsPage.getPageList());
-        model.addAttribute("pageCount", hitsPage.getPageCount());
-        model.addAttribute("resultCount", hitsPage.getNrOfElements());
+        pagedResults.setPage(page - 1);
+        model.addAttribute("page", page);
+        model.addAttribute("isFirstPage", pagedResults.isFirstPage());
+        model.addAttribute("isLastPage", pagedResults.isLastPage());
+        model.addAttribute("plants", pagedResults.getPageList());
+        model.addAttribute("pageCount", pagedResults.getPageCount());
+        model.addAttribute("resultCount", pagedResults.getNrOfElements());
         return "searchResults";
     }
 
@@ -92,6 +107,15 @@ public class PlantSearchController {
                 + "&showImages=" + query.get("showImages")
                 + "&orderFieldOne=" + query.getOrDefault("orderFieldOne", "")
                 + "&filters=" + filtersForQuery;
+    }
+
+    public PagedListHolder<SpeciesLight> getPagedSearchResults(String q, int page, int pageSize) {
+        List<SpeciesLight> hits = speciesLightRepository.findByCommonNameContainingIgnoreCase(q);
+        hits.addAll(speciesLightRepository.findByScientificNameContainingIgnoreCase(q));
+        PagedListHolder<SpeciesLight> hitsPage = new PagedListHolder<>(hits);
+        hitsPage.setPage(page);
+        hitsPage.setPageSize(pageSize);
+        return hitsPage;
     }
 
     public String buildFilters(Map<FilterPair, String> filterMap) {

@@ -30,7 +30,7 @@
         th:text="'Your search for \'' + ${q} + '\' returned ' + ${resultCount} + ' plants.'"></h3>
 </div>
 
-<div th:replace="fragments :: search-form"></div>
+<div th:replace="~{fragments :: search-form}"></div>
 
 <table>
     <tr>
@@ -104,6 +104,25 @@
         </a>
     </li>
 </ol>
+
+<div th:unless="${error}">
+    <span>
+        <a th:href="'/plants/search/results?page=1&showImages=' + ${showImages}
+        + '&orderFieldOne=' + ${orderFieldOne}">First</a>
+    </span>
+    <span th:if="${!isFirstPage}">
+        <a th:href="'/plants/search/results?page=' + ${page - 1} + '&showImages=' + ${showImages}
+        + '&orderFieldOne=' + ${orderFieldOne}">Previous</a>
+    </span>
+    <span th:if="${!isLastPage}">
+        <a th:href="'/plants/search/results?page=' + ${page + 1} + '&showImages=' + ${showImages}
+        + '&orderFieldOne=' + ${orderFieldOne}">Next</a>
+    </span>
+    <span>
+        <a th:href="'/plants/search/results?page=' + ${pageCount} + '&showImages=' + ${showImages}
+        + '&orderFieldOne=' + ${orderFieldOne}">Last</a>
+    </span>
+</div>
 
 <!--<div th:unless="${error}">-->
 <!--    <span>-->
