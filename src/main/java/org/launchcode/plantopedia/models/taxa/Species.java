@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import org.launchcode.plantopedia.models.distributions.Distributions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -46,7 +47,50 @@ public class Species extends SpeciesCoreDataWithSources {
     })
     private List<Synonym> synonyms;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Genus.class, optional = false,
+            cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "genus_id", referencedColumnName = "id", nullable = false,
+            foreignKey = @ForeignKey(foreignKeyDefinition =
+                    "FOREIGN KEY (genus_id) REFERENCES genus (id)"))
+    @Access(value = AccessType.FIELD)
+    private Genus genusForORM;
+
     public Species() {}
+
+    public Genus getGenusForORM() {
+        return genusForORM;
+    }
+
+    public void setGenusForORM(Genus genusForORM) {
+        this.genusForORM = genusForORM;
+    }
+
+    public SpeciesLight toSpeciesLight() {
+        SpeciesLight sl = new SpeciesLight();
+        sl.setId(this.getId());
+        sl.setSlug(this.getSlug());
+        sl.setCommonName(this.getCommonName());
+        sl.setScientificName(this.getScientificName());
+        sl.setYear(this.getYear());
+        sl.setBibliography(this.getBibliography());
+        sl.setAuthor(this.getAuthor());
+        sl.setStatus(this.getStatus());
+        sl.setRank(this.getRank());
+        sl.setFamilyCommonName(this.getFamilyCommonName());
+        sl.setGenusId(this.getGenusId());
+        sl.setImageUrl(this.getImageUrl());
+        sl.setGenus(this.getGenus());
+        sl.setFamily(this.getFamily());
+        sl.setLinks(this.getLinks());
+        List<String> slSynonyms = new ArrayList<>();
+        for (Synonym synonym : this.getSynonyms()) {
+            slSynonyms.add(synonym.getName());
+        }
+        sl.setSynonyms(slSynonyms);
+        sl.setGenusForORM(this.getGenusForORM());
+        return sl;
+    }
 
     public String getObservations() {
         return observations;

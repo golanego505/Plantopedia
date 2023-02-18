@@ -14,14 +14,12 @@ import org.launchcode.plantopedia.responses.retrievals.SpeciesRetrievalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class SaveDataController {
@@ -100,6 +98,14 @@ public class SaveDataController {
         return "Saved species with id=" + id;
     }
 
+    @GetMapping(value = "/get-data/species-light/{id}")
+    @ResponseBody
+    public String handleSaveSpeciesLightById(@PathVariable Integer id,
+                                             @Value("${TREFLE_API_TOKEN}") String apiKey) {
+        saveSpeciesLightById(apiKey, id);
+        return "Saved species-light with id=" + id;
+    }
+
     @RequestMapping(value = "/get-data/zones")
     @ResponseBody
     public String getAllZones(@Value("${TREFLE_API_TOKEN}") String apiKey) {
@@ -122,6 +128,19 @@ public class SaveDataController {
         return "Saved all species with common names.";
     }
 
+    private void saveSpeciesLightById(String apiKey, int id) {
+        String uri = "https://trefle.io/api/v1/species/" + id + "?token=" + apiKey;
+        RestTemplate restTemplate = new RestTemplate();
+        SpeciesRetrievalResponse response = restTemplate.getForObject(uri, SpeciesRetrievalResponse.class);
+        if (response != null) {
+            Species species = response.getData();
+            Optional<Genus> optGenus = genusRepository.findById(species.getGenusId());
+            if(optGenus.isPresent()) {
+                species.setGenusForORM(optGenus.get());
+            }
+            speciesLightRepository.save(response.getData().toSpeciesLight());
+        }
+    }
     private void saveSpeciesLight(String apiKey) {
 
         String uri = "https://trefle.io/api/v1/species?token=" + apiKey;
