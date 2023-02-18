@@ -39,16 +39,6 @@
     </h3>
 </div>
 
-<form method="POST" th:action="@{/plants/search}">
-    <label for="q">Keyword:</label>
-    <input type="text" id="q" required name="q"/><br>
-    <input type="radio" id="showImages" name="showImages" value="1"/>
-    <label for="showImages">Show Images</label><br>
-    <input type="radio" id="hideImages" name="showImages" value="0"/>
-    <label for="hideImages">Hide Images</label><br>
-    <input type="submit" value="Search"/><br>
-</form>
-
 <table>
     <tr>
         <td>
@@ -59,11 +49,7 @@
                 <input th:if="${q}" type="hidden" name="q" th:value="${q}"/>
                 <input type="hidden" name="page" th:value="${page}"/>
                 <input type="hidden" name="orderFieldOne" th:value="${orderFieldOne}"/>
-                <button th:if="${q}" name="showImages" type="submit" formmethod="POST" form="hide_images"
-                        value="0"
-                        th:formaction="@{/plants/search}">Hide Images
-                </button>
-                <button th:unless="${q}" name="showImages" type="submit" formmethod="GET" form="hide_images" value="0"
+                <button name="showImages" type="submit" formmethod="GET" form="hide_images" value="0"
                         th:formaction="@{/plants}">Hide Images
                 </button>
             </form>
@@ -73,10 +59,7 @@
                 <input th:if="${q}" type="hidden" name="q" th:value="${q}"/>
                 <input type="hidden" name="page" th:value="${page}"/>
                 <input type="hidden" name="orderFieldOne" th:value="${orderFieldOne}"/>
-                <button th:if="${q}" name="showImages" type="submit" formmethod="POST" form="show_images" value="1"
-                        th:formaction="@{/plants/search}">Show Images
-                </button>
-                <button th:unless="${q}" name="showImages" type="submit" formmethod="GET" form="show_images" value="1"
+                <button name="showImages" type="submit" formmethod="GET" form="show_images" value="1"
                         th:formaction="@{/plants}">Show Images
                 </button>
             </form>
