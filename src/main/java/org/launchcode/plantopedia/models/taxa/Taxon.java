@@ -1,15 +1,17 @@
 package org.launchcode.plantopedia.models.taxa;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
+import org.springframework.data.domain.Persistable;
 
 import java.util.Objects;
 
 @MappedSuperclass
-public abstract class Taxon {
+public abstract class Taxon implements Persistable<Integer> {
     @Id
     private Integer id;
     private String slug;
+    @Transient
+    boolean isNew = true;
 
     public Integer getId() {
         return id;
@@ -25,6 +27,17 @@ public abstract class Taxon {
 
     public void setSlug(String slug) {
         this.slug = slug;
+    }
+
+    @Override
+    public boolean isNew() {
+        return isNew;
+    }
+
+    @PrePersist
+    @PostLoad
+    void markNotNew() {
+        this.isNew = false;
     }
 
     @Override

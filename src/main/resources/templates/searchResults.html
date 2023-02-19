@@ -39,22 +39,20 @@
         </td>
         <td th:if="${showImages}">
             <form id="hide_images">
-                <input type="hidden" name="q" th:value="${q}"/>
                 <input type="hidden" name="page" th:value="${page}"/>
                 <input type="hidden" name="orderFieldOne" th:value="${orderFieldOne}"/>
                 <button name="showImages" type="submit" formmethod="POST" form="hide_images"
                         value="0"
-                        th:formaction="@{/plants/search}">Hide Images
+                        th:formaction="@{/toggle-images}">Hide Images
                 </button>
             </form>
         </td>
         <td th:unless="${showImages}">
             <form id="show_images">
-                <input type="hidden" name="q" th:value="${q}"/>
                 <input type="hidden" name="page" th:value="${page}"/>
                 <input type="hidden" name="orderFieldOne" th:value="${orderFieldOne}"/>
                 <button name="showImages" type="submit" formmethod="POST" form="show_images" value="1"
-                        th:formaction="@{/plants/search}">Show Images
+                        th:formaction="@{/toggle-images}">Show Images
                 </button>
             </form>
         </td>

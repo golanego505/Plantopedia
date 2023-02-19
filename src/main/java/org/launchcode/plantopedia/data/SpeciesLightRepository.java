@@ -12,6 +12,13 @@ public interface SpeciesLightRepository extends PagingAndSortingRepository<Speci
         CrudRepository<SpeciesLight, Integer> {
     List<SpeciesLight> findByCommonName(String commonName);
     List<SpeciesLight> findByCommonNameContainingIgnoreCase(String name);
-
     List<SpeciesLight> findByScientificNameContainingIgnoreCase(String name);
+    List<SpeciesLight> findByCommonNameLikeOrderByCommonName(String name);
+
+    List<SpeciesLight> findByCommonNameLikeOrderByScientificName(String name);
+    List<SpeciesLight> findByScientificNameLikeOrderByCommonName(String name);
+    List<SpeciesLight> findByScientificNameLikeOrderByScientificName(String name);
+    List<SpeciesLight> findByCommonNameLikeOrScientificNameLike(String common, String scientific);
+    List<SpeciesLight> findByCommonNameLikeOrScientificNameLikeOrderByCommonName(String common, String scientific);
+    List<SpeciesLight> findByCommonNameLikeOrScientificNameLikeOrderByScientificName(String common, String scientific);
 }
