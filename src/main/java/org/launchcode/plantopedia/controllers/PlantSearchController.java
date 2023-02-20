@@ -16,10 +16,7 @@ import org.thymeleaf.util.StringUtils;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class PlantSearchController {
@@ -27,6 +24,7 @@ public class PlantSearchController {
     static PagedListHolder<SpeciesLight> pagedResults = new PagedListHolder<>();
     static String searchTerm;
     static boolean showImages = true;
+    private static Comparator<SpeciesLight> speciesLightComparator;
     @Autowired
     private SpeciesLightRepository speciesLightRepository;
 
@@ -44,8 +42,9 @@ public class PlantSearchController {
         }
         List<SpeciesLightField> notNullFields = new ArrayList<>();
         hideNull.forEach(integer -> notNullFields.add(SpeciesLightField.values()[integer]));
+        SpeciesLightField orderBy = SpeciesLightField.values()[orderFieldOne];
         PagedListHolder<SpeciesLight> hitsPage =
-                getPagedSearchResults(q, 0, pageSize, orderFieldOne, notNullFields);
+                getPagedSearchResults(q, 0, pageSize, orderBy, notNullFields);
         pagedResults = hitsPage;
         results = hitsPage.getSource();
         searchTerm = q;
@@ -117,23 +116,137 @@ public class PlantSearchController {
     }
 
     public PagedListHolder<SpeciesLight> getPagedSearchResults(
-            String q, int page, int pageSize, int orderFieldOne,
+            String q, int page, int pageSize, SpeciesLightField orderBy,
             List<SpeciesLightField> notNullFields) {
         String pattern = '%' + q + '%';
-        List<SpeciesLight> hits;
-        SpeciesLightField field = SpeciesLightField.values()[orderFieldOne];
-        if (field.getField().equals("scientific_name")) {
-            hits = speciesLightRepository.
-                    findByCommonNameLikeOrScientificNameLikeOrderByScientificName(pattern, pattern);
-        } else {
-            hits = speciesLightRepository.
-                    findByCommonNameLikeOrScientificNameLikeOrderByCommonName(pattern, pattern);
-        }
+        List<SpeciesLight> hits = speciesLightRepository.
+                findByCommonNameLikeOrScientificNameLike(pattern, pattern);
         PlantSearchController.removeNullValues(hits, notNullFields);
+        sortByField(hits, orderBy);
         PagedListHolder<SpeciesLight> hitsPage = new PagedListHolder<>(hits);
         hitsPage.setPage(page);
         hitsPage.setPageSize(pageSize);
         return hitsPage;
+    }
+
+    private static void sortByField(List<SpeciesLight> aList, SpeciesLightField field) {
+        Comparator<String> compareStringsNullsLast =
+                Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER);
+        Comparator<SpeciesLight> compareCommonNames =
+                Comparator.nullsLast(
+                        Comparator.comparing(
+                                SpeciesLight::getCommonName, compareStringsNullsLast
+                        )
+                );
+        Comparator<SpeciesLight> compareScientificNames =
+                Comparator.nullsLast(
+                        Comparator.comparing(
+                                SpeciesLight::getScientificName, compareStringsNullsLast
+                        )
+                );
+        Comparator<SpeciesLight> compareSlugs =
+                Comparator.nullsLast(
+                        Comparator.comparing(
+                                SpeciesLight::getSlug, compareStringsNullsLast
+                        )
+                );
+        Comparator<SpeciesLight> compareYears =
+                Comparator.nullsLast(
+                        Comparator.comparing(
+                                SpeciesLight::getYear
+                        )
+                );
+        Comparator<SpeciesLight> compareAuthors =
+                Comparator.nullsLast(
+                        Comparator.comparing(
+                                SpeciesLight::getAuthor, compareStringsNullsLast
+                        )
+                );
+        Comparator<SpeciesLight> compareGenera =
+                Comparator.nullsLast(
+                        Comparator.comparing(
+                                SpeciesLight::getGenus, compareStringsNullsLast
+                        )
+                );
+        Comparator<SpeciesLight> compareFamilies =
+                Comparator.nullsLast(
+                        Comparator.comparing(
+                                SpeciesLight::getFamily, compareStringsNullsLast
+                        )
+                );
+        Comparator<SpeciesLight> compareBibliographies =
+                Comparator.nullsLast(
+                        Comparator.comparing(
+                                SpeciesLight::getBibliography, compareStringsNullsLast
+                        )
+                );
+        switch (field) {
+            case BIBLIOGRAPHY -> {
+                aList.sort(
+                        compareBibliographies.thenComparing(
+                                SpeciesLight::getId
+                        )
+                );
+            }
+            case FAMILY -> {
+                aList.sort(
+                        compareFamilies.thenComparing(
+                                SpeciesLight::getId
+                        )
+                );
+            }
+            case GENUS -> {
+                aList.sort(
+                        compareGenera.thenComparing(
+                                SpeciesLight::getId
+                        )
+                );
+            }
+            case AUTHOR -> {
+                aList.sort(
+                        compareAuthors.thenComparing(
+                                SpeciesLight::getId
+                        )
+                );
+            }
+            case COMMON_NAME -> {
+                aList.sort(
+                        compareCommonNames.thenComparing(
+                                SpeciesLight::getId
+                        )
+                );
+            }
+            case SCIENTIFIC_NAME -> {
+                aList.sort(
+                        compareScientificNames.thenComparing(
+                                SpeciesLight::getId
+                        )
+                );
+            }
+            case ID -> {
+                aList.sort(
+                        Comparator.nullsLast(
+                                Comparator.comparing(SpeciesLight::getId)
+                        )
+                );
+            }
+            case SLUG -> {
+                aList.sort(
+                        compareSlugs.thenComparing(
+                                SpeciesLight::getId
+                        )
+                );
+            }
+            case YEAR -> {
+                aList.sort(
+                        compareYears.thenComparing(
+                                SpeciesLight::getId
+                        )
+                );
+            }
+            default -> {
+            }
+        }
     }
 
     private static void removeNullValues(List<SpeciesLight> aList,
@@ -231,20 +344,20 @@ public class PlantSearchController {
     }
 
     public enum SpeciesLightField {
-        ID("id"),
-        SLUG("slug"),
-        COMMON_NAME("common_name"),
-        SCIENTIFIC_NAME("scientific_name"),
-        YEAR("year"),
-        BIBLIOGRAPHY("bibliography"),
-        AUTHOR("author"),
-        STATUS("status"),
-        RANK("rank"),
-        FAMILY_COMMON_NAME("family_common_name"),
-        GENUS_ID("genus_id"),
-        IMAGE_URL("image_url"),
-        GENUS("genus"),
-        FAMILY("family");
+        ID("id"), //0
+        SLUG("slug"), //1
+        COMMON_NAME("common_name"), //2
+        SCIENTIFIC_NAME("scientific_name"), //3
+        YEAR("year"), //4
+        BIBLIOGRAPHY("bibliography"), //5
+        AUTHOR("author"), //6
+        STATUS("status"), //7
+        RANK("rank"), //8
+        FAMILY_COMMON_NAME("family_common_name"), //9
+        GENUS_ID("genus_id"), //10
+        IMAGE_URL("image_url"), //11
+        GENUS("genus"), //12
+        FAMILY("family"); //13
 
         private final String field;
 

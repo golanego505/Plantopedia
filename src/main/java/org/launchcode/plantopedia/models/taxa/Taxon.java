@@ -29,7 +29,6 @@ public abstract class Taxon implements Persistable<Integer> {
         this.slug = slug;
     }
 
-    @Override
     public boolean isNew() {
         return isNew;
     }

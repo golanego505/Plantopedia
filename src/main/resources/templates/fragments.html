@@ -24,8 +24,15 @@
         </select>
         <label for="order-field-1">Order by:</label>
         <select name="orderFieldOne" id="order-field-1">
-            <option selected value="0">Common Name</option>
-            <option value="1">Scientific Name</option>
+            <option selected value="2">Common Name</option>
+            <option value="3">Scientific Name</option>
+            <option value="4">Publication Year</option>
+            <option value="6">Author</option>
+            <option value="5">Bibliography</option>
+            <option value="12">Genus</option>
+            <option value="13">Family</option>
+            <option value="0">Id</option>
+            <option value="1">Slug</option>
         </select>
         <br>
         <label for="hideNull2">Hide plants that lack a common name</label>
@@ -49,6 +56,23 @@
         <input type="hidden" name="page" value="1"/>
         <input type="submit" value="Search"/><br>
     </form>
+</div>
+
+<div th:fragment="search-result-card-data" class="container">
+    <h4 th:text="${plant.commonName}"></h4>
+    <i><p th:text="${plant.scientificName}"></p></i>
+    <p>Author:
+        <span th:if="${plant.author}" th:text="${plant.author}"></span>
+        <span th:unless="${plant.author}">Unavailable</span>
+    </p>
+    <p>Bibliography:
+        <span th:if="${plant.bibliography}" th:text="${plant.bibliography}"></span>
+        <span th:unless="${plant.bibliography}">Unavailable</span>
+    </p>
+    <p>Publication year:
+        <span th:if="${plant.year}" th:text="${plant.year}"></span>
+        <span th:unless="${plant.year}">Unavailable</span>
+    </p>
 </div>
 
 </body>

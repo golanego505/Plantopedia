@@ -81,9 +81,7 @@
                 <img th:unless="${plant.commonName != null}"
                      th:src="${plant.imageUrl}"
                      th:alt="${plant.scientificName}" width="100%">
-                <div class="container">
-                    <h4 th:text="${plant.commonName}"></h4>
-                    <i><p th:text="${plant.scientificName}"></p></i>
+                <div th:replace="~{fragments :: search-result-card-data}">
                 </div>
             </div>
         </a>
@@ -94,9 +92,7 @@
     <li th:each="plant : ${plants}" style="width: 20%">
         <a th:href="@{/species/{id}(id=${plant.id})}">
             <div class="card">
-                <div class="container">
-                    <h4 th:text="${plant.commonName}"></h4>
-                    <i><p th:text="${plant.scientificName}"></p></i>
+                <div th:replace="~{fragments :: search-result-card-data}">
                 </div>
             </div>
         </a>
