@@ -40,19 +40,16 @@
         <td th:if="${showImages}">
             <form id="hide_images">
                 <input type="hidden" name="page" th:value="${page}"/>
-                <input type="hidden" name="orderFieldOne" th:value="${orderFieldOne}"/>
                 <button name="showImages" type="submit" formmethod="POST" form="hide_images"
-                        value="0"
-                        th:formaction="@{/toggle-images}">Hide Images
+                        value="0" th:formaction="@{/toggle-images}">Hide Images
                 </button>
             </form>
         </td>
         <td th:unless="${showImages}">
             <form id="show_images">
                 <input type="hidden" name="page" th:value="${page}"/>
-                <input type="hidden" name="orderFieldOne" th:value="${orderFieldOne}"/>
-                <button name="showImages" type="submit" formmethod="POST" form="show_images" value="1"
-                        th:formaction="@{/toggle-images}">Show Images
+                <button name="showImages" type="submit" formmethod="POST" form="show_images"
+                        value="1" th:formaction="@{/toggle-images}">Show Images
                 </button>
             </form>
         </td>
@@ -101,20 +98,16 @@
 
 <div th:unless="${error}">
     <span>
-        <a th:href="'/plants/search/results?page=1&showImages=' + ${showImages}
-        + '&orderFieldOne=' + ${orderFieldOne}">First</a>
+        <a th:href="@{/plants/search/results?page=1}">First</a>
     </span>
     <span th:if="${!isFirstPage}">
-        <a th:href="'/plants/search/results?page=' + ${page - 1} + '&showImages=' + ${showImages}
-        + '&orderFieldOne=' + ${orderFieldOne}">Previous</a>
+        <a th:href="'/plants/search/results?page=' + ${page - 1}">Previous</a>
     </span>
     <span th:if="${!isLastPage}">
-        <a th:href="'/plants/search/results?page=' + ${page + 1} + '&showImages=' + ${showImages}
-        + '&orderFieldOne=' + ${orderFieldOne}">Next</a>
+        <a th:href="'/plants/search/results?page=' + ${page + 1}">Next</a>
     </span>
     <span>
-        <a th:href="'/plants/search/results?page=' + ${pageCount} + '&showImages=' + ${showImages}
-        + '&orderFieldOne=' + ${orderFieldOne}">Last</a>
+        <a th:href="'/plants/search/results?page=' + ${pageCount}">Last</a>
     </span>
 </div>
 

@@ -22,9 +22,11 @@ import java.util.*;
 public class PlantSearchController {
     static List<SpeciesLight> results = new ArrayList<>();
     static PagedListHolder<SpeciesLight> pagedResults = new PagedListHolder<>();
-    static String searchTerm;
+    static String searchTerm = "";
     static boolean showImages = true;
-    private static Comparator<SpeciesLight> speciesLightComparator;
+    static List<Integer> excludeNullChecked = new ArrayList<>();
+    static Integer orderByField = 2;
+    static Integer resultsPerPage = 10;
     @Autowired
     private SpeciesLightRepository speciesLightRepository;
 
@@ -49,6 +51,9 @@ public class PlantSearchController {
         results = hitsPage.getSource();
         searchTerm = q;
         PlantSearchController.showImages = showImages;
+        excludeNullChecked = hideNull;
+        orderByField = orderFieldOne;
+        resultsPerPage = pageSize;
 //        RestTemplate restTemplate = new RestTemplate();
 //        String token = PlantListController.getClientToken(request.getRequestURI(), apiKey).getToken();
 //        PlantListResponse response;
@@ -64,17 +69,16 @@ public class PlantSearchController {
 //                    PlantListResponse.class);
 //        }
         return "redirect:/plants/search/results?"
-                + "&page=" + page
-                + "&orderFieldOne=" + orderFieldOne;
+                + "page=" + page;
     }
 
     @RequestMapping(value = "/plants/search/results")
     public String displaySearchResults(Model model,
-                                       @RequestParam int page,
-                                       @RequestParam String orderFieldOne) {
+                                       @RequestParam int page) {
+        model.addAttribute("hideNull", excludeNullChecked);
         model.addAttribute("q", searchTerm);
         model.addAttribute("showImages", showImages);
-        model.addAttribute("orderFieldOne", orderFieldOne);
+        model.addAttribute("orderFieldOne", orderByField);
         pagedResults.setPage(page - 1);
         model.addAttribute("page", page);
         model.addAttribute("isFirstPage", pagedResults.isFirstPage());
@@ -82,21 +86,25 @@ public class PlantSearchController {
         model.addAttribute("plants", pagedResults.getPageList());
         model.addAttribute("pageCount", pagedResults.getPageCount());
         model.addAttribute("resultCount", pagedResults.getNrOfElements());
+        model.addAttribute("pageSize", resultsPerPage);
         return "searchResults";
     }
 
     @PostMapping(value = "/toggle-images")
     public String toggleImages(@RequestParam int page,
-                               @RequestParam String orderFieldOne,
                                @RequestParam boolean showImages) {
         PlantSearchController.showImages = showImages;
         return "redirect:/plants/search/results?" +
-                "&page=" + page +
-                "&orderFieldOne=" + orderFieldOne;
+                "page=" + page;
     }
 
     @GetMapping(value = "/plants/search")
-    public String showSearchForm() {
+    public String showSearchForm(Model model) {
+        model.addAttribute("showImages", true);
+        model.addAttribute("hideNull", new ArrayList<>());
+        model.addAttribute("q", "");
+        model.addAttribute("pageSize", 10);
+        model.addAttribute("orderFieldOne", 2);
         return "searchForm";
     }
 
