@@ -51,6 +51,16 @@
         <td th:if="${edibleParts}" th:text="${edibleParts}"></td>
         <td th:unless="${edibleParts}">None</td>
     </tr>
+    <tr>
+        <td>Native zones:</td>
+        <td>
+            <th:block th:each="zone : ${species.distributions.ntv}">
+            <span th:text="${zone.name}">
+            </span>
+                <br>
+            </th:block>
+        </td>
+    </tr>
 </table>
 </div>
 </body>

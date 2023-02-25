@@ -53,6 +53,14 @@
                 </button>
             </form>
         </td>
+        <td>
+            <form th:action="@{/plants/search/results}" method="POST">
+                <label for="page-selector">Jump to page:</label>
+                <input id="page-selector" name="page" type="number" value="1"
+                       step="1" min="1" th:max="${pageCount}"/>
+                <input type="submit" value="Go">
+            </form>
+        </td>
     </tr>
 </table>
 
@@ -61,7 +69,7 @@
 <!--        <input type="hidden" name="q" th:value="${q}"/>-->
 <!--        <input type="hidden" name="showImages" th:value="${showImages}"/>-->
 <!--        <input type="hidden" name="page" value="1"/>-->
-<!--        <input th:if="${orderFieldOne}" type="hidden" name="orderFieldOne" th:value="${orderFieldOne}"/>-->
+<!--        <input th:if="${primaryOrderField}" type="hidden" name="primaryOrderField" th:value="${primaryOrderField}"/>-->
 <!--        <input id="hideIfNull1" type="checkbox" name="hideNullCommonNames" value="1"/>-->
 <!--        <label for="hideIfNull1">Hide plants without common names</label>-->
 <!--        <input type="submit" value="Filter"/>-->
@@ -114,19 +122,19 @@
 <!--<div th:unless="${error}">-->
 <!--    <span>-->
 <!--        <a th:href="'/parse-pagination-link?' + ${firstLinkQuery} + '&path=' + ${firstLinkPath}-->
-<!--        + '&showImages=' + ${showImages} + '&orderFieldOne=' + ${orderFieldOne}">First</a>-->
+<!--        + '&showImages=' + ${showImages} + '&primaryOrderField=' + ${primaryOrderField}">First</a>-->
 <!--    </span>-->
 <!--    <span th:if="${links.prev}">-->
 <!--        <a th:href="'/parse-pagination-link?' + ${prevLinkQuery} + '&path=' + ${prevLinkPath}-->
-<!--        + '&showImages=' + ${showImages} + '&orderFieldOne=' + ${orderFieldOne}">Previous</a>-->
+<!--        + '&showImages=' + ${showImages} + '&primaryOrderField=' + ${primaryOrderField}">Previous</a>-->
 <!--    </span>-->
 <!--    <span th:if="${links.next}">-->
 <!--        <a th:href="'/parse-pagination-link?' + ${nextLinkQuery} + '&path=' + ${nextLinkPath}-->
-<!--        + '&showImages=' + ${showImages} + '&orderFieldOne=' + ${orderFieldOne}">Next</a>-->
+<!--        + '&showImages=' + ${showImages} + '&primaryOrderField=' + ${primaryOrderField}">Next</a>-->
 <!--    </span>-->
 <!--    <span>-->
 <!--        <a th:href="'/parse-pagination-link?' + ${lastLinkQuery} + '&path=' + ${lastLinkPath}-->
-<!--        + '&showImages=' + ${showImages} + '&orderFieldOne=' + ${orderFieldOne}">Last</a>-->
+<!--        + '&showImages=' + ${showImages} + '&primaryOrderField=' + ${primaryOrderField}">Last</a>-->
 <!--    </span>-->
 <!--</div>-->
 

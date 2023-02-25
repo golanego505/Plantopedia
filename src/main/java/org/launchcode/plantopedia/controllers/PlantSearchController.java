@@ -1,13 +1,13 @@
 package org.launchcode.plantopedia.controllers;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.launchcode.plantopedia.data.SpeciesLightRepository;
 import org.launchcode.plantopedia.models.taxa.SpeciesLight;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,51 +25,69 @@ public class PlantSearchController {
     static String searchTerm = "";
     static boolean showImages = true;
     static List<Integer> excludeNullChecked = new ArrayList<>();
-    static Integer orderByField = 2;
+    static Integer primaryOrderField = 2;
     static Integer resultsPerPage = 10;
+    static final SpeciesLightField[] fields = SpeciesLightField.values();
+    static Integer searchBy = SpeciesLightField.valueOf("COMMON_NAME").ordinal();
+    static List<SpeciesLightField> unusedFields = Arrays.asList(SpeciesLightField.values());
+    static MultiValueMap<Integer, String> queries = new LinkedMultiValueMap<>(8);
+    //    static Map<Integer, String> queries = new HashMap<>();
     @Autowired
     private SpeciesLightRepository speciesLightRepository;
 
     @PostMapping(value = "/plants/search")
-    public String processSearchForm(Model model, HttpServletRequest request,
-                                    @RequestParam String q,
-                                    @RequestParam int page,
+    public String processSearchForm(@RequestParam List<Integer> searchFieldOrdinals,
+                                    @RequestParam List<String> q,
                                     @RequestParam(required = false) boolean showImages,
-                                    @RequestParam int orderFieldOne,
+                                    @RequestParam int primaryOrderField,
                                     @RequestParam int pageSize,
-                                    @RequestParam(required = false) List<Integer> hideNull,
-                                    @Value("${TREFLE_API_TOKEN}") String apiKey) {
+                                    @RequestParam(required = false) List<Integer> hideNull) {
+
+        for (Integer i : queries.keySet()) {
+            queries.remove(i);
+        }
+        for (int i = 0; i < searchFieldOrdinals.size(); i++) {
+            queries.add(searchFieldOrdinals.get(i), q.get(i));
+        }
+
+        MultiValueMap<SpeciesLightField, String> queryMap = new LinkedMultiValueMap<>();
+        List<SpeciesLightField> searchFields = new ArrayList<>();
+        searchFieldOrdinals.forEach(i -> searchFields.add(SpeciesLightField.values()[i]));
+        for (int i = 0; i < searchFields.size(); i++) {
+            queryMap.add(searchFields.get(i), q.get(i));
+        }
+
         if (hideNull == null) {
             hideNull = new ArrayList<>();
         }
         List<SpeciesLightField> notNullFields = new ArrayList<>();
         hideNull.forEach(integer -> notNullFields.add(SpeciesLightField.values()[integer]));
-        SpeciesLightField orderBy = SpeciesLightField.values()[orderFieldOne];
+        SpeciesLightField orderBy = SpeciesLightField.values()[primaryOrderField];
         PagedListHolder<SpeciesLight> hitsPage =
-                getPagedSearchResults(q, 0, pageSize, orderBy, notNullFields);
+                getPagedSearchResults(queryMap, pageSize, orderBy, notNullFields);
         pagedResults = hitsPage;
         results = hitsPage.getSource();
-        searchTerm = q;
+        searchTerm = q.get(0);
         PlantSearchController.showImages = showImages;
         excludeNullChecked = hideNull;
-        orderByField = orderFieldOne;
+        PlantSearchController.primaryOrderField = primaryOrderField;
         resultsPerPage = pageSize;
+        searchBy = searchFieldOrdinals.get(0);
 //        RestTemplate restTemplate = new RestTemplate();
 //        String token = PlantListController.getClientToken(request.getRequestURI(), apiKey).getToken();
 //        PlantListResponse response;
-//        if (orderFieldOne.equals("")) {
+//        if (primaryOrderField.equals("")) {
 //            response = restTemplate.getForObject(
 //                    BASE_API_URI + "plants/search?q=" + q + "&page=" + page
 //                            + "&token=" + token + "&" + filters,
 //                    PlantListResponse.class);
 //        } else {
 //            response = restTemplate.getForObject(
-//                    BASE_API_URI + "plants/search?q=" + q + "&page=" + page + "&order[" + orderFieldOne + "]=asc" +
+//                    BASE_API_URI + "plants/search?q=" + q + "&page=" + page + "&order[" + primaryOrderField + "]=asc" +
 //                            "&token=" + token + "&" + filters,
 //                    PlantListResponse.class);
 //        }
-        return "redirect:/plants/search/results?"
-                + "page=" + page;
+        return "redirect:/plants/search/results?page=1";
     }
 
     @RequestMapping(value = "/plants/search/results")
@@ -78,7 +96,7 @@ public class PlantSearchController {
         model.addAttribute("hideNull", excludeNullChecked);
         model.addAttribute("q", searchTerm);
         model.addAttribute("showImages", showImages);
-        model.addAttribute("orderFieldOne", orderByField);
+        model.addAttribute("primaryOrderField", primaryOrderField);
         pagedResults.setPage(page - 1);
         model.addAttribute("page", page);
         model.addAttribute("isFirstPage", pagedResults.isFirstPage());
@@ -87,6 +105,11 @@ public class PlantSearchController {
         model.addAttribute("pageCount", pagedResults.getPageCount());
         model.addAttribute("resultCount", pagedResults.getNrOfElements());
         model.addAttribute("pageSize", resultsPerPage);
+        model.addAttribute("fields", fields);
+        model.addAttribute("searchBy", searchBy);
+        model.addAttribute("unusedFields", unusedFields);
+        model.addAttribute("queries", queries);
+//        model.addAttribute("selectedFields", selectedFields);
         return "searchResults";
     }
 
@@ -104,7 +127,17 @@ public class PlantSearchController {
         model.addAttribute("hideNull", new ArrayList<>());
         model.addAttribute("q", "");
         model.addAttribute("pageSize", 10);
-        model.addAttribute("orderFieldOne", 2);
+        model.addAttribute("primaryOrderField", SpeciesLightField
+                .valueOf("COMMON_NAME").ordinal());
+        model.addAttribute("fields", fields);
+        model.addAttribute("searchBy", SpeciesLightField.valueOf("COMMON_NAME").ordinal());
+        model.addAttribute("selectedFields", new ArrayList<Integer>());
+        model.addAttribute("unusedFields", unusedFields);
+        for (Integer i : queries.keySet()) {
+            queries.remove(i);
+        }
+        queries.add(-1, "");
+        model.addAttribute("queries", queries);
         return "searchForm";
     }
 
@@ -119,22 +152,68 @@ public class PlantSearchController {
         return "redirect:/plants/search?q=" + query.get("q")
                 + "&page=" + query.get("page")
                 + "&showImages=" + query.get("showImages")
-                + "&orderFieldOne=" + query.getOrDefault("orderFieldOne", "")
+                + "&primaryOrderField=" + query.getOrDefault("primaryOrderField", "")
                 + "&filters=" + filtersForQuery;
     }
 
     public PagedListHolder<SpeciesLight> getPagedSearchResults(
-            String q, int page, int pageSize, SpeciesLightField orderBy,
+            MultiValueMap<SpeciesLightField, String> queryMap, int pageSize, SpeciesLightField orderBy,
             List<SpeciesLightField> notNullFields) {
-        String pattern = '%' + q + '%';
-        List<SpeciesLight> hits = speciesLightRepository.
-                findByCommonNameLikeOrScientificNameLike(pattern, pattern);
-        PlantSearchController.removeNullValues(hits, notNullFields);
+        List<SpeciesLight> hits = searchByFields(queryMap);
+        removeNullValues(hits, notNullFields);
         sortByField(hits, orderBy);
         PagedListHolder<SpeciesLight> hitsPage = new PagedListHolder<>(hits);
-        hitsPage.setPage(page);
         hitsPage.setPageSize(pageSize);
         return hitsPage;
+    }
+
+    public List<SpeciesLight> searchByFields(MultiValueMap<SpeciesLightField, String> q) {
+        List<SpeciesLight> results = new ArrayList<>();
+        speciesLightRepository.findAll().forEach(results::add);
+
+        for (SpeciesLightField key : q.keySet()) {
+            for (String term : q.get(key)) {
+                List<SpeciesLight> nextRestriction = searchByField(term, key);
+                results.removeIf(sl -> !nextRestriction.contains(sl));
+            }
+        }
+
+        return results;
+    }
+
+    public List<SpeciesLight> searchByField(String q, SpeciesLightField field) {
+        switch (field) {
+//            case RANK -> {
+//                return speciesLightRepository.findBySpeciesRankContainingIgnoreCase(q);
+//            }
+            case YEAR -> {
+                return speciesLightRepository.findByYear(Integer.parseInt(q));
+            }
+            case GENUS -> {
+                return speciesLightRepository.findByGenusContainingIgnoreCase(q);
+            }
+            case FAMILY -> {
+                return speciesLightRepository.findByFamilyContainingIgnoreCase(q);
+            }
+            case AUTHOR -> {
+                return speciesLightRepository.findByAuthorContainingIgnoreCase(q);
+            }
+            case SCIENTIFIC_NAME -> {
+                return speciesLightRepository.findByScientificNameContainingIgnoreCase(q);
+            }
+            case BIBLIOGRAPHY -> {
+                return speciesLightRepository.findByBibliographyContainingIgnoreCase(q);
+            }
+//            case STATUS -> {
+//                return speciesLightRepository.findByStatusContainingIgnoreCase(q);
+//            }
+            case FAMILY_COMMON_NAME -> {
+                return speciesLightRepository.findByFamilyCommonNameContainingIgnoreCase(q);
+            }
+            default -> {
+                return speciesLightRepository.findByCommonNameContainingIgnoreCase(q);
+            }
+        }
     }
 
     private static void sortByField(List<SpeciesLight> aList, SpeciesLightField field) {
@@ -150,12 +229,6 @@ public class PlantSearchController {
                 Comparator.nullsLast(
                         Comparator.comparing(
                                 SpeciesLight::getScientificName, compareStringsNullsLast
-                        )
-                );
-        Comparator<SpeciesLight> compareSlugs =
-                Comparator.nullsLast(
-                        Comparator.comparing(
-                                SpeciesLight::getSlug, compareStringsNullsLast
                         )
                 );
         Comparator<SpeciesLight> compareYears =
@@ -231,20 +304,6 @@ public class PlantSearchController {
                         )
                 );
             }
-            case ID -> {
-                aList.sort(
-                        Comparator.nullsLast(
-                                Comparator.comparing(SpeciesLight::getId)
-                        )
-                );
-            }
-            case SLUG -> {
-                aList.sort(
-                        compareSlugs.thenComparing(
-                                SpeciesLight::getId
-                        )
-                );
-            }
             case YEAR -> {
                 aList.sort(
                         compareYears.thenComparing(
@@ -261,12 +320,6 @@ public class PlantSearchController {
                                          List<SpeciesLightField> notNullFields) {
         for (SpeciesLightField field : notNullFields) {
             switch (field) {
-                case ID -> {
-                    aList.removeIf(sl -> sl.getId() == null);
-                }
-                case SLUG -> {
-                    aList.removeIf(sl -> sl.getSlug() == null);
-                }
                 case COMMON_NAME -> {
                     aList.removeIf(sl -> sl.getCommonName() == null);
                 }
@@ -282,20 +335,14 @@ public class PlantSearchController {
                 case AUTHOR -> {
                     aList.removeIf(sl -> sl.getAuthor() == null);
                 }
-                case STATUS -> {
-                    aList.removeIf(sl -> sl.getStatus() == null);
-                }
-                case RANK -> {
-                    aList.removeIf(sl -> sl.getRank() == null);
-                }
+//                case STATUS -> {
+//                    aList.removeIf(sl -> sl.getStatus() == null);
+//                }
+//                case RANK -> {
+//                    aList.removeIf(sl -> sl.getRank() == null);
+//                }
                 case FAMILY_COMMON_NAME -> {
                     aList.removeIf(sl -> sl.getFamilyCommonName() == null);
-                }
-                case GENUS_ID -> {
-                    aList.removeIf(sl -> sl.getGenusId() == null);
-                }
-                case IMAGE_URL -> {
-                    aList.removeIf(sl -> sl.getImageUrl() == null);
                 }
                 case GENUS -> {
                     aList.removeIf(sl -> sl.getGenus() == null);
@@ -352,29 +399,31 @@ public class PlantSearchController {
     }
 
     public enum SpeciesLightField {
-        ID("id"), //0
-        SLUG("slug"), //1
-        COMMON_NAME("common_name"), //2
-        SCIENTIFIC_NAME("scientific_name"), //3
-        YEAR("year"), //4
-        BIBLIOGRAPHY("bibliography"), //5
-        AUTHOR("author"), //6
-        STATUS("status"), //7
-        RANK("rank"), //8
-        FAMILY_COMMON_NAME("family_common_name"), //9
-        GENUS_ID("genus_id"), //10
-        IMAGE_URL("image_url"), //11
-        GENUS("genus"), //12
-        FAMILY("family"); //13
+        COMMON_NAME("common_name", "Common Name"),
+        SCIENTIFIC_NAME("scientific_name", "Scientific Name"),
+        YEAR("year", "Publication Year"),
+        BIBLIOGRAPHY("bibliography", "Bibliography"),
+        AUTHOR("author", "Author"),
+        //        STATUS("status", "Status"),
+//        RANK("rank", "Rank"),
+        FAMILY_COMMON_NAME("family_common_name", "Family Common Name"),
+        GENUS("genus", "Genus"),
+        FAMILY("family", "Family");
 
-        private final String field;
+        private final String jsonName;
+        private final String formName;
 
-        SpeciesLightField(String field) {
-            this.field = field;
+        SpeciesLightField(String jsonName, String formName) {
+            this.jsonName = jsonName;
+            this.formName = formName;
         }
 
-        public String getField() {
-            return this.field;
+        public String getJsonName() {
+            return this.jsonName;
+        }
+
+        public String getFormName() {
+            return this.formName;
         }
     }
 }
