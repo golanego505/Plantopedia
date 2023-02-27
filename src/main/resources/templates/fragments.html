@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<div th:fragment="search-form">
+<div class="spread-lines" th:fragment="search-form">
     <h4>Run a new search:</h4>
     <form method="POST" th:action="@{/plants/search}">
         <div id="searchFields">
@@ -33,22 +33,8 @@
                     <br>
                 </th:block>
             </th:block>
-            <!--            <label for="searchField">Search by field:</label>-->
-            <!--            <span>-->
-            <!--            <select name="searchFieldOrdinals" id="searchField" required>-->
-            <!--                <option selected value="">Select a field to search by</option>-->
-            <!--                <th:block th:each="field : ${fields}">-->
-            <!--                    <option th:value="${field.ordinal}" th:text="${field.formName}">-->
-            <!--&lt;!&ndash;                            th:selected="${field.ordinal == searchBy}"&ndash;&gt;-->
-            <!--                    </option>-->
-            <!--                </th:block>-->
-            <!--            </select>-->
-            <!--            </span>-->
-            <!--            <label for="q">Keyword:</label>-->
-            <!--            <input type="search" id="q" required name="q" th:value="${q}"/>-->
         </div>
-        <button
-                type="button" id="addField">Add Search Criterion
+        <button type="button" id="addField">Add Search Criterion
         </button>
         <script type="text/javascript" th:src="@{/js/searchForm.js}"></script>
         <br>
@@ -70,42 +56,18 @@
                 <option th:selected="${primaryOrderField==field.ordinal}"
                         th:value="${field.ordinal}" th:text="${field.formName}"></option>
             </th:block>
-            <!--            <option th:selected="${primaryOrderField==2}" value="2">Common Name</option>-->
-            <!--            <option th:selected="${primaryOrderField==3}" value="3">Scientific Name</option>-->
-            <!--            <option th:selected="${primaryOrderField==4}" value="4">Publication Year</option>-->
-            <!--            <option th:selected="${primaryOrderField==6}" value="6">Author</option>-->
-            <!--            <option th:selected="${primaryOrderField==5}" value="5">Bibliography</option>-->
-            <!--            <option th:selected="${primaryOrderField==12}" value="12">Genus</option>-->
-            <!--            <option th:selected="${primaryOrderField==13}" value="13">Family</option>-->
-            <!--            <option th:selected="${primaryOrderField==0}" value="0">Id</option>-->
-            <!--            <option th:selected="${primaryOrderField==1}" value="1">Slug</option>-->
         </select>
         <br>
+        Results must contain:
+        <br>
         <th:block th:each="field : ${fields}">
-            <label th:for="'hideNull' + ${field.ordinal}"
-                   th:text="'Results must contain: ' + ${field.formName}"></label>
-            <input th:checked="${hideNull.contains(field.ordinal)}" type="checkbox"
+            <span style="position: relative; left: 30px;">
+            <label th:for="'hideNull' + ${field.ordinal}" th:text="${field.formName}"></label>
+                <input th:checked="${hideNull.contains(field.ordinal)}" type="checkbox"
                    name="hideNull" th:id="'hideNull' + ${field.ordinal}" th:value="${field.ordinal}"/>
+            </span>
             <br>
         </th:block>
-        <!--        <label for="hideNull2">Hide plants that lack a common name</label>-->
-        <!--        <input th:checked="${hideNull.contains(2)}" type="checkbox" name="hideNull" id="hideNull2" value="2"/>-->
-        <!--        <br>-->
-        <!--        <label for="hideNull4">Hide plants that lack a publication year</label>-->
-        <!--        <input th:checked="${hideNull.contains(4)}" type="checkbox" name="hideNull" id="hideNull4" value="4"/>-->
-        <!--        <br>-->
-        <!--        <label for="hideNull5">Hide plants that lack a bibliography</label>-->
-        <!--        <input th:checked="${hideNull.contains(5)}" type="checkbox" name="hideNull" id="hideNull5" value="5"/>-->
-        <!--        <br>-->
-        <!--        <label for="hideNull6">Hide plants that lack an author</label>-->
-        <!--        <input th:checked="${hideNull.contains(6)}" type="checkbox" name="hideNull" id="hideNull6" value="6"/>-->
-        <!--        <br>-->
-        <!--        <label for="hideNull9">Hide plants that lack a family common name</label>-->
-        <!--        <input th:checked="${hideNull.contains(9)}" type="checkbox" name="hideNull" id="hideNull9" value="9"/>-->
-        <!--        <br>-->
-        <!--        <label for="hideNull11">Hide plants that lack an image url</label>-->
-        <!--        <input th:checked="${hideNull.contains(11)}" type="checkbox" name="hideNull" id="hideNull11" value="11"/>-->
-        <!--        <br>-->
         <input type="hidden" name="page" value="1"/>
         <input type="submit" value="Search"/><br>
     </form>
