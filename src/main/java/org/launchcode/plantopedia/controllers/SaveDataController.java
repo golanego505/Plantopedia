@@ -137,6 +137,14 @@ public class SaveDataController {
         return "Saved all species light with id >=" + startId;
     }
 
+    @RequestMapping(value = "/get-data/species-light/start-at-page/{startPage}")
+    @ResponseBody
+    public String getAllSpeciesLightStartingAtPage(@Value("${TREFLE_API_TOKEN}") String apiKey,
+                                                   @PathVariable int startPage) {
+        saveSpeciesLightFromPage(apiKey, startPage);
+        return "Saved all species light from Trefle page " + startPage + " to the end of the database.";
+    }
+
     public void saveSpeciesLightById(String apiKey, int id) {
         String uri = "https://trefle.io/api/v1/species/" + id + "?token=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
@@ -167,6 +175,33 @@ public class SaveDataController {
         if (response != null) {
             int pageCount = (int) Math.ceil(response.getMeta().getTotal() / 20.0);
             for (int i = 0; i < pageCount; i++) {
+                assert response != null;
+                List<SpeciesLight> speciesLightList = response.getData();
+                for (SpeciesLight speciesLight : speciesLightList) {
+                    if (!speciesLightRepository.existsById(speciesLight.getId())) {
+                        speciesLight.setGenusForORM(em.find(Genus.class, speciesLight.getGenusId()));
+                        speciesLightRepository.save(speciesLight);
+                    }
+                }
+                if (i < pageCount - 1) {
+                    response = restTemplate.getForObject(
+                            "https://trefle.io" + response.getLinks().getNext() +
+                                    "&token=" + apiKey,
+                            SpeciesListResponse.class);
+                }
+            }
+        }
+    }
+
+    private void saveSpeciesLightFromPage(String apiKey, int startPage) {
+
+        String uri = "https://trefle.io/api/v1/species?token=" + apiKey;
+        RestTemplate restTemplate = new RestTemplate();
+        SpeciesListResponse response = restTemplate.
+                getForObject(uri, SpeciesListResponse.class);
+        if (response != null) {
+            int pageCount = (int) Math.ceil(response.getMeta().getTotal() / 20.0);
+            for (int i = startPage; i < pageCount; i++) {
                 assert response != null;
                 List<SpeciesLight> speciesLightList = response.getData();
                 for (SpeciesLight speciesLight : speciesLightList) {
