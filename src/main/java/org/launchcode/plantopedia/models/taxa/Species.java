@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import org.launchcode.plantopedia.models.distributions.Distributions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,24 +30,67 @@ public class Species extends SpeciesCoreDataWithSources {
     private CommonNames commonNames;
     @Embedded
     private Distributions distributions;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Flower flower;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Foliage foliage;
     @JsonProperty("fruit_or_seed")
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private FruitOrSeed fruitOrSeed;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Specifications specifications;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Growth growth;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "species_synonym", inverseJoinColumns = {
             @JoinColumn(name = "synonym_id")
     })
     private List<Synonym> synonyms;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Genus.class, optional = false,
+            cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "genus_id", referencedColumnName = "id", nullable = false,
+            foreignKey = @ForeignKey(foreignKeyDefinition =
+                    "FOREIGN KEY (genus_id) REFERENCES genus (id)"))
+    @Access(value = AccessType.FIELD)
+    private Genus genusForORM;
+
     public Species() {}
+
+    public Genus getGenusForORM() {
+        return genusForORM;
+    }
+
+    public void setGenusForORM(Genus genusForORM) {
+        this.genusForORM = genusForORM;
+    }
+
+    public SpeciesLight toSpeciesLight() {
+        SpeciesLight sl = new SpeciesLight();
+        sl.setId(this.getId());
+        sl.setSlug(this.getSlug());
+        sl.setCommonName(this.getCommonName());
+        sl.setScientificName(this.getScientificName());
+        sl.setYear(this.getYear());
+        sl.setBibliography(this.getBibliography());
+        sl.setAuthor(this.getAuthor());
+        sl.setStatus(this.getStatus());
+        sl.setRank(this.getRank());
+        sl.setFamilyCommonName(this.getFamilyCommonName());
+        sl.setGenusId(this.getGenusId());
+        sl.setImageUrl(this.getImageUrl());
+        sl.setGenus(this.getGenus());
+        sl.setFamily(this.getFamily());
+        sl.setLinks(this.getLinks());
+        List<String> slSynonyms = new ArrayList<>();
+        for (Synonym synonym : this.getSynonyms()) {
+            slSynonyms.add(synonym.getName());
+        }
+        sl.setSynonyms(slSynonyms);
+        sl.setGenusForORM(this.getGenusForORM());
+        return sl;
+    }
 
     public String getObservations() {
         return observations;
@@ -200,44 +244,44 @@ public class Species extends SpeciesCoreDataWithSources {
 
     @Embeddable
     public static class Images {
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "flower_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
         )
         private List<Image> flower;
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "leaf_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
         )
         private List<Image> leaf;
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "habit_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
         )
         private List<Image> habit;
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "fruit_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
         )
         private List<Image> fruit;
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "bark_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
         )
         private List<Image> bark;
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "other_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
         )
         private List<Image> other;
         @JsonProperty("")
-        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         @JoinTable(name = "unspecified_images",
                 joinColumns = @JoinColumn(name = "species_id"),
                 inverseJoinColumns = @JoinColumn(name = "image_id")
@@ -317,9 +361,11 @@ public class Species extends SpeciesCoreDataWithSources {
         @Entity
         @Table(name = "image")
         public static class Image {
+
             @Id
             private Integer id;
             @JsonProperty("image_url")
+            @Column(length = 511)
             private String imageUrl;
             private String copyright;
 
@@ -433,7 +479,7 @@ public class Species extends SpeciesCoreDataWithSources {
         @JsonProperty("soil_humidity")
         private Integer soilHumidity;
         @JsonIgnore
-        @OneToOne(mappedBy = "growth")
+        @OneToOne(mappedBy = "growth", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
         private Species species;
 
         public Growth() {
@@ -447,31 +493,31 @@ public class Species extends SpeciesCoreDataWithSources {
             this.species = species;
         }
 
-        public void setMinimumTemperatureDegF(Integer minimumTemperatureDegF) {
+        public void setMinimumTemperatureDegF(Float minimumTemperatureDegF) {
         }
 
-        public void setMinimumTemperatureDegC(Integer minimumTemperatureDegC) {
+        public void setMinimumTemperatureDegC(Float minimumTemperatureDegC) {
         }
 
-        public void setMaximumTemperatureDegF(Integer maximumTemperatureDegF) {
+        public void setMaximumTemperatureDegF(Float maximumTemperatureDegF) {
         }
 
-        public void setMaximumTemperatureDegC(Integer maximumTemperatureDegC) {
+        public void setMaximumTemperatureDegC(Float maximumTemperatureDegC) {
         }
 
-        public void setRowSpacingCm(Integer rowSpacingCm) {
+        public void setRowSpacingCm(Float rowSpacingCm) {
         }
 
-        public void setSpreadCm(Integer spreadCm) {
+        public void setSpreadCm(Float spreadCm) {
         }
 
-        public void setMinimumPrecipitationMm(Integer minimumPrecipitationMm) {
+        public void setMinimumPrecipitationMm(Float minimumPrecipitationMm) {
         }
 
-        public void setMaximumPrecipitationMm(Integer maximumPrecipitationMm) {
+        public void setMaximumPrecipitationMm(Float maximumPrecipitationMm) {
         }
 
-        public void setMinimumRootDepthCm(Integer minimumRootDepthCm) {
+        public void setMinimumRootDepthCm(Float minimumRootDepthCm) {
         }
 
         @Column(name = "row_spacing_cm")
@@ -865,7 +911,7 @@ public class Species extends SpeciesCoreDataWithSources {
         @Enumerated(EnumType.STRING)
         private Toxicity toxicity;
         @JsonIgnore
-        @OneToOne(mappedBy = "specifications")
+        @OneToOne(mappedBy = "specifications", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
         private Species species;
 
         public Specifications() {}
@@ -1040,6 +1086,7 @@ public class Species extends SpeciesCoreDataWithSources {
     }
 
     @Entity
+    @Table(name = "synonym")
     public static class Synonym {
         @Id
         private Integer id;
@@ -1759,7 +1806,7 @@ public class Species extends SpeciesCoreDataWithSources {
         }
 
         @JsonValue
-        private String getPart() {
+        public String getPart() {
             return this.part;
         }
     }
@@ -1779,7 +1826,8 @@ public class Species extends SpeciesCoreDataWithSources {
         private List<Color> color;
         private Boolean conspicuous;
         @JsonIgnore
-        @OneToOne(mappedBy = "flower")
+        @OneToOne(mappedBy = "flower",
+                cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
         private Species species;
 
         public Flower() {}
@@ -1834,7 +1882,7 @@ public class Species extends SpeciesCoreDataWithSources {
         @JsonProperty("leaf_retention")
         private Boolean leafRetention;
         @JsonIgnore
-        @OneToOne(mappedBy = "foliage")
+        @OneToOne(mappedBy = "foliage", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
         private Species species;
 
         public Foliage() {}
@@ -1917,7 +1965,7 @@ public class Species extends SpeciesCoreDataWithSources {
         @JsonProperty("seed_persistence")
         private Boolean seedPersistence;
         @JsonIgnore
-        @OneToOne(mappedBy = "fruitOrSeed")
+        @OneToOne(mappedBy = "fruitOrSeed", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
         private Species species;
 
         public FruitOrSeed() {}

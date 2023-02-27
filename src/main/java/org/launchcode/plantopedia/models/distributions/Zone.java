@@ -18,9 +18,9 @@ public class Zone extends Taxon {
     private Integer speciesCount;
     @Transient
     private TdwgUnitLinks links;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private TdwgUnit parent;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "zone_children",
             joinColumns = @JoinColumn(name = "zone_id"),
             inverseJoinColumns = @JoinColumn(name = "child_id")

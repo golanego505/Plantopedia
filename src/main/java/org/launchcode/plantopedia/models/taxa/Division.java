@@ -1,8 +1,6 @@
 package org.launchcode.plantopedia.models.taxa;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import org.launchcode.plantopedia.responses.links.DivisionLinks;
 
 @Entity
@@ -10,7 +8,7 @@ public class Division extends Taxon {
     private String name;
     @Transient
     private DivisionLinks links;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private Subkingdom subkingdom;
 
     public Division() {

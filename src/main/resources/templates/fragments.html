@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="spread-lines" th:fragment="search-form">
+    <h4>Run a new search:</h4>
+    <form method="POST" th:action="@{/plants/search}">
+        <div id="searchFields">
+            <th:block th:each="key : ${queries.keySet}">
+                <th:block th:each="term : ${queries.get(key)}">
+                    <span>
+                        <label>Search by field:
+                            <select onchange="displayInputElement(event);" name="searchFieldOrdinals" required>
+                                <option th:selected="${key == -1}" value="">Select a field to search by</option>
+                                <th:block th:each="field : ${fields}">
+                                    <option th:value="${field.ordinal}" th:text="${field.formName}"
+                                            th:selected="${field.ordinal == key}">
+                                    </option>
+                                </th:block>
+                            </select>
+                        </label>
+                        <th:block th:if="${term != ''}">
+                            <input th:if="${key==2}" th:value="${term}" type="number" step="1"
+                                   min="1000" max="2100" name="q"/>
+                            <input th:unless="${key==2}" th:value="${term}" type="search" name="q"/>
+                        </th:block>
+                    </span>
+                    <button th:if="${term != ''}" onclick="removeField(event);" type="button">Remove criterion</button>
+                    <br>
+                </th:block>
+            </th:block>
+        </div>
+        <button type="button" id="addField">Add Search Criterion
+        </button>
+        <script type="text/javascript" th:src="@{/js/searchForm.js}"></script>
+        <br>
+        <input type="radio" id="showImages" name="showImages" value="1" th:checked="${showImages}"/>
+        <label for="showImages">Show Images</label><br>
+        <input type="radio" id="hideImages" name="showImages" value="0" th:checked="${!showImages}"/>
+        <label for="hideImages">Hide Images</label><br>
+        <label for="pageSize">Results per page:</label>
+        <select name="pageSize" id="pageSize">
+            <option th:selected="${pageSize==10}" value="10">10</option>
+            <option th:selected="${pageSize==20}" value="20">20</option>
+            <option th:selected="${pageSize==30}" value="30">30</option>
+            <option th:selected="${pageSize==40}" value="40">40</option>
+        </select>
+        <br>
+        <label for="primary-order-field">Primary order field:</label>
+        <select name="primaryOrderField" id="primary-order-field">
+            <th:block th:each="field : ${fields}">
+                <option th:selected="${primaryOrderField==field.ordinal}"
+                        th:value="${field.ordinal}" th:text="${field.formName}"></option>
+            </th:block>
+        </select>
+        <br>
+        Results must contain:
+        <br>
+        <th:block th:each="field : ${fields}">
+            <span style="position: relative; left: 30px;">
+            <label th:for="'hideNull' + ${field.ordinal}" th:text="${field.formName}"></label>
+                <input th:checked="${hideNull.contains(field.ordinal)}" type="checkbox"
+                   name="hideNull" th:id="'hideNull' + ${field.ordinal}" th:value="${field.ordinal}"/>
+            </span>
+            <br>
+        </th:block>
+        <input type="hidden" name="page" value="1"/>
+        <input type="submit" value="Search"/><br>
+    </form>
+</div>
+
+<div th:fragment="search-result-card-data" class="container">
+    <h4 th:text="${plant.commonName}"></h4>
+    <i><p th:text="${plant.scientificName}"></p></i>
+    <p>Author:
+        <span th:if="${plant.author}" th:text="${plant.author}"></span>
+        <span th:unless="${plant.author}">Unavailable</span>
+    </p>
+    <p>Bibliography:
+        <span th:if="${plant.bibliography}" th:text="${plant.bibliography}"></span>
+        <span th:unless="${plant.bibliography}">Unavailable</span>
+    </p>
+    <p>Publication year:
+        <span th:if="${plant.year}" th:text="${plant.year}"></span>
+        <span th:unless="${plant.year}">Unavailable</span>
+    </p>
+    <p>Genus:
+        <span th:if="${plant.genus}" th:text="${plant.genus}"></span>
+        <span th:unless="${plant.genus}">Unavailable</span>
+    </p>
+    <p>Family:
+        <span th:if="${plant.family}" th:text="${plant.family}"></span>
+        <span th:unless="${plant.family}">Unavailable</span>
+    </p>
+</div>
+
+</body>
+</html>
