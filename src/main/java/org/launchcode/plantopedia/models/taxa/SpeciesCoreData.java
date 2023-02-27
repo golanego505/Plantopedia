@@ -12,7 +12,7 @@ public abstract class SpeciesCoreData extends Taxon {
     @JsonProperty("scientific_name")
     private String scientificName;
     private Integer year;
-    @Column(length = 511)
+    @Column(length = 1023)
     private String bibliography;
     private String author;
     @Enumerated(EnumType.STRING)
