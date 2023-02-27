@@ -16,6 +16,9 @@
     a:visited {
     color: CaptionText;
     }
+
+
+
     </style>
 </head>
 <body>
@@ -36,17 +39,72 @@
     </h3>
 </div>
 
-<form method="POST" th:action="@{/plants/search}">
-    <label for="q">Keyword:</label>
-    <input type="text" id="q" name="q"/>
-    <input type="submit" value="Search"/>
+<a th:href="@{/plants/search}">Start a search</a>
+
+<table>
+    <tr>
+        <td>
+            <h4 th:text="'Page ' + ${page} + ' of ' + ${pageCount}"></h4>
+        </td>
+        <td th:if="${showImages}">
+            <form id="hide_images">
+                <input th:if="${q}" type="hidden" name="q" th:value="${q}"/>
+                <input type="hidden" name="page" th:value="${page}"/>
+                <input type="hidden" name="orderFieldOne" th:value="${orderFieldOne}"/>
+                <button name="showImages" type="submit" formmethod="GET" form="hide_images" value="0"
+                        th:formaction="@{/plants}">Hide Images
+                </button>
+            </form>
+        </td>
+        <td th:unless="${showImages}">
+            <form id="show_images">
+                <input th:if="${q}" type="hidden" name="q" th:value="${q}"/>
+                <input type="hidden" name="page" th:value="${page}"/>
+                <input type="hidden" name="orderFieldOne" th:value="${orderFieldOne}"/>
+                <button name="showImages" type="submit" formmethod="GET" form="show_images" value="1"
+                        th:formaction="@{/plants}">Show Images
+                </button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<h3>Order results</h3>
+<form method="POST" th:action="@{/order-results}">
+    <table>
+        <tr>
+            <td>
+                <label for="order-field-1">Primary order field:</label>
+                <select name="orderFieldOne" id="order-field-1" required>
+                    <option value="common_name">Common Name</option>
+                    <option value="scientific_name">Scientific Name</option>
+                </select>
+                <input th:if="${q}" type="hidden" name="q" th:value="${q}"/>
+                <input type="hidden" name="showImages" th:value="${showImages}"/>
+                <input type="hidden" name="page" value="1"/>
+            </td>
+            <td>
+                <input type="submit" value="Apply"/>
+            </td>
+        </tr>
+    </table>
 </form>
 
-<h4 th:text="'Page ' + ${page} + ' of ' + ${pageCount}"></h4>
+<div th:if="${q}">
+    <form method="POST" th:action="@{/filter-search-results}">
+        <input type="hidden" name="q" th:value="${q}"/>
+        <input type="hidden" name="showImages" th:value="${showImages}"/>
+        <input type="hidden" name="page" value="1"/>
+        <input th:if="${orderFieldOne}" type="hidden" name="orderFieldOne" th:value="${orderFieldOne}"/>
+        <input id="hideIfNull1" type="checkbox" name="hideNullCommonNames" value="1"/>
+        <label for="hideIfNull1">Hide plants without common names</label>
+        <input type="submit" value="Filter"/>
+    </form>
+</div>
 
-<ol>
+<ol th:if="${showImages}">
     <li th:each="plant : ${plants}" style="width: 20%">
-        <a th:href="@{/plants/detail/{id}(id=${plant.id})}">
+        <a th:href="@{/species/{id}(id=${plant.id})}">
             <div class="card">
                 <img th:if="${plant.commonName != null}"
                      th:src="${plant.imageUrl}"
@@ -63,21 +121,35 @@
     </li>
 </ol>
 
+<ol th:unless="${showImages}">
+    <li th:each="plant : ${plants}" style="width: 20%">
+        <a th:href="@{/species/{id}(id=${plant.id})}">
+            <div class="card">
+                <div class="container">
+                    <h4 th:text="${plant.commonName}"></h4>
+                    <i><p th:text="${plant.scientificName}"></p></i>
+                </div>
+            </div>
+        </a>
+    </li>
+</ol>
+
 <div th:unless="${error}">
     <span>
-        <a th:href="'/parse-pagination-link?' + ${firstLinkQuery} + '&path=' + ${firstLinkPath}">First</a>
+        <a th:href="'/parse-pagination-link?' + ${firstLinkQuery} + '&path=' + ${firstLinkPath}
+        + '&showImages=' + ${showImages} + '&orderFieldOne=' + ${orderFieldOne}">First</a>
     </span>
-
-    <span th:unless="${firstLinkQuery}"></span>
-
     <span th:if="${links.prev}">
-        <a th:href="'/parse-pagination-link?' + ${prevLinkQuery} + '&path=' + ${prevLinkPath}">Previous</a>
+        <a th:href="'/parse-pagination-link?' + ${prevLinkQuery} + '&path=' + ${prevLinkPath}
+        + '&showImages=' + ${showImages} + '&orderFieldOne=' + ${orderFieldOne}">Previous</a>
     </span>
     <span th:if="${links.next}">
-        <a th:href="'/parse-pagination-link?' + ${nextLinkQuery} + '&path=' + ${nextLinkPath}">Next</a>
+        <a th:href="'/parse-pagination-link?' + ${nextLinkQuery} + '&path=' + ${nextLinkPath}
+        + '&showImages=' + ${showImages} + '&orderFieldOne=' + ${orderFieldOne}">Next</a>
     </span>
     <span>
-        <a th:href="'/parse-pagination-link?' + ${lastLinkQuery} + '&path=' + ${lastLinkPath}">Last</a>
+        <a th:href="'/parse-pagination-link?' + ${lastLinkQuery} + '&path=' + ${lastLinkPath}
+        + '&showImages=' + ${showImages} + '&orderFieldOne=' + ${orderFieldOne}">Last</a>
     </span>
 </div>
 

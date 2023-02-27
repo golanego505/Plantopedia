@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8" >
+    <title style="text-align:center" th:text="${species.commonName}"></title>
+    <style>
+    body {
+    background-color: #93CD97;
+    }
+    table.center {
+    margin-left:auto;
+    margin-right:auto;
+    }
+    img {
+    border-radius: 20%;
+    border: 5px solid black;
+    }
+    table, th, td {
+    border: 1px solid black;
+    }
+    table {
+    table-layout: fixed ;
+    width: 40% ;
+    </style>
+<h1 style="text-align:center" th:text="${species.commonName}"></h1>
+<h3 style="text-align:center" th:text="${species.scientificName}"></h3>
+
+<div style="text-align:center">
+<img th:src="${species.imageUrl}"
+     th:alt="${species.commonName}" width= auto, height= 450px>
+</div>
+</head>
+<body>
+<div style="text-align:center">
+<h3>Plant Facts!</h3>
+<table class="center">
+    <tr th:if ="${species.family!=null}">
+        <td>Family:</td>
+        <td th:text="${species.family}"></td>
+    </tr>
+    <tr th:if ="${species.genus!=null}">
+        <td>Genus:</td>
+        <td th:text="${species.genus}"></td>
+    </tr>
+    <tr th:if ="${species.year!=null}">
+        <td>Year Discovered:</td>
+        <td th:text="${species.year}"></td>
+    </tr>
+    <tr>
+        <td>Edible Parts:</td>
+        <td th:if="${edibleParts}" th:text="${edibleParts}"></td>
+        <td th:unless="${edibleParts}">None</td>
+    </tr>
+    <tr>
+        <td>Native zones:</td>
+        <td>
+            <th:block th:each="zone : ${species.distributions.ntv}">
+            <span th:text="${zone.name}">
+            </span>
+                <br>
+            </th:block>
+        </td>
+    </tr>
+</table>
+</div>
+</body>
+</html>

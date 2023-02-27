@@ -13,7 +13,8 @@ public class SpeciesLight extends SpeciesCoreData {
     private List<String> synonyms;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Genus.class, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Genus.class, optional = false,
+    cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "genus_id", referencedColumnName = "id", nullable = false,
             foreignKey = @ForeignKey(foreignKeyDefinition =
             "FOREIGN KEY (genus_id) REFERENCES genus (id)"))

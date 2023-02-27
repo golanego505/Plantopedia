@@ -12,10 +12,11 @@ public class Genus extends Taxon {
     private String name;
     @Transient
     private GenusLinks links;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private Family family;
     @JsonIgnore
-    @OneToMany(mappedBy = "genusForORM", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "genusForORM", fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL)
     private List<SpeciesLight> speciesLightList;
 
     public Genus() {}
