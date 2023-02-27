@@ -23,6 +23,7 @@ public abstract class TaxonWithSources extends Taxon {
     }
 
     @Entity
+    @Table(name = "source")
     public static class Source {
         @JsonProperty("last_update")
         private String lastUpdate;

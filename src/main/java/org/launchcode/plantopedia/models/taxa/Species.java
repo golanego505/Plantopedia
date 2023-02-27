@@ -361,6 +361,7 @@ public class Species extends SpeciesCoreDataWithSources {
         @Entity
         @Table(name = "image")
         public static class Image {
+
             @Id
             private Integer id;
             @JsonProperty("image_url")
@@ -1085,6 +1086,7 @@ public class Species extends SpeciesCoreDataWithSources {
     }
 
     @Entity
+    @Table(name = "synonym")
     public static class Synonym {
         @Id
         private Integer id;
