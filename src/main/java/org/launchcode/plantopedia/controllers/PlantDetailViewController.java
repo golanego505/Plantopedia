@@ -42,6 +42,7 @@ public class PlantDetailViewController {
                 }
             }
         }
+
         return "plantDetailView";
     }
 
