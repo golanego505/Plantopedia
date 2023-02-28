@@ -28,7 +28,9 @@ public class PlantDetailViewController {
         if (speciesData != null) {
             Species species = speciesData.getData();
             model.addAttribute("species", species);
+
         }
+
         return "plantDetailView";
     }
 

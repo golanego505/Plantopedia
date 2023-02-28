@@ -46,11 +46,31 @@
         <td>Year Discovered:</td>
         <td th:text="${species.year}"></td>
     </tr>
-    <tr>
-        <td>Edible Parts:</td>
-        <td th:text="${species.ediblePart}"></td>
+    <tr th:if ="${species.commonNames.en!=null}">
+        <td>Common Names:</td>
+        <td>
+        <span th:each ="commonName : ${species.commonNames.getEn()}"><span th:text = "${commonName}"></span><br></span>
+        </td>
     </tr>
+    <tr th:if =${species.vegetable!=null}>
+        <td>Vegetable:</td>
+        <td th:text="${species.vegetable}"></td>
+    </tr>
+    <tr th:if =${species.observations!=null}>
+        <td>Area found:</td>
+        <td th:text="${species.observations}"></td>
+    </tr>
+    <tr th:if =${species.edible!=null}>
+        <td>Edible:</td>
+        <td th:text="${species.edible}"></td>
+    </tr>
+    <tr>
+        <td>Images:</td>
+        <td th:text="${species.images}"></td>
+    </tr>
+
 </table>
 </div>
+
 </body>
 </html>
