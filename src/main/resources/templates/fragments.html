@@ -13,7 +13,6 @@
             <th:block th:each="key : ${queries.keySet}">
                 <th:block th:each="term : ${queries.get(key)}">
                     <span>
-                        <label>Search by field:
                             <select onchange="displayInputElement(event);" name="searchFieldOrdinals" required>
                                 <option th:selected="${key == -1}" value="">Select a field to search by</option>
                                 <th:block th:each="field : ${fields}">
@@ -22,14 +21,13 @@
                                     </option>
                                 </th:block>
                             </select>
-                        </label>
                         <th:block th:if="${term != ''}">
                             <input th:if="${key==2}" th:value="${term}" type="number" step="1"
                                    min="1000" max="2100" name="q" required/>
                             <input th:unless="${key==2}" th:value="${term}" type="search" name="q" required/>
                         </th:block>
                     </span>
-                    <button th:if="${term != ''}" onclick="removeField(event);" type="button">Remove criterion</button>
+                    <button th:if="${term != '' && term != firstTerm}" onclick="removeField(event);" type="button">Remove criterion</button>
                     <br>
                 </th:block>
             </th:block>
@@ -64,7 +62,7 @@
             <span style="position: relative; left: 30px;">
             <label th:for="'hideNull' + ${field.ordinal}" th:text="${field.formName}"></label>
                 <input th:checked="${hideNull.contains(field.ordinal)}" type="checkbox"
-                   name="hideNull" th:id="'hideNull' + ${field.ordinal}" th:value="${field.ordinal}"/>
+                       name="hideNull" th:id="'hideNull' + ${field.ordinal}" th:value="${field.ordinal}"/>
             </span>
             <br>
         </th:block>
