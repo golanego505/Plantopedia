@@ -100,7 +100,7 @@ function displayInputElement(event) {
 }
 
 function removeField(event) {
-     event.target.previousSibling.remove();
-     event.target.nextSibling.remove();
+     event.target.previousElementSibling.remove();
+     event.target.nextElementSibling.remove();
      event.target.remove();
 }
