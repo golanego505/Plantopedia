@@ -25,8 +25,8 @@
                         </label>
                         <th:block th:if="${term != ''}">
                             <input th:if="${key==2}" th:value="${term}" type="number" step="1"
-                                   min="1000" max="2100" name="q"/>
-                            <input th:unless="${key==2}" th:value="${term}" type="search" name="q"/>
+                                   min="1000" max="2100" name="q" required/>
+                            <input th:unless="${key==2}" th:value="${term}" type="search" name="q" required/>
                         </th:block>
                     </span>
                     <button th:if="${term != ''}" onclick="removeField(event);" type="button">Remove criterion</button>
