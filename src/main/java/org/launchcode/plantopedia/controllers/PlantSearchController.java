@@ -43,9 +43,7 @@ public class PlantSearchController {
                                     @RequestParam int pageSize,
                                     @RequestParam(required = false) List<Integer> hideNull) {
 
-        for (Integer i : queries.keySet()) {
-            queries.remove(i);
-        }
+        queries = new LinkedMultiValueMap<>(8);
         for (int i = 0; i < searchFieldOrdinals.size(); i++) {
             queries.add(searchFieldOrdinals.get(i), q.get(i));
         }
@@ -109,6 +107,7 @@ public class PlantSearchController {
         model.addAttribute("searchBy", searchBy);
         model.addAttribute("unusedFields", unusedFields);
         model.addAttribute("queries", queries);
+        model.addAttribute("firstTerm", searchTerm);
 //        model.addAttribute("selectedFields", selectedFields);
         return "searchResults";
     }
