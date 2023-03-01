@@ -120,7 +120,7 @@ public class PlantSearchController {
                 "page=" + page;
     }
 
-    @GetMapping(value = "/plants/search")
+    @GetMapping(value = "/search")
     public String showSearchForm(Model model) {
         model.addAttribute("showImages", true);
         model.addAttribute("hideNull", new ArrayList<>());
@@ -137,7 +137,7 @@ public class PlantSearchController {
         }
         queries.add(-1, "");
         model.addAttribute("queries", queries);
-        return "searchForm";
+        return "search";
     }
 
     @RequestMapping(value = "/filter-search-results")
