@@ -43,9 +43,7 @@ public class PlantSearchController {
                                     @RequestParam int pageSize,
                                     @RequestParam(required = false) List<Integer> hideNull) {
 
-        for (Integer i : queries.keySet()) {
-            queries.remove(i);
-        }
+        queries = new LinkedMultiValueMap<>(8);
         for (int i = 0; i < searchFieldOrdinals.size(); i++) {
             queries.add(searchFieldOrdinals.get(i), q.get(i));
         }
@@ -109,6 +107,7 @@ public class PlantSearchController {
         model.addAttribute("searchBy", searchBy);
         model.addAttribute("unusedFields", unusedFields);
         model.addAttribute("queries", queries);
+        model.addAttribute("firstTerm", searchTerm);
 //        model.addAttribute("selectedFields", selectedFields);
         return "searchResults";
     }
@@ -121,7 +120,7 @@ public class PlantSearchController {
                 "page=" + page;
     }
 
-    @GetMapping(value = "/plants/search")
+    @GetMapping(value = "/search")
     public String showSearchForm(Model model) {
         model.addAttribute("showImages", true);
         model.addAttribute("hideNull", new ArrayList<>());
@@ -138,7 +137,7 @@ public class PlantSearchController {
         }
         queries.add(-1, "");
         model.addAttribute("queries", queries);
-        return "searchForm";
+        return "search";
     }
 
     @RequestMapping(value = "/filter-search-results")

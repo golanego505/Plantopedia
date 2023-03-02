@@ -14,8 +14,8 @@ import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 
-import static org.launchcode.plantopedia.controllers.ClientToken.API_PATH;
-import static org.launchcode.plantopedia.controllers.ClientToken.getClientToken;
+import static org.launchcode.plantopedia.controllers.ClientTokenHandler.API_PATH;
+import static org.launchcode.plantopedia.controllers.ClientTokenHandler.getClientToken;
 
 @Controller
 public class PlantDetailViewController {

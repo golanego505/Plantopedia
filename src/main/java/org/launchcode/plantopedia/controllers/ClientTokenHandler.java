@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 
-public class ClientToken {
+public class ClientTokenHandler {
     public static final String API_PATH ="https://trefle.io/api/v1/";
     public static final String CLIENT_TOKEN_REQUEST_PATH = "https://trefle.io/api/auth/claim";
 

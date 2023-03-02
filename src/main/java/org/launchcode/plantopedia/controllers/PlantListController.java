@@ -33,7 +33,7 @@ public class PlantListController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String listAllPlants(Model model, HttpServletRequest request,
                                 @Value("${TREFLE_API_TOKEN}") String apiKey) {
-        return "redirect:/plants";
+        return "index";
     }
 
     public String displayGivenListOfPlants(Model model, List<Plant> plants) {
