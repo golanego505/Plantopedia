@@ -68,7 +68,7 @@
         <td>Area found:</td>
         <td th:text="${species.observations}"></td>
     </tr>
-    <tr th:if =${species.edible!=null}>
+    <tr th:if =${species.edible}>
         <td>Edible:</td>
         <td th:text="${species.edible}"></td>
     </tr>
@@ -89,6 +89,18 @@
     </tr>
 
 </table>
+   <span th:if =${species.images.leaf}>
+    <th:block th:each="image : ${species.images.leaf}">
+        <img th:src="${image.imageUrl}"
+             th:alt="${species.commonName}" width= auto, height= 300px>
+    </th:block>
+    </span>
+    <span th:if =${species.images.flower}>
+    <th:block th:each="image : ${species.images.flower}">
+        <img th:src="${image.imageUrl}"
+             th:alt="${species.commonName}" width= auto, height= 300px>
+    </th:block>
+    </span>
 </div>
 
 </body>
