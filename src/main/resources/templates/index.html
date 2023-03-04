@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
-    <!-- Theme Made By www.w3schools.com - No Copyright -->
     <title>Homepage</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,13 +12,45 @@
     <style th:replace="~{fragments :: style}">
     </style>
 </head>
+</style>
+</head>
+<!--<body id="myPage" data-offset="50">-->
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#myPage">Welcome, Username123!</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="view.html">HOME</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">PHOTOS
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="photos page.html">My Photos</a></li>
+                        <li><a href="favorites page.html">My Favorites</a></li>
+                    </ul>
+                </li>
+                <li><a href="search page.html">SEARCH PLANTOPEDIA</a></li>
+                <li><a href="settings page.html">SETTINGS</a></li>
+                <li><a href="plantopedia loggedoout.html">SIGN OUT</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <body id="myPage" data-offset="50">
 
 <nav th:replace="~{fragments :: navbar}">
 </nav>
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <!-- Indicators -->
     <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -27,7 +58,6 @@
         <li data-target="#myCarousel" data-slide-to="3"></li>
     </ol>
 
-    <!-- Wrapper for slides -->
     <div class="carousel-inner" role="listbox">
         <div class="item active">
             <img src="images/plant 12.png" alt="Plant 1" width="400" height="400">
@@ -56,7 +86,6 @@
         </div>
     </div>
 
-    <!-- Left and right controls -->
     <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
@@ -67,7 +96,6 @@
     </a>
 </div>
 
-<!-- Container (The Band Section) -->
 <div id="band" class="container text-center">
     <h3>Homepage</h3>
     <p><em>Username123's Page</em></p>
@@ -87,7 +115,6 @@
     </div>
 </div>
 
-<!-- Footer -->
 <footer class="text-center">
     <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
         <span class="glyphicon glyphicon-chevron-up"></span>
